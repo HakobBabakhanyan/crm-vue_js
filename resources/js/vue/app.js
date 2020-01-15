@@ -1,58 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex';
-import auth from './middleware/auth';
-import log from './middleware/log';
-import guest from './middleware/guest';
 import helpers from "./helpers/helpers";
 import App from './views/App'
 import Dashboard from "./views/Dashboard";
+import auth from "./middleware/auth";
 import Login from "./views/auth/Login";
+import guest from "./middleware/guest";
+import log from "./middleware/log";
 import Profile from "./views/Profile";
-
-import VueToastr from "vue-toastr";
-Vue.use(VueToastr, {
-    defaultTimeout: 1500,
-    defaultProgressBar:false
-
-});
-
-
-
-Vue.use(Vuex);
-Vue.use(VueRouter);
-window.axios = require('axios');
-Vue.prototype.$http = window.axios;
-Vue.prototype.$helpers = helpers;
-
-const store = new Vuex.Store({
-    state:{
-        jwt: localStorage.getItem('jwt'),
-        user:null
-    },
-    getters:{
-        getUser: async (state)=>{
-            if(!state.user){
-              return   axios.post('/api/user', {
-                    token: localStorage.getItem('jwt'),
-                }).then( (request)=>{
-                    state.user= request.data.user;
-                    return request.data.user
-              } ).catch( (error)=>{
-                    console.log(error);
-                    localStorage.removeItem('jwt')
-                } );
-            }else{
-                return  state.user
-            }
-
-        }
-    },
-});
-window.store = store;
-
-
-Vue.component('App', require('./views/App.vue').default);
+import axios from 'axios';
 
 const router = new VueRouter({
     mode: 'history',
@@ -131,9 +88,52 @@ router.beforeEach((to, from, next) => {
 
     return next();
 });
+
+
+import VueToastr from "vue-toastr";
+Vue.use(VueToastr, {
+    defaultTimeout: 1500,
+    defaultProgressBar:false
+
+});
+Vue.use(Vuex);
+Vue.use(VueRouter);
+
+// window.axios = require('axios');
+// Vue.prototype.$http = window.axios;
+Vue.prototype.$helpers = helpers;
+
+const store = new Vuex.Store({
+    state:{
+        jwt: localStorage.getItem('jwt'),
+        user:null
+    },
+    getters:{
+        getUser: async (state)=>{
+            if(!state.user){
+              return   axios.post('/api/user', {
+                    token: localStorage.getItem('jwt'),
+                }).then( (request)=>{
+                    state.user= request.data.user;
+                    return request.data.user
+              } ).catch( (error)=>{
+                    console.log(error);
+                    localStorage.removeItem('jwt')
+                } );
+            }else{
+                return  state.user
+            }
+
+        }
+    },
+});
+
+
+Vue.component('App', require('./views/App.vue').default);
+
 Vue.config.devtools = true;
 
 const app = new Vue({
-    router,store,
+    router,store,axios,
     components: {App},
 }).$mount('#app');

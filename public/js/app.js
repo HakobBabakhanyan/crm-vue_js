@@ -2082,7 +2082,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     logout: function logout() {
       var self = this;
-      this.$http.post('/api/logout', {
+      this.$axios.post('/api/logout', {
         token: self.$store.state.jwt
       }).then(function (response) {
         localStorage.removeItem('jwt');
@@ -3025,7 +3025,7 @@ __webpack_require__.r(__webpack_exports__);
         fd.append('password_confirmation', (_this$user$password_c = this.user.password_confirmation) !== null && _this$user$password_c !== void 0 ? _this$user$password_c : null);
       }
 
-      this.$http.post('/api/user/update', fd, {
+      this.$axios.post('/api/user/update', fd, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'autorizacion': localStorage.getItem('jwt')
@@ -3140,7 +3140,7 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
 
       if (this.name !== "" && this.password !== "") {
-        this.$http.post('/api/login', {
+        this.$axios.post('/api/login', {
           name: this.name,
           password: this.password
         }).then(function (response) {
@@ -23727,16 +23727,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _middleware_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./middleware/auth */ "./resources/js/vue/middleware/auth.js");
-/* harmony import */ var _middleware_log__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./middleware/log */ "./resources/js/vue/middleware/log.js");
-/* harmony import */ var _middleware_guest__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./middleware/guest */ "./resources/js/vue/middleware/guest.js");
-/* harmony import */ var _helpers_helpers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./helpers/helpers */ "./resources/js/vue/helpers/helpers.js");
-/* harmony import */ var _views_App__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./views/App */ "./resources/js/vue/views/App.vue");
-/* harmony import */ var _views_Dashboard__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./views/Dashboard */ "./resources/js/vue/views/Dashboard.vue");
-/* harmony import */ var _views_auth_Login__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./views/auth/Login */ "./resources/js/vue/views/auth/Login.vue");
+/* harmony import */ var _helpers_helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/helpers */ "./resources/js/vue/helpers/helpers.js");
+/* harmony import */ var _views_App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/App */ "./resources/js/vue/views/App.vue");
+/* harmony import */ var _views_Dashboard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/Dashboard */ "./resources/js/vue/views/Dashboard.vue");
+/* harmony import */ var _middleware_auth__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./middleware/auth */ "./resources/js/vue/middleware/auth.js");
+/* harmony import */ var _views_auth_Login__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./views/auth/Login */ "./resources/js/vue/views/auth/Login.vue");
+/* harmony import */ var _middleware_guest__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./middleware/guest */ "./resources/js/vue/middleware/guest.js");
+/* harmony import */ var _middleware_log__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./middleware/log */ "./resources/js/vue/middleware/log.js");
 /* harmony import */ var _views_Profile__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./views/Profile */ "./resources/js/vue/views/Profile.vue");
-/* harmony import */ var vue_toastr__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vue-toastr */ "./node_modules/vue-toastr/dist/vue-toastr.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var vue_toastr__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vue-toastr */ "./node_modules/vue-toastr/dist/vue-toastr.esm.js");
 
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -23744,9 +23750,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
 
@@ -23759,96 +23762,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_toastr__WEBPACK_IMPORTED_MODULE_12__["default"], {
-  defaultTimeout: 1500,
-  defaultProgressBar: false
-});
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_3__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
-window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.$http = window.axios;
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.$helpers = _helpers_helpers__WEBPACK_IMPORTED_MODULE_7__["default"];
-var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
-  state: {
-    jwt: localStorage.getItem('jwt'),
-    user: null
-  },
-  getters: {
-    getUser: function () {
-      var _getUser = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(state) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (state.user) {
-                  _context.next = 4;
-                  break;
-                }
-
-                return _context.abrupt("return", axios.post('/api/user', {
-                  token: localStorage.getItem('jwt')
-                }).then(function (request) {
-                  state.user = request.data.user;
-                  return request.data.user;
-                })["catch"](function (error) {
-                  console.log(error);
-                  localStorage.removeItem('jwt');
-                }));
-
-              case 4:
-                return _context.abrupt("return", state.user);
-
-              case 5:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      function getUser(_x) {
-        return _getUser.apply(this, arguments);
-      }
-
-      return getUser;
-    }()
-  }
-});
-window.store = store;
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('App', __webpack_require__(/*! ./views/App.vue */ "./resources/js/vue/views/App.vue")["default"]);
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
   mode: 'history',
   linkActiveClass: "active",
   routes: [{
     path: '/',
     name: 'home',
-    component: _views_Dashboard__WEBPACK_IMPORTED_MODULE_9__["default"],
+    component: _views_Dashboard__WEBPACK_IMPORTED_MODULE_6__["default"],
     meta: {
-      middleware: _middleware_auth__WEBPACK_IMPORTED_MODULE_4__["default"]
+      middleware: _middleware_auth__WEBPACK_IMPORTED_MODULE_7__["default"]
     }
   }, {
     path: '/login',
     name: 'login',
-    component: _views_auth_Login__WEBPACK_IMPORTED_MODULE_10__["default"],
+    component: _views_auth_Login__WEBPACK_IMPORTED_MODULE_8__["default"],
     meta: {
-      middleware: _middleware_guest__WEBPACK_IMPORTED_MODULE_6__["default"]
+      middleware: _middleware_guest__WEBPACK_IMPORTED_MODULE_9__["default"]
     }
   }, {
     path: '/dashboard',
     name: 'dashboard',
-    component: _views_Dashboard__WEBPACK_IMPORTED_MODULE_9__["default"],
+    component: _views_Dashboard__WEBPACK_IMPORTED_MODULE_6__["default"],
     meta: {
-      middleware: [_middleware_auth__WEBPACK_IMPORTED_MODULE_4__["default"], _middleware_log__WEBPACK_IMPORTED_MODULE_5__["default"]]
+      middleware: [_middleware_auth__WEBPACK_IMPORTED_MODULE_7__["default"], _middleware_log__WEBPACK_IMPORTED_MODULE_10__["default"]]
     }
   }, {
     path: '/profile',
     name: 'profile',
     component: _views_Profile__WEBPACK_IMPORTED_MODULE_11__["default"],
     meta: {
-      middleware: [_middleware_auth__WEBPACK_IMPORTED_MODULE_4__["default"], _middleware_log__WEBPACK_IMPORTED_MODULE_5__["default"]]
+      middleware: [_middleware_auth__WEBPACK_IMPORTED_MODULE_7__["default"], _middleware_log__WEBPACK_IMPORTED_MODULE_10__["default"]]
     }
   }]
 }); // Creates a `nextMiddleware()` function which not only
@@ -23889,12 +23832,72 @@ router.beforeEach(function (to, from, next) {
 
   return next();
 });
+
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_toastr__WEBPACK_IMPORTED_MODULE_13__["default"], {
+  defaultTimeout: 1500,
+  defaultProgressBar: false
+});
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_3__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]); // window.axios = require('axios');
+// Vue.prototype.$http = window.axios;
+
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.$helpers = _helpers_helpers__WEBPACK_IMPORTED_MODULE_4__["default"];
+var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
+  state: {
+    jwt: localStorage.getItem('jwt'),
+    user: null
+  },
+  getters: {
+    getUser: function () {
+      var _getUser = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(state) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (state.user) {
+                  _context.next = 4;
+                  break;
+                }
+
+                return _context.abrupt("return", axios__WEBPACK_IMPORTED_MODULE_12___default.a.post('/api/user', {
+                  token: localStorage.getItem('jwt')
+                }).then(function (request) {
+                  state.user = request.data.user;
+                  return request.data.user;
+                })["catch"](function (error) {
+                  console.log(error);
+                  localStorage.removeItem('jwt');
+                }));
+
+              case 4:
+                return _context.abrupt("return", state.user);
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      function getUser(_x) {
+        return _getUser.apply(this, arguments);
+      }
+
+      return getUser;
+    }()
+  }
+});
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('App', __webpack_require__(/*! ./views/App.vue */ "./resources/js/vue/views/App.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.config.devtools = true;
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   router: router,
   store: store,
+  axios: axios__WEBPACK_IMPORTED_MODULE_12___default.a,
   components: {
-    App: _views_App__WEBPACK_IMPORTED_MODULE_8__["default"]
+    App: _views_App__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
 }).$mount('#app');
 

@@ -65,7 +65,7 @@
                 event.preventDefault();
                 let self = this;
                 if (this.name !== "" && this.password !== "") {
-                    this.$http.post('/api/login', {
+                    this.$axios.post('/api/login', {
                         name: this.name,
                         password: this.password
                     }).then(function (response) {
