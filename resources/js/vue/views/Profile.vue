@@ -109,7 +109,7 @@
                 if(this.user.password_confirmation){
                     fd.append('password_confirmation',this.user.password_confirmation??null);
                 }
-                this.$axios.post('/api/user/update', fd,{
+                this.$http.post('/api/user/update', fd,{
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'autorizacion': localStorage.getItem('jwt'),

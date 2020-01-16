@@ -85,7 +85,7 @@
         methods: {
             logout() {
                 let self = this;
-                    this.$axios.post('/api/logout', {
+                    this.$http.post('/api/logout', {
                         token: self.$store.state.jwt
                     }).then(function (response) {
                         localStorage.removeItem('jwt');

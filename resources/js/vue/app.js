@@ -11,6 +11,7 @@ import log from "./middleware/log";
 import Profile from "./views/Profile";
 import axios from 'axios';
 
+Vue.prototype.$http = axios;
 const router = new VueRouter({
     mode: 'history',
     linkActiveClass: "active",
@@ -111,7 +112,7 @@ const store = new Vuex.Store({
     getters:{
         getUser: async (state)=>{
             if(!state.user){
-              return   axios.post('/api/user', {
+              return   this.$http.post('/api/user', {
                     token: localStorage.getItem('jwt'),
                 }).then( (request)=>{
                     state.user= request.data.user;
@@ -134,6 +135,6 @@ Vue.component('App', require('./views/App.vue').default);
 Vue.config.devtools = true;
 
 const app = new Vue({
-    router,store,axios,
+    router,store,
     components: {App},
 }).$mount('#app');

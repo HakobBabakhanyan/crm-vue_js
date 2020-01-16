@@ -2082,7 +2082,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     logout: function logout() {
       var self = this;
-      this.$axios.post('/api/logout', {
+      this.$http.post('/api/logout', {
         token: self.$store.state.jwt
       }).then(function (response) {
         localStorage.removeItem('jwt');
@@ -3025,7 +3025,7 @@ __webpack_require__.r(__webpack_exports__);
         fd.append('password_confirmation', (_this$user$password_c = this.user.password_confirmation) !== null && _this$user$password_c !== void 0 ? _this$user$password_c : null);
       }
 
-      this.$axios.post('/api/user/update', fd, {
+      this.$http.post('/api/user/update', fd, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'autorizacion': localStorage.getItem('jwt')
@@ -3140,7 +3140,7 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
 
       if (this.name !== "" && this.password !== "") {
-        this.$axios.post('/api/login', {
+        this.$http.post('/api/login', {
           name: this.name,
           password: this.password
         }).then(function (response) {
@@ -23740,6 +23740,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_toastr__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vue-toastr */ "./node_modules/vue-toastr/dist/vue-toastr.esm.js");
 
 
+var _this = undefined;
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -23762,6 +23764,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.$http = axios__WEBPACK_IMPORTED_MODULE_12___default.a;
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
   mode: 'history',
   linkActiveClass: "active",
@@ -23861,7 +23864,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
                   break;
                 }
 
-                return _context.abrupt("return", axios__WEBPACK_IMPORTED_MODULE_12___default.a.post('/api/user', {
+                return _context.abrupt("return", _this.$http.post('/api/user', {
                   token: localStorage.getItem('jwt')
                 }).then(function (request) {
                   state.user = request.data.user;
@@ -23895,7 +23898,6 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.config.devtools = true;
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   router: router,
   store: store,
-  axios: axios__WEBPACK_IMPORTED_MODULE_12___default.a,
   components: {
     App: _views_App__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
