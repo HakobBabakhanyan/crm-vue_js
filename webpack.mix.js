@@ -12,4 +12,5 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/vue/app.js', 'public/js')
-   .sass('resources/sass/material/app.scss', 'public/css');
+   .sass('resources/sass/material/app.scss', 'public/css')
+   .disableSuccessNotifications();

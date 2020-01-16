@@ -19,6 +19,12 @@
                         <p>Profile</p>
                     </a>
                 </router-link>
+                <router-link tag="li" :to="{ name: 'companies' }" class="nav-item">
+                    <a class="nav-link"  href="javascript:void(0)">
+                        <i class="material-icons">store_mall_directory</i>
+                        <p>Companies</p>
+                    </a>
+                </router-link>
 <!--                <li class="nav-item ">-->
 <!--                    <a class="nav-link collapsed" v-on:click="collapse = !collapse" href="javascript:void(0)" :aria-expanded="collapse">-->
 <!--                        <span class="sidebar-mini"> MLT </span>-->

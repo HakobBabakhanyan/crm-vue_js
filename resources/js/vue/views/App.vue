@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper ">
+    <div class="wrapper" v-bind:class="{'nav-open':nav_open}">
         <side-bar v-if="auth"/>
         <div v-bind:class="{'main-panel':auth}">
             <nav-bar v-if="auth"/>
@@ -30,7 +30,8 @@
         components: {Login, VFooter, SideBar, NavBar},
         data() {
             return {
-                auth: this.$store.jwt
+                auth: this.$store.jwt,
+                nav_open:false
             }
         },
     }

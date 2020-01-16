@@ -6,5 +6,8 @@ crm in vue.js JWT
 
 - git clone
 - composer install
-- npm install
-- npm run dev
+- cp .env.example .env 
+- php artisan key:generate
+- php jwt:secret
+- npm install (option)
+- npm run dev (option)

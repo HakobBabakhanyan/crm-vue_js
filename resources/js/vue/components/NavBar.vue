@@ -2,9 +2,11 @@
     <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
             <div class="navbar-wrapper">
-                <a class="navbar-brand" href="#pablo">Dashboard</a>
+                <router-link class="navbar-brand"   :to="{name:'dashboard'}">
+                    Dashboard
+                </router-link>
             </div>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <button v-bind:class="{'toggled':$parent.nav_open}" v-on:click="$parent.nav_open = !$parent.nav_open" class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="navbar-toggler-icon icon-bar"></span>
                 <span class="navbar-toggler-icon icon-bar"></span>
