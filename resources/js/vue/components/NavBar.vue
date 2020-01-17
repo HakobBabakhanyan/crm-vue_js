@@ -6,7 +6,7 @@
                     Dashboard
                 </router-link>
             </div>
-            <button v-bind:class="{'toggled':$parent.nav_open}" v-on:click="$parent.nav_open = !$parent.nav_open" class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <button v-bind:class="{'toggled':$parent.nav_open}" v-on:click="$parent.nav_open = !$parent.nav_open" class="navbar-toggler" type="button" >
                 <span class="sr-only">Toggle navigation</span>
                 <span class="navbar-toggler-icon icon-bar"></span>
                 <span class="navbar-toggler-icon icon-bar"></span>

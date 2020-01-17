@@ -1,5 +1,5 @@
 <template>
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="/img/sidebar-1.jpg">
+    <div class="sidebar" data-color="purple" data-background-color="white">
         <div class="logo">
             <router-link class="simple-text logo-normal" :to="{ name:'home' }" >
                 Crm

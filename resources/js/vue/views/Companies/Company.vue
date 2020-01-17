@@ -2,11 +2,11 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12   ">
+                <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header card-header-primary">
-                            <h4 class="card-title">Edit Profile</h4>
-                            <p class="card-category">Complete your profile</p>
+                        <div v-bind:class="{'card-header-success':!edit,'card-header-warning':edit}" class="card-header ">
+                            <h4 v-if="!edit" class="card-title">Create Profile</h4>
+                            <h4 v-else class="card-title">Edit Profile</h4>
                         </div>
                         <div class="card-body mt-5">
                             <form v-on:submit="update($event)" action="">
@@ -18,7 +18,10 @@
                                         <VInput v-model="company.type" ref="type" :label="'Type'"/>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+                                <button type="submit" class="btn btn-primary pull-right">
+                                    <span v-if="!edit" >Create Profile</span>
+                                    <span v-else >Update Profile</span>
+                                </button>
                                 <div class="clearfix"></div>
                             </form>
                         </div>
@@ -117,4 +120,5 @@
 </script>
 
 <style scoped>
+
 </style>

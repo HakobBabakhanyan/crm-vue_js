@@ -9,7 +9,7 @@ class CompaniesController extends Controller
 {
     public function getCompanies(){
         $data=[
-          'companies'=>Companies::all()
+          'companies'=>Companies::paginate(2)
         ];
 
         return response()->json($data);
@@ -34,7 +34,7 @@ class CompaniesController extends Controller
         $company = Companies::_save($request->all(),$company);
 
         $data=[
-            'message'=>'company create',
+            'message'=>'success',
             'company'=>$company
         ];
 

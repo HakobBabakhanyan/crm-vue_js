@@ -14,10 +14,15 @@ import VueToastr from "vue-toastr";
 import Companies from "./views/Companies/Companies";
 import Company from "./views/Companies/Company";
 import VueSweetalert2 from 'vue-sweetalert2';
+import Paginate from 'vuejs-paginate';
+
+
+Vue.component('paginate', Paginate);
 
 Vue.use(VueSweetalert2);
 
 Vue.prototype.$http = axios;
+
 const router = new VueRouter({
     mode: 'history',
     linkActiveClass: "active",

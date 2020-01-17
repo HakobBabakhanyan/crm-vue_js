@@ -7,10 +7,10 @@
                 <router-view/>
             </div>
             <v-footer v-if="auth"/>
+            <div v-if="nav_open" v-on:click="nav_open = !nav_open" class="close-layer visible"></div>
         </div>
     </div>
 </template>
-
 <script>
     import "../components/NavBar";
     import NavBar from "../components/NavBar";
