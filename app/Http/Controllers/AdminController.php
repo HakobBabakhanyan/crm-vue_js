@@ -61,6 +61,25 @@ class AdminController extends Controller
         return response()->json(compact('user','token'),201);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/user",
+     *      tags={"User"},
+     *      summary="get user login",
+     *      security={ {"auth": {} } },
+     *      description="desc",
+     *      @OA\Response(
+     *          response=200,
+     *          @OA\JsonContent(
+     *             type="object",
+     *             @OA\Items()
+     *         ),
+     *          description="successful operation"
+     *       ),
+     *     )
+     *
+     * Returns list of projects
+     */
     public function getAuthenticatedUser()
     {
         try {

@@ -1,27 +1,39 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex';
+import axios from 'axios';
 import helpers from "./helpers/helpers";
-import App from './views/App'
-import Dashboard from "./views/Dashboard";
 import auth from "./middleware/auth";
-import Login from "./views/auth/Login";
 import guest from "./middleware/guest";
 import log from "./middleware/log";
-import Profile from "./views/Profile";
-import axios from 'axios';
 import VueToastr from "vue-toastr";
-import Companies from "./views/Companies/Companies";
-import Company from "./views/Companies/Company";
 import VueSweetalert2 from 'vue-sweetalert2';
-import Paginate from 'vuejs-paginate';
 
-
-Vue.component('paginate', Paginate);
-
+Vue.use(VueToastr, {
+    defaultTimeout: 1500,
+    defaultProgressBar:false
+});
+Vue.use(Vuex);
+Vue.use(VueRouter);
 Vue.use(VueSweetalert2);
 
+///start component import
+Vue.component('Dashboard', require('./views/Dashboard').default);
+Vue.component('Profile', require('./views/Profile').default);
+Vue.component('Companies', require('./views/Companies/Companies').default);
+Vue.component('Company', require('./views/Companies/Company').default);
+Vue.component('paginate', require('vuejs-paginate'));
+Vue.component('VInput', require('./components/form/VInput').default);
+Vue.component('VueDropify', require('./components/form/Dropify').default);
+Vue.component('NavBar', require('./components/NavBar').default);
+Vue.component('SideBar', require('./components/SideBar').default);
+Vue.component('VFooter', require('./components/Footer').default);
+Vue.component('Login', require('./views/auth/Login').default);
+Vue.component('App', require('./views/App.vue').default);
+/// end
+
 Vue.prototype.$http = axios;
+Vue.prototype.$helpers = helpers;
 
 const router = new VueRouter({
     mode: 'history',
@@ -30,7 +42,7 @@ const router = new VueRouter({
         {
             path: '/',
             name: 'home',
-            component: Dashboard,
+            component: Vue.component('Dashboard'),
             meta: {
                 middleware: auth,
             },
@@ -38,7 +50,7 @@ const router = new VueRouter({
         {
             path: '/login',
             name: 'login',
-            component: Login,
+            component: Vue.component('Login'),
             meta: {
                 middleware: guest,
             },
@@ -46,42 +58,42 @@ const router = new VueRouter({
         {
             path: '/dashboard',
             name: 'dashboard',
-            component: Dashboard,
+            component: Vue.component('Dashboard'),
             meta: {
-                middleware: [auth, log],
+                middleware: auth,
             },
         },
         {
             path: '/profile',
             name: 'profile',
-            component: Profile,
+            component: Vue.component('Profile'),
             meta: {
-                middleware: [auth, log],
+                middleware: auth,
             },
         },
         {
             path: '/companies',
             name: 'companies',
-            component: Companies,
+            component: Vue.component('Companies'),
             meta: {
-                middleware: [auth, log],
+                middleware: auth,
             },
         },
         {
             path: '/company/add',
             name: 'company-add',
-            component: Company,
+            component: Vue.component('Company'),
             meta: {
-                middleware: [auth, log],
+                middleware: auth,
             },
         },
         {
             path: '/company/edit/:id',
             name: 'company-edit',
             props:{edit:true},
-            component: Company,
+            component: Vue.component('Company'),
             meta: {
-                middleware: [auth, log],
+                middleware: auth,
             },
         },
     ],
@@ -90,22 +102,6 @@ const router = new VueRouter({
 // Creates a `nextMiddleware()` function which not only
 // runs the default `next()` callback but also triggers
 // the subsequent Middleware function.
-function nextFactory(context, middleware, index) {
-    const subsequentMiddleware = middleware[index];
-    // If no subsequent Middleware exists,
-    // the default `next()` callback is returned.
-    if (!subsequentMiddleware) return context.next;
-
-    return (...parameters) => {
-        // Run the default Vue Router `next()` callback first.
-        context.next(...parameters);
-        // Than run the subsequent Middleware with a new
-        // `nextMiddleware()` callback.
-        const nextMiddleware = nextFactory(context, middleware, index + 1);
-        subsequentMiddleware({ ...context, next: nextMiddleware });
-    };
-}
-
 router.beforeEach((to, from, next) => {
     if (to.meta.middleware) {
         const middleware = Array.isArray(to.meta.middleware)
@@ -118,25 +114,13 @@ router.beforeEach((to, from, next) => {
             router,
             to,
         };
-        const nextMiddleware = nextFactory(context, middleware, 1);
+        const nextMiddleware = helpers.nextFactory(context, middleware, 1);
 
         return middleware[0]({ ...context, next: nextMiddleware });
     }
 
     return next();
 });
-
-
-Vue.use(VueToastr, {
-    defaultTimeout: 1500,
-    defaultProgressBar:false
-
-});
-Vue.use(Vuex);
-Vue.use(VueRouter);
-
-Vue.prototype.$helpers = helpers;
-
 const store = new Vuex.Store({
     state:{
         jwt: localStorage.getItem('jwt'),
@@ -168,12 +152,8 @@ const store = new Vuex.Store({
     },
 });
 
-
-Vue.component('App', require('./views/App.vue').default);
-
 Vue.config.devtools = true;
 
 const app = new Vue({
     router,store,
-    components: {App},
 }).$mount('#app');

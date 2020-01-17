@@ -12,11 +12,6 @@
     </div>
 </template>
 <script>
-    import "../components/NavBar";
-    import NavBar from "../components/NavBar";
-    import SideBar from "../components/SideBar";
-    import VFooter from "../components/Footer";
-    import Login from "./auth/Login";
     import {mapGetters} from 'vuex';
 
     export default {
@@ -25,9 +20,7 @@
             ...mapGetters([
                 'jwt',
             ])
-        }
-        ,
-        components: {Login, VFooter, SideBar, NavBar},
+        },
         data() {
             return {
                 auth: this.$store.jwt,

@@ -65,12 +65,8 @@
 
 <script>
 
-    import VInput from '../components/form/VInput'
-    import VueDropify from '../components/form/Dropify';
-
     export default {
         name: "Profile",
-        components: {VInput, VueDropify},
         data: () => {
             return {
                 user: {},

@@ -17,6 +17,24 @@
                                     <div class="col-md-6">
                                         <VInput v-model="company.type" ref="type" :label="'Type'"/>
                                     </div>
+                                    <div class="col-md-6">
+                                        <VInput v-model="company.info.address" ref="address" :label="'Address'"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <VInput v-model="company.info.site" ref="site" :label="'Site'"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <VInput v-model="company.info.contacts" ref="contacts" :label="'Contacts'"/>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-2 my-2">
+                                                <img class="img-fluid" :src="'/images/'+company.logo" alt="">
+                                            </div>
+                                        </div>
+                                        <VueDropify  v-on:upload="uploadFile($event)"  ref="file"/>
+                                    </div>
+
                                 </div>
                                 <button type="submit" class="btn btn-primary pull-right">
                                     <span v-if="!edit" >Create Profile</span>
@@ -34,12 +52,8 @@
 
 <script>
 
-    import VInput from '../../components/form/VInput'
-    import VueDropify from '../../components/form/Dropify';
-
     export default {
         name: "CompanyAdd",
-        components: {VInput, VueDropify},
         props:{
             edit:{
                 default:false
@@ -47,7 +61,9 @@
         },
         data: () => {
             return {
-                company: {},
+                company: {
+                    info:{}
+                },
                 errors: {},
                 files: null
             }
@@ -62,6 +78,7 @@
                     }
                 }).then((response)=>{
                     self.company = response.data.company
+                    console.log(self.company)
                 } )
             }
         },
@@ -83,6 +100,15 @@
                 }
                 if(this.company.type){
                     fd.append('type', this.company.type??null);
+                }
+                if(this.company.info.address){
+                    fd.append('address', this.company.info.address??null);
+                }
+                if(this.company.info.site){
+                    fd.append('site', this.company.info.site??null);
+                }
+                if(this.company.info.contacts){
+                    fd.append('contacts', this.company.info.contacts??null);
                 }
                 this.$http.post(this.$store.state.url.addCompany, fd,{
                     headers: {

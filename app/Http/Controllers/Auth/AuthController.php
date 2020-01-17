@@ -19,11 +19,38 @@ class AuthController extends Controller
     }
 
     /**
-     * Get a JWT token via given credentials.
+     * @OA\Post(
+     *      path="/api/login",
+     *      tags={"login"},
+     *      summary="login users",
+     *      description="login user",
+     *       @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         required=true,
+     *        @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *      @OA\Parameter(
+     *         name="password",
+     *         in="query",
+     *         required=true,
+     *        @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=200,
+     *          @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items()
+     *         ),
+     *          description="successful operation"
+     *       ),
+     *     )
      *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * Returns list of projects
      */
     public function login(Request $request)
     {
