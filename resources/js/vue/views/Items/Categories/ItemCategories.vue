@@ -8,22 +8,21 @@
                             <i class="material-icons">assignment</i>
                         </div>
                         <div class="card-icon float-right ">
-                            <router-link :to="{name:'company-add'}">
+                            <router-link :to="{name:'item-categories-create'}">
                                 <span class="text-white">Add</span>
-<!--                                    <i class="material-icons text-white">add</i>-->
+                                <!--                                    <i class="material-icons text-white">add</i>-->
                             </router-link>
                         </div>
-                        <h4 class="card-title">Companies</h4>
+                        <h4 class="card-title">Customers Company</h4>
 
                     </div>
                     <div class="card-body table-responsive">
-                        <VTable @remove="remove" :edit_route="'company-edit'" :thead="{'id':'ID','name':'Name','created_at':'Date'}" :items="companies" />
-
+                        <VTable @remove="remove" :edit_route="'item-categories-edit'" :thead="{'id':'ID','name':'Name','created_at':'Date'}" :items="items" />
                         <paginate
                             :page-count="data.last_page?data.last_page:0"
                             :page-range="3"
                             :margin-pages="2"
-                            :click-handler="clickCallback"
+                            :click-handler="pagination"
                             :prev-text="'Prev'"
                             :next-text="'Next'"
                             :container-class="'pagination'"
@@ -43,65 +42,56 @@
 </template>
 <script>
     export default {
-        name: "Companies",
+        name: "ItemCategories",
         data: () => ({
-            name: '',
-            password: '',
-            companies: [],
+            items: [],
             data: [],
 
         }),
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
-
             let self = this;
-            self.$http.get(this.$store.state.url.getCompanies, {
+            self.$http.get(self.$const.URL.ITEM_CATEGORIES_INDEX, {
                 params: {
                     token: self.$store.state.jwt
                 }
             }).then((response) => {
-                console.log(response.data.companies)
-                self.data = response.data.companies;
-                self.companies = self.data.data;
+                self.data = response.data.categories;
+                self.items = self.data.data;
             });
 
         },
         methods: {
-            remove($event,id) {
+            remove($event, id) {
                 let self = this;
                 self.$swal.fire({
-                    icon:'warning',
-                    title:'Delete this Compny',
+                    icon: 'warning',
+                    title: 'Delete this Item !',
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        return self.$http.delete(self.$store.state.url.destroyCompany+id,{
-                            data: { token: self.$store.state.jwt }
-                        }).then( (response)=>{
+                    preConfirm: (item) => {
+                        return self.$http.delete(self.$const.URL.ITEM_CATEGORIES_DESTROY + id, {
+                            data: {token: self.$store.state.jwt}
+                        }).then((response) => {
                             self.$toastr.s(response.data.message);
-                            self.companies = response.data.companies;
-                            return 1;
-                        } )
+                            self.data = response.data.categories;
+                            self.items = self.data.data;
+                        })
                     },
-                }).then((result) => {
-                    if (result.value) {
-                        console.log(result.value)
-                    }
-                });
-
+                })
 
             },
-            clickCallback(pageNum) {
-                let self= this;
-                self.$http.get(self.$store.state.url.getCompanies+'?page='+pageNum, {
+            pagination(pageNum) {
+                let self = this;
+                self.$http.get(self.$const.URL.ITEM_CATEGORIES_INDEX + '?page=' + pageNum, {
                     params: {
                         token: self.$store.state.jwt
                     }
                 }).then((response) => {
-                    console.log(response.data.companies)
-                    self.companies = response.data.companies.data;
+                    self.data = response.data.categories;
+                    self.items = self.data.data;
                 });
-            }
+            },
         }
     }
 </script>

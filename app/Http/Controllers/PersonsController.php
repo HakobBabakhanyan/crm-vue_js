@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Companies;
+use App\Models\Persons;
 use App\Traits\Uploads;
 use Illuminate\Http\Request;
 
-class CompaniesController extends Controller
+class PersonsController extends Controller
 {
-
     use Uploads;
-
     /**
      * @Oa\Get(
-     *      path="/api/companies/get",
-     *      tags={"companies"},
+     *      path="/api/persons/get",
+     *      tags={"persons"},
      *      security={ {"auth": {} } },
      *      description="get companies",
      *      @OA\Parameter(
      *         name="page",
      *         in="query",
-     *         description="pages",
+     *         description="number of page",
      *         required=false,
      *        @OA\Schema(
      *             type="integer",
@@ -37,24 +35,47 @@ class CompaniesController extends Controller
      *       ),
      *     )
      *
-     * Returns list of companies
+     * Returns list of persons
      */
-    public function getCompanies(){
+    public function getPersons(){
         $data=[
-          'companies'=>Companies::paginate(2)
+            'persons'=>Persons::paginate(2)
         ];
-
+        return response()->json($data);
+    }
+    /**
+     * @Oa\Get(
+     *      path="/api/persons/get/all",
+     *      tags={"persons"},
+     *      security={ {"auth": {} } },
+     *      description="get companies",
+     *      @OA\Response(
+     *          response=200,
+     *          @OA\JsonContent(
+     *             type="object",
+     *             @OA\Items()
+     *         ),
+     *          description="successful operation"
+     *       ),
+     *     )
+     *
+     * Returns list of persons
+     */
+    public function getPersonsAll(){
+        $data=[
+            'persons'=>Persons::all()
+        ];
         return response()->json($data);
     }
 
     /**
      * @Oa\Get(
-     *      path="/api/companies/get/{company}",
-     *      tags={"companies"},
+     *      path="/api/persons/get/{person}",
+     *      tags={"persons"},
      *      security={ {"auth": {} } },
-     *      description="get company id",
+     *      description="get perosn by id",
      *      @OA\Parameter(
-     *         name="company",
+     *         name="person",
      *         in="path",
      *         description="ID of pet to fetch",
      *         required=true,
@@ -74,28 +95,22 @@ class CompaniesController extends Controller
      *     )
      *
      * Returns company by id
+     * @param Persons $person
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function getCompany(Companies $company){
+    public function getPerson(Persons $person){
         $data=[
-          'company'=>$company
+            'person'=>$person->with('companies')->first(),
         ];
 
         return response()->json($data);
     }
 
-
-    public function getCompaniesAll(Companies $company){
-        $data=[
-            'companies'=>Companies::all()
-        ];
-
-        return response()->json($data);
-    }
 
     public function sync(Request $request){
 
         if(isset($request['id'])){
-            $company = Companies::find($request['id']);
+            $company = Persons::find($request['id']);
         }else {
             $company = null;
         }
@@ -105,24 +120,24 @@ class CompaniesController extends Controller
                 $this->imageDelete($company->logo);
             }
         }
-        $company = Companies::_save($request->all(),$company);
+        $company = Persons::_save($request->all(),$company);
 
         $data=[
             'message'=>'success',
-            'company'=>$company
+            'person'=>$company
         ];
 
         return response()->json($data);
 
     }
+    public function destroy(Persons $person){
 
-    public function destroy(Companies $company){
-
-        $company->delete();
+        $person->delete();
         $data=[
-          'message'=>'Company delete',
-          'companies'=>Companies::all()
+            'message'=>'Person delete',
+            'persons'=>Persons::paginate(2)
         ];
         return response()->json($data);
     }
+
 }

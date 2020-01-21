@@ -16,14 +16,10 @@
 
     export default {
         name: "App",
-        computed: {
-            ...mapGetters([
-                'jwt',
-            ])
-        },
+
         data() {
             return {
-                auth: this.$store.jwt,
+                auth: false,
                 nav_open:false
             }
         },

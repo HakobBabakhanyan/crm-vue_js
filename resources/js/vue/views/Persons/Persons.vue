@@ -8,17 +8,16 @@
                             <i class="material-icons">assignment</i>
                         </div>
                         <div class="card-icon float-right ">
-                            <router-link :to="{name:'company-add'}">
+                            <router-link :to="{name:'person-add'}">
                                 <span class="text-white">Add</span>
 <!--                                    <i class="material-icons text-white">add</i>-->
                             </router-link>
                         </div>
-                        <h4 class="card-title">Companies</h4>
+                        <h4 class="card-title">Persons</h4>
 
                     </div>
                     <div class="card-body table-responsive">
-                        <VTable @remove="remove" :edit_route="'company-edit'" :thead="{'id':'ID','name':'Name','created_at':'Date'}" :items="companies" />
-
+                        <VTable @remove="remove" :edit_route="'person-edit'" :thead="{'id':'ID','name':'Name','created_at':'Date'}" :items="persons" />
                         <paginate
                             :page-count="data.last_page?data.last_page:0"
                             :page-range="3"
@@ -43,11 +42,11 @@
 </template>
 <script>
     export default {
-        name: "Companies",
+        name: "Persons",
         data: () => ({
             name: '',
             password: '',
-            companies: [],
+            persons: [],
             data: [],
 
         }),
@@ -55,14 +54,13 @@
             this.$parent.auth = this.$store.state.jwt;
 
             let self = this;
-            self.$http.get(this.$store.state.url.getCompanies, {
+            self.$http.get(this.$store.state.url.getPersons, {
                 params: {
                     token: self.$store.state.jwt
                 }
             }).then((response) => {
-                console.log(response.data.companies)
-                self.data = response.data.companies;
-                self.companies = self.data.data;
+                self.data = response.data.persons;
+                self.persons = self.data.data;
             });
 
         },
@@ -71,16 +69,16 @@
                 let self = this;
                 self.$swal.fire({
                     icon:'warning',
-                    title:'Delete this Compny',
+                    title:'Delete this Person',
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (login) => {
-                        return self.$http.delete(self.$store.state.url.destroyCompany+id,{
+                        return self.$http.delete(self.$store.state.url.destroyPerson+id,{
                             data: { token: self.$store.state.jwt }
                         }).then( (response)=>{
                             self.$toastr.s(response.data.message);
-                            self.companies = response.data.companies;
-                            return 1;
+                            self.data = response.data.persons;
+                            self.persons = self.data.data;
                         } )
                     },
                 }).then((result) => {

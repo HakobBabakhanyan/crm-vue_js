@@ -5,31 +5,38 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div v-bind:class="{'card-header-success':!edit,'card-header-warning':edit}" class="card-header ">
-                            <h4 v-if="!edit" class="card-title">Create Profile</h4>
-                            <h4 v-else class="card-title">Edit Profile</h4>
+                            <h4 v-if="!edit" class="card-title">Create Person</h4>
+                            <h4 v-else class="card-title">Edit Person</h4>
                         </div>
                         <div class="card-body mt-5">
                             <form v-on:submit="update($event)" action="">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <VInput v-model="company.name" ref="name" :label="'Name'"/>
+                                        <VInput v-model="person.name" ref="name" :label="'Name'"/>
                                     </div>
                                     <div class="col-md-6">
-                                        <VInput v-model="company.type" ref="type" :label="'Type'"/>
+                                        <VInput v-model="person.info.address" ref="address" :label="'Address'"/>
                                     </div>
                                     <div class="col-md-6">
-                                        <VInput v-model="company.info.address" ref="address" :label="'Address'"/>
+                                        <VInput v-model="person.info.contacts" ref="contacts" :label="'Contacts'"/>
                                     </div>
-                                    <div class="col-md-6">
-                                        <VInput v-model="company.info.site" ref="site" :label="'Site'"/>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <VInput v-model="company.info.contacts" ref="contacts" :label="'Contacts'"/>
+                                    <div class="col-12">
+                                        <label class="typo__label">Simple Companies</label>
+                                        <Multiselect
+                                            v-model="person.companies"
+                                            :options="options"
+                                            :multiple="true"
+                                            @input="updateSelect"
+                                            track-by="id"
+                                            label="name"
+                                            placeholder="Select Companies"
+                                        >
+                                        </Multiselect>
                                     </div>
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-2 my-2">
-                                                <img class="img-fluid" :src="'/images/'+company.logo" alt="">
+                                                <img class="img-fluid" :src="'/images/'+person.image" alt="">
                                             </div>
                                         </div>
                                         <VueDropify  v-on:upload="uploadFile($event)"  ref="file"/>
@@ -53,7 +60,7 @@
 <script>
 
     export default {
-        name: "CompanyAdd",
+        name: "Person",
         props:{
             edit:{
                 default:false
@@ -61,26 +68,35 @@
         },
         data: () => {
             return {
-                company: {
+                person: {
                     info:{}
                 },
+                selected:null,
+                options: [],
                 errors: {},
                 files: null
             }
         },
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
+            let self = this;
             if(this.edit){
-                let self = this;
-                this.$http.get(self.$store.state.url.getCompany+self.$route.params.id,{
+                this.$http.get(self.$store.state.url.getPerson+self.$route.params.id,{
                     params: {
                         token: self.$store.state.jwt
                     }
                 }).then((response)=>{
-                    self.company = response.data.company
-                    console.log(self.company)
-                } )
-            }
+                    self.person = response.data.person;
+                    this.selected = self.person.companies;
+                } );
+            };
+            this.$http.get(self.$store.state.url.getCompaniesAll,{
+                params: {
+                    token: self.$store.state.jwt
+                }
+            }).then((response)=>{
+                self.options = response.data.companies;
+            } )
         },
         methods: {
             update($event) {
@@ -92,32 +108,41 @@
                     fd.append('image', this.files[0]);
                 }
                 fd.append('token', localStorage.getItem('jwt'));
-                if(this.company.id){
-                    fd.append('id', this.company.id??null);
+                if(this.person.id){
+                    fd.append('id', this.person.id??null);
                 }
-                if(this.company.name){
-                    fd.append('name', this.company.name??null);
+                if(this.person.name){
+                    fd.append('name', this.person.name??null);
                 }
-                if(this.company.type){
-                    fd.append('type', this.company.type??null);
+                if(Array.isArray(this.selected)){
+                    this.selected.map(function (item) {
+                        fd.append('selected[]', item??null);
+                    });
                 }
-                if(this.company.info.address){
-                    fd.append('address', this.company.info.address??null);
+                // if(this.person.selected){
+                //     fd.append('selected', this.selected??null);
+                // }
+                if(this.person.type){
+                    fd.append('type', this.person.type??null);
                 }
-                if(this.company.info.site){
-                    fd.append('site', this.company.info.site??null);
+                if(this.person.info.address){
+                    fd.append('address', this.person.info.address??null);
                 }
-                if(this.company.info.contacts){
-                    fd.append('contacts', this.company.info.contacts??null);
+                if(this.person.info.site){
+                    fd.append('site', this.person.info.site??null);
                 }
-                this.$http.post(this.$store.state.url.syncCompany, fd,{
+                if(this.person.info.contacts){
+                    fd.append('contacts', this.person.info.contacts??null);
+                }
+                this.$http.post(this.$store.state.url.syncPerson, fd,{
                     headers: {
                         'Content-Type': 'multipart/form-data',
             }
 
             }).
                 then((response) => {
-                    self.$router.push({name:'companies'});
+                    console.log(response.data)
+                    self.$router.push({name:'persons'});
                     self.$toastr.s(response.data.message);
                 }).catch((error) => {
                     if (error.response) {
@@ -132,9 +157,16 @@
             uploadFile($event) {
                 this.files = $event
             },
+            updateSelect(items) {
+                let selected = [];
+                items.map(function (item) {
+                    selected.push(item.id)
+                });
+                this.selected = selected;
+            },
             validate() {
                 let error = false;
-                if (!this.company.name) {
+                if (!this.person.name) {
                     this.$refs.name.error = 'name is required';
                     this.$toastr.e('name in required');
                     error = true;

@@ -1,13 +1,12 @@
 <template>
     <!--is-focused-->
-    <div v-bind:class="{'is-filled':value,'has-danger':error}"  class="form-group bmd-form-group">
-        <label class="bmd-label-floating">{{ label }}</label>
-        <input :type="type"
-               :id="id"
-               :value="value"
-               :required="required"
-               v-bind:class="{'is-invalid':error}"
-               v-on:input="updateValue($event.target.value)" class="form-control ">
+    <div  v-bind:class="{'is-filled':value,'has-danger':error}"  class="form-group  bmd-form-group">
+        <label class="bmd-label-floating" :for="id" >{{ label }}</label>
+        <textarea :id="id"
+                  :required="required"
+                  v-bind:class="{'is-invalid':error}"
+                  v-on:input="updateValue($event.target.value)"
+                  class="form-control"  rows="3">{{ value }}</textarea>
         <div class="invalid-feedback">
             {{ error }}
         </div>

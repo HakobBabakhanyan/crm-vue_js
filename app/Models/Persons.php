@@ -4,21 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Companies extends Model
+class Persons extends Model
 {
+    protected $casts = [
+        'info' => 'collection'
+    ];
+
+
 
     public function customers(){
         return $this->morphMany(Customers::class, 'parent','parent_type');
     }
 
-    protected $casts = [
-      'info' => 'collection'
-    ];
-
     protected $appends = ['type'];
+
 
     public function getTypeAttribute(){
         return self::class;
+    }
+
+    public function companies(){
+        return $this->belongsToMany(Companies::class);
     }
 
     public static function _save($data, $item=null){
@@ -26,14 +32,17 @@ class Companies extends Model
             $item = new self();
         }
         $item->name = $data['name'];
-        $item->type = $data['type'];
-        $item->logo = $data['img']??null;
+        $item->image = $data['img']??null;
         $info['address'] = $data['address']??null;
-        $info['site'] = $data['site']??null;
         $info['contacts'] = $data['contacts']??null;
         $item->info = $info;
 
         $item->save();
+
+        if($item){
+            $item->companies()->sync($data['selected']);
+        }
+
         return $item;
     }
 }

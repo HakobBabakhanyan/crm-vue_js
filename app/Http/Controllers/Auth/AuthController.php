@@ -43,7 +43,7 @@ class AuthController extends Controller
      *      @OA\Response(
      *          response=200,
      *          @OA\JsonContent(
-     *             type="array",
+     *             type="json",
      *             @OA\Items()
      *         ),
      *          description="successful operation"

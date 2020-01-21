@@ -374,9 +374,6 @@
         }),
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
-            this.$store.getters.getUser.then((data)=>{
-                console.log(data.name)
-            });
         },
         methods:{
             test(){
