@@ -15852,7 +15852,6 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .sidebar .sidebar-wrapper > .nav [data-toggle=collapse] ~ div > ul > li > a i,
 .sidebar .sidebar-wrapper .user .user-info [data-toggle=collapse] ~ div > ul > li > a i {
   font-size: 17px;
-  line-height: 20px;
   width: 26px;
 }
 

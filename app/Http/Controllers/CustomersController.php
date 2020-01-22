@@ -40,74 +40,79 @@ class CustomersController extends Controller
      *
      * Returns list of persons
      */
-
-
-    public function getCustomers(){
-        $data=[
-            'companies'=>Companies::query()->whereHas('customers')
+    public function getCustomers()
+    {
+        $data = [
+            'companies' => Companies::query()->whereHas('customers')
                 ->with('customers')->paginate(self::PAGINATE),
-            'persons'=>Persons::query()->whereHas('customers')
+            'persons' => Persons::query()->whereHas('customers')
                 ->with('customers')->paginate(self::PAGINATE)
         ];
         return response()->json($data);
     }
 
 
-    public function getCustomersCompanies(){
-        $data=[
-            'companies'=>Companies::query()->whereHas('customers')
+    public function getCustomersCompanies()
+    {
+        $data = [
+            'companies' => Companies::query()->whereHas('customers')
                 ->with('customers')->paginate(self::PAGINATE),
         ];
 
         return response()->json($data);
     }
 
-    public function getCustomersPersons(){
-        $data=[
-            'persons'=>Persons::query()->whereHas('customers')
+    public function getCustomersPersons()
+    {
+        $data = [
+            'persons' => Persons::query()->whereHas('customers')
                 ->with('customers')->paginate(self::PAGINATE),
         ];
 
         return response()->json($data);
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
 
 
-        $customer =  Customers::_save($request->all());
+        $customer = Customers::_save($request->all());
 
-        $data=[
-            'message'=>'Created'
+        $data = [
+            'message' => 'Created'
         ];
         return response()->json($data);
     }
 
-    public function destroy(Customers $customer){
+    public function destroy(Customers $customer)
+    {
 
         $customer->delete();
 
-        $data=[
-            'companies'=>Companies::query()->whereHas('customers')
+        $data = [
+            'companies' => Companies::query()->whereHas('customers')
                 ->with('customers')->paginate(self::PAGINATE),
-            'persons'=>Persons::query()->whereHas('customers')
+            'persons' => Persons::query()->whereHas('customers')
                 ->with('customers')->paginate(self::PAGINATE),
-            'message'=>'deleted'
+            'message' => 'deleted'
         ];
         return response()->json($data);
     }
 
 
-    public function getSelectsItems(Request $request){
+    public function getSelectsItems(Request $request)
+    {
 
 
-        if(isset($request['type'])){
+        if (isset($request['type'])) {
             $model = Customers::TYPE[$request['type']];
-        }else $model = Companies::class;
+        } else $model = Companies::class;
 
-        $data=[
-            'items'=>$model::query()->doesntHave('customers')->get()
+        $data = [
+            'items' => $model::query()->doesntHave('customers')->get()
         ];
 
         return response()->json($data);
     }
+
 }

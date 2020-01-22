@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,7 +51,7 @@ Route::group(['middleware' => ['jwt.verify:admin']], function() {
     Route::group(['prefix'=>'items'],function (){
         $controller = 'ItemsController';
         Route::get('index',$controller.'@index');
-        Route::post('create',$controller.'@sync');
+        Route::post('sync',$controller.'@sync');
         Route::get('get/{item}',$controller.'@getItem');
         Route::delete('destroy/{item}',$controller.'@destroy');
 
@@ -60,12 +60,22 @@ Route::group(['middleware' => ['jwt.verify:admin']], function() {
             Route::get('index',$controller.'@index');
             Route::get('get/{category}',$controller.'@getCategory');
             Route::get('search',$controller.'@search');
-            Route::post('create',$controller.'@sync');
+            Route::post('sync',$controller.'@sync');
             Route::delete('destroy/{category}',$controller.'@destroy');
-
         });
-
     });
+
+    Route::group(['prefix'=>'settings'],function (){
+       Route::group(['prefix'=>'currencies'],function (){
+          $controller = 'CurrenciesController';
+          Route::get('index',$controller.'@index');
+           Route::get('get/{item}',$controller.'@getItem');
+
+           Route::post('sync',$controller.'@sync');
+           Route::delete('destroy/{item}',$controller.'@destroy');
+       });
+    });
+
 
 
 

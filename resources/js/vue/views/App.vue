@@ -12,17 +12,12 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex';
-
     export default {
         name: "App",
-
-        data() {
-            return {
+        data: ()=>({
                 auth: false,
                 nav_open:false
-            }
-        },
+            }),
     }
 </script>
 

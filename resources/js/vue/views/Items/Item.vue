@@ -92,7 +92,7 @@
                 $event.preventDefault();
                 let self = this;
                 console.log(self.type);
-                this.$http.post(this.$const.URL.ITEM_CREATE, {
+                this.$http.post(this.$const.URL.ITEM_SYNC, {
                     token: localStorage.getItem('jwt'),
                     'item': self.item,
                 }).then((response) => {

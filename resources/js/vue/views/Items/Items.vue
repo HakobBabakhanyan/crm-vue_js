@@ -17,7 +17,10 @@
 
                     </div>
                     <div class="card-body table-responsive">
-                        <VTable @remove="remove" :edit_route="'item-edit'" :thead="{'id':'ID','name':'Name','created_at':'Date'}" :items="items" />
+                        <VTable @remove="remove"
+                                :edit_route="'item-edit'"
+                                :thead="{'id':'ID','name':'Name','created_at':'Date'}"
+                                :items="items" />
                         <paginate
                             :page-count="data.last_page?data.last_page:0"
                             :page-range="3"

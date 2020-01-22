@@ -22,6 +22,9 @@ Vue.use(VueSweetalert2);
 ///start component import
 Vue.component('VTable', require('./components/table/VTable').default);
 Vue.component('VTextarea', require('./components/form/VTextarea').default);
+Vue.component('VCheckbox', require('./components/form/VCheckbox').default);
+Vue.component('VInput', require('./components/form/VInput').default);
+Vue.component('SideBarCollapse', require('./components/SideBarCollapse').default);
 
 
 
@@ -30,7 +33,6 @@ Vue.component('Profile', require('./views/Profile').default);
 Vue.component('Companies', require('./views/Companies/Companies').default);
 Vue.component('Company', require('./views/Companies/Company').default);
 Vue.component('paginate', require('vuejs-paginate'));
-Vue.component('VInput', require('./components/form/VInput').default);
 Vue.component('VueDropify', require('./components/form/Dropify').default);
 Vue.component('NavBar', require('./components/NavBar').default);
 Vue.component('SideBar', require('./components/SideBar').default);
@@ -47,7 +49,9 @@ Vue.component('Items', require('./views/Items/Items').default);
 Vue.component('Item', require('./views/Items/Item').default);
 Vue.component('ItemCategories', require('./views/Items/Categories/ItemCategories').default);
 Vue.component('ItemCategory', require('./views/Items/Categories/ItemCategory').default);
-
+// settings
+Vue.component('Currencies', require('./views/Settings/Currencies/Currencies').default);
+Vue.component('Currency', require('./views/Settings/Currencies/Currency').default);
 
 /// end
 
@@ -209,6 +213,30 @@ const router = new VueRouter({
             name: 'item-categories-edit',
             props: {edit: true},
             component: Vue.component('ItemCategory'),
+            meta: {
+                middleware: auth,
+            },
+        },
+        {
+            path: '/settings/currencies',
+            name: 'settings-currencies',
+            component: Vue.component('Currencies'),
+            meta: {
+                middleware: auth,
+            },
+        },
+        {
+            path: '/settings/currencies/create',
+            name: 'settings-currencies-create',
+            component: Vue.component('Currency'),
+            meta: {
+                middleware: auth,
+            },
+        },{
+            path: '/settings/currencies/edit/:id',
+            name: 'settings-currencies-edit',
+            props: {edit: true},
+            component: Vue.component('Currency'),
             meta: {
                 middleware: auth,
             },

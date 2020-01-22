@@ -58,7 +58,7 @@
             password: ''
         }),
         mounted() {
-            this.$parent.auth = this.$store.state.jwt;
+            this.$parent.auth = localStorage.getItem('jwt');
         },
         methods: {
             login(event) {
