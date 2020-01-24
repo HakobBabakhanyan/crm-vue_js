@@ -17,7 +17,6 @@ class CreateAdminsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->string('image')->nullable();
-            $table->string('api_token', 80)->unique()->nullable()->default(null);
             $table->string('password');
             $table->timestamps();
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Companies;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -13,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
     }
 
     /**
@@ -23,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        dd('INV-'.str_pad(Companies::max('id')+1, 5, '0', STR_PAD_LEFT));
     }
 
 

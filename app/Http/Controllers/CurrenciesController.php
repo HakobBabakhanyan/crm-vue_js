@@ -47,6 +47,45 @@ class CurrenciesController extends Controller
     }
 
 
+    /**
+     * @Oa\Get(
+     *      path="/api/settings/currencies/get/all",
+     *      tags={"settings"},
+     *      security={ {"auth": {} } },
+     *      description="get companies",
+     *      @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="id of category",
+     *         required=false,
+     *        @OA\Schema(
+     *             type="integer",
+     *             format="int64",
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=200,
+     *          @OA\JsonContent(
+     *             type="object",
+     *             @OA\Items()
+     *         ),
+     *          description="successful operation"
+     *       ),
+     *     )
+     *
+     * Returns list of persons
+     * @param $item
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAll(){
+
+        $data = [
+            'items'=>Currencies::query()->get()
+        ];
+
+        return response()->json($data);
+    }
+
 
     /**
      * @Oa\Get(
@@ -92,8 +131,8 @@ class CurrenciesController extends Controller
 
         $data = $request->all();
         $validator = Validator::make($data['item'],[
-            'name' => 'required|unique:currencies,name,'.(isset($data['item']['id'])?$data['item']['id']:null),
-            'code'=>'required|unique:currencies,code,'.(isset($data['item']['id'])?$data['item']['id']:null),
+            'name' => 'required|string|unique:currencies,name,'.(isset($data['item']['id'])?$data['item']['id']:null),
+            'code'=>'required|string|unique:currencies,code,'.(isset($data['item']['id'])?$data['item']['id']:null),
             'rate'=>'required|numeric',
             'status'=>'boolean',
             'default'=>'boolean',

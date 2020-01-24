@@ -72,6 +72,84 @@ class CustomersController extends Controller
         return response()->json($data);
     }
 
+
+    /**
+     * @Oa\Get(
+     *      path="/api/customers/search/persons",
+     *      tags={"customers"},
+     *      security={ {"auth": {} } },
+     *      @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="name  of  customer persons",
+     *         required=false,
+     *        @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=200,
+     *          @OA\JsonContent(
+     *             type="object",
+     *             @OA\Items()
+     *         ),
+     *          description="successful operation"
+     *       ),
+     *     )
+     *
+     * Returns list of persons
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function searchPersons(Request $request){
+        $data = [
+            'items' => Persons::query()->whereHas('customers')
+                ->with('customers')
+                ->where('name','LIKE','%'.$request['search'].'%')
+                ->get(),
+        ];
+
+        return response()->json($data);
+    }
+    /**
+     * @Oa\Get(
+     *      path="/api/customers/search/companies",
+     *      tags={"customers"},
+     *      security={ {"auth": {} } },
+     *      @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="name  of  customer companies",
+     *         required=false,
+     *        @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=200,
+     *          @OA\JsonContent(
+     *             type="object",
+     *             @OA\Items()
+     *         ),
+     *          description="successful operation"
+     *       ),
+     *     )
+     *
+     * Returns list of persons
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function searchCompanies(Request $request){
+        $data = [
+            'items' => Companies::query()->whereHas('customers')
+                ->with('customers')
+                ->where('name','LIKE','%'.$request['search'].'%')
+                ->get(),
+        ];
+
+        return response()->json($data);
+    }
+
     public function create(Request $request)
     {
 

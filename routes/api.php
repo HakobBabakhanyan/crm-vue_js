@@ -24,25 +24,25 @@ Route::group(['middleware' => ['jwt.verify:admin']], function() {
     Route::post('user/update', 'AdminController@update');
 
     Route::group(['prefix'=>'companies'],function (){
-        Route::get('get', 'CompaniesController@getCompanies');
-        Route::get('get/all', 'CompaniesController@getCompaniesAll');
-        Route::get('get/{company}', 'CompaniesController@getCompany');
+        Route::get('index', 'CompaniesController@index');
+        Route::get('get', 'CompaniesController@get');
         Route::post('sync', 'CompaniesController@sync');
-        Route::delete('destroy/{company}', 'CompaniesController@destroy');
+        Route::delete('destroy', 'CompaniesController@destroy');
     });
     Route::group(['prefix'=>'persons'],function (){
-        Route::get('get', 'PersonsController@getPersons');
-        Route::get('get/all', 'PersonsController@getPersonsAll');
-        Route::get('get/{person}', 'PersonsController@getPerson');
+        Route::get('index', 'PersonsController@index');
+        Route::get('get', 'PersonsController@get');
         Route::post('sync', 'PersonsController@sync');
-        Route::delete('destroy/{person}', 'PersonsController@destroy');
+        Route::delete('destroy', 'PersonsController@destroy');
     });
 
     Route::group(['prefix'=>'customers'],function (){
         $controller = 'CustomersController';
         Route::get('get', $controller.'@getCustomers');
         Route::get('get/companies', $controller.'@getCustomersCompanies');
+        Route::get('search/companies',$controller.'@searchCompanies');
         Route::get('get/persons', $controller.'@getCustomersPersons');
+        Route::get('search/persons',$controller.'@searchPersons');
         Route::get('get/selects', $controller.'@getSelectsItems');
         Route::post('create', $controller.'@create');
         Route::delete('destroy/{customer}', $controller.'@destroy');
@@ -69,13 +69,30 @@ Route::group(['middleware' => ['jwt.verify:admin']], function() {
        Route::group(['prefix'=>'currencies'],function (){
           $controller = 'CurrenciesController';
           Route::get('index',$controller.'@index');
+           Route::get('get/all',$controller.'@getAll');
+           Route::get('get/{item}',$controller.'@getItem');
+           Route::post('sync',$controller.'@sync');
+           Route::delete('destroy/{item}',$controller.'@destroy');
+       });
+       Route::group(['prefix'=>'taxes'],function (){
+           $controller = 'TaxesController';
+           Route::get('index',$controller.'@index');
            Route::get('get/{item}',$controller.'@getItem');
 
            Route::post('sync',$controller.'@sync');
            Route::delete('destroy/{item}',$controller.'@destroy');
        });
     });
+    Route::group(['prefix'=>'incomes'],function (){
+        Route::group(['prefix'=>'categories'],function (){
+            $controller = 'IncomeCategoriesController';
+            Route::get('index',$controller.'@index');
+            Route::get('get/{item}',$controller.'@getItem');
 
+            Route::post('sync',$controller.'@sync');
+            Route::delete('destroy/{item}',$controller.'@destroy');
+        });
+    });
 
 
 

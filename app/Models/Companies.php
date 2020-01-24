@@ -36,4 +36,5 @@ class Companies extends Model
         $item->save();
         return $item;
     }
+
 }

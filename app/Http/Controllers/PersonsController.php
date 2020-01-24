@@ -11,7 +11,7 @@ class PersonsController extends Controller
     use Uploads;
     /**
      * @Oa\Get(
-     *      path="/api/persons/get",
+     *      path="/api/persons/index",
      *      tags={"persons"},
      *      security={ {"auth": {} } },
      *      description="get companies",
@@ -37,15 +37,16 @@ class PersonsController extends Controller
      *
      * Returns list of persons
      */
-    public function getPersons(){
+    public function index(){
         $data=[
-            'persons'=>Persons::paginate(2)
+            'persons'=>Persons::paginate()
         ];
         return response()->json($data);
     }
+
     /**
      * @Oa\Get(
-     *      path="/api/persons/get/all",
+     *      path="/api/persons/get",
      *      tags={"persons"},
      *      security={ {"auth": {} } },
      *      description="get companies",
@@ -60,49 +61,18 @@ class PersonsController extends Controller
      *     )
      *
      * Returns list of persons
-     */
-    public function getPersonsAll(){
-        $data=[
-            'persons'=>Persons::all()
-        ];
-        return response()->json($data);
-    }
-
-    /**
-     * @Oa\Get(
-     *      path="/api/persons/get/{person}",
-     *      tags={"persons"},
-     *      security={ {"auth": {} } },
-     *      description="get perosn by id",
-     *      @OA\Parameter(
-     *         name="person",
-     *         in="path",
-     *         description="ID of pet to fetch",
-     *         required=true,
-     *        @OA\Schema(
-     *             type="integer",
-     *             format="int64",
-     *         )
-     *     ),
-     *      @OA\Response(
-     *          response=200,
-     *          @OA\JsonContent(
-     *             type="object",
-     *             @OA\Items()
-     *         ),
-     *          description="successful operation"
-     *       ),
-     *     )
-     *
-     * Returns company by id
-     * @param Persons $person
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getPerson(Persons $person){
-        $data=[
-            'person'=>$person->with('companies')->first(),
-        ];
+    public function get(Request $request){
+        $persons = Persons::query();
 
+        if(isset($request['id'])){
+            $persons->where('id',$request['id']);
+        }
+        $data=[
+            'persons'=>$persons->with('companies')->get()
+        ];
         return response()->json($data);
     }
 
@@ -130,12 +100,13 @@ class PersonsController extends Controller
         return response()->json($data);
 
     }
-    public function destroy(Persons $person){
+    public function destroy(Request $request){
 
+        $person = Persons::query()->findOrFail($request['id']);
         $person->delete();
         $data=[
             'message'=>'Person delete',
-            'persons'=>Persons::paginate(2)
+            'persons'=>Persons::paginate()
         ];
         return response()->json($data);
     }

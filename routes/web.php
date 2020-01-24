@@ -20,7 +20,7 @@
 //Route::get('/home', 'HomeController@index')->name('home');
 //
 
-//Route::get('/{any}', 'HomeController@index')->where('any', '.*');
+Route::get('/test', 'HomeController@index');
 
 Route::get('/{any}', function () {
     return view('index');

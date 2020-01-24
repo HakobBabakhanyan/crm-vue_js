@@ -40,7 +40,7 @@ class Persons extends Model
         $item->save();
 
         if($item){
-            $item->companies()->sync($data['selected']);
+            $item->companies()->sync($data['selected']??[]);
         }
 
         return $item;

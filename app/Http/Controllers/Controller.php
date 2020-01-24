@@ -49,6 +49,11 @@ use Illuminate\Routing\Controller as BaseController;
  *         url="http://swagger.io"
  *     )
  * )
+ *   @OA\Tag(
+ *     name="companies",
+ *     description="companies",
+
+ * )
  * @OA\ExternalDocumentation(
  *     description="Find out more about Swagger",
  *     url="http://swagger.io"

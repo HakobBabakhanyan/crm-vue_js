@@ -92,13 +92,13 @@
                 }
             }
         },
-        "/api/companies/get": {
+        "/api/companies/index": {
             "get": {
                 "tags": [
                     "companies"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\CompaniesController::getCompanies",
+                "operationId": "App\\Http\\Controllers\\CompaniesController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -131,19 +131,136 @@
                 ]
             }
         },
-        "/api/companies/get/{company}": {
+        "/api/companies/get": {
             "get": {
                 "tags": [
                     "companies"
                 ],
                 "description": "get company id",
-                "operationId": "App\\Http\\Controllers\\CompaniesController::getCompany",
+                "operationId": "App\\Http\\Controllers\\CompaniesController::get",
                 "parameters": [
                     {
                         "name": "company",
                         "in": "path",
                         "description": "ID of pet to fetch",
                         "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/settings/currencies/index": {
+            "get": {
+                "tags": [
+                    "settings"
+                ],
+                "description": "get companies",
+                "operationId": "App\\Http\\Controllers\\CurrenciesController::index",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/settings/currencies/get/all": {
+            "get": {
+                "tags": [
+                    "settings"
+                ],
+                "description": "get companies",
+                "operationId": "App\\Http\\Controllers\\CurrenciesController::getAll",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of category",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/settings/currencies/get/{id}": {
+            "get": {
+                "tags": [
+                    "settings"
+                ],
+                "description": "get companies",
+                "operationId": "App\\Http\\Controllers\\CurrenciesController::getItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of category",
+                        "required": false,
                         "schema": {
                             "type": "integer",
                             "format": "int64"
@@ -182,6 +299,240 @@
                         "name": "page",
                         "in": "query",
                         "description": "number of page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/customers/search/persons": {
+            "get": {
+                "tags": [
+                    "customers"
+                ],
+                "operationId": "App\\Http\\Controllers\\CustomersController::searchPersons",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "name  of  customer persons",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/customers/search/companies": {
+            "get": {
+                "tags": [
+                    "customers"
+                ],
+                "operationId": "App\\Http\\Controllers\\CustomersController::searchCompanies",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "name  of  customer companies",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/incomes/categories/index": {
+            "get": {
+                "tags": [
+                    "incomes"
+                ],
+                "description": "get index",
+                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::index",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/incomes/categories/get/{id}": {
+            "get": {
+                "tags": [
+                    "incomes"
+                ],
+                "description": "get company by id",
+                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::getItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of category",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/incomes/categories/sync": {
+            "post": {
+                "tags": [
+                    "incomes"
+                ],
+                "description": "get company by id",
+                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::sync",
+                "parameters": [
+                    {
+                        "name": "item",
+                        "in": "query",
+                        "description": "item",
+                        "required": false,
+                        "schema": {
+                            "properties": {
+                                "item[name]": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/incomes/categories/destroy/{item}": {
+            "delete": {
+                "tags": [
+                    "incomes"
+                ],
+                "description": "get company by id",
+                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::destroy",
+                "parameters": [
+                    {
+                        "name": "item",
+                        "in": "path",
+                        "description": "id of category",
                         "required": false,
                         "schema": {
                             "type": "integer",
@@ -469,6 +820,84 @@
                     }
                 ]
             }
+        },
+        "/api/settings/taxes/index": {
+            "get": {
+                "tags": [
+                    "settings"
+                ],
+                "description": "get companies",
+                "operationId": "App\\Http\\Controllers\\TaxesController::index",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/settings/taxes/get/{id}": {
+            "get": {
+                "tags": [
+                    "settings"
+                ],
+                "description": "get companies",
+                "operationId": "App\\Http\\Controllers\\TaxesController::getItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of category",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
         }
     },
     "tags": [
@@ -487,6 +916,10 @@
                 "description": "Find out more about",
                 "url": "http://swagger.io"
             }
+        },
+        {
+            "name": "companies",
+            "description": "companies"
         }
     ],
     "externalDocs": {

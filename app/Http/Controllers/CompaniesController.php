@@ -13,7 +13,7 @@ class CompaniesController extends Controller
 
     /**
      * @Oa\Get(
-     *      path="/api/companies/get",
+     *      path="/api/companies/index",
      *      tags={"companies"},
      *      security={ {"auth": {} } },
      *      description="get companies",
@@ -39,9 +39,9 @@ class CompaniesController extends Controller
      *
      * Returns list of companies
      */
-    public function getCompanies(){
+    public function index(){
         $data=[
-          'companies'=>Companies::paginate(2)
+          'companies'=>Companies::paginate()
         ];
 
         return response()->json($data);
@@ -49,7 +49,7 @@ class CompaniesController extends Controller
 
     /**
      * @Oa\Get(
-     *      path="/api/companies/get/{company}",
+     *      path="/api/companies/get",
      *      tags={"companies"},
      *      security={ {"auth": {} } },
      *      description="get company id",
@@ -73,26 +73,30 @@ class CompaniesController extends Controller
      *       ),
      *     )
      *
-     * Returns company by id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function getCompany(Companies $company){
+    public function get(Request $request){
+
+        $companies = Companies::query();
+
+        if(isset($request['id'])){
+            $companies->where('id',$request['id']);
+        }
+
         $data=[
-          'company'=>$company
-        ];
-
-        return response()->json($data);
-    }
-
-
-    public function getCompaniesAll(Companies $company){
-        $data=[
-            'companies'=>Companies::all()
+          'companies'=>$companies->get()
         ];
 
         return response()->json($data);
     }
 
     public function sync(Request $request){
+
+        $request->validate([
+            'name'=>'required|unique:companies,name,'.(isset($request['id'])?$request['id']:null),
+            'type'=>'required'
+        ]);
 
         if(isset($request['id'])){
             $company = Companies::find($request['id']);
@@ -105,6 +109,7 @@ class CompaniesController extends Controller
                 $this->imageDelete($company->logo);
             }
         }
+
         $company = Companies::_save($request->all(),$company);
 
         $data=[
@@ -116,12 +121,13 @@ class CompaniesController extends Controller
 
     }
 
-    public function destroy(Companies $company){
+    public function destroy(Request $request){
 
+        $company = Companies::query()->findOrFail($request['id']);
         $company->delete();
         $data=[
           'message'=>'Company delete',
-          'companies'=>Companies::all()
+          'companies'=>Companies::paginate()
         ];
         return response()->json($data);
     }
