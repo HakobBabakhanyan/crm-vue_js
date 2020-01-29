@@ -209,13 +209,13 @@
                 ]
             }
         },
-        "/api/settings/currencies/get/all": {
+        "/api/settings/currencies/get": {
             "get": {
                 "tags": [
                     "settings"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\CurrenciesController::getAll",
+                "operationId": "App\\Http\\Controllers\\CurrenciesController::get",
                 "parameters": [
                     {
                         "name": "id",
@@ -287,13 +287,13 @@
                 ]
             }
         },
-        "/api/customers/get": {
+        "/api/customers/index": {
             "get": {
                 "tags": [
                     "customers"
                 ],
                 "description": "get custumers",
-                "operationId": "App\\Http\\Controllers\\CustomersController::getCustomers",
+                "operationId": "App\\Http\\Controllers\\CustomersController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -304,39 +304,11 @@
                             "type": "integer",
                             "format": "int64"
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "items": {}
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
+                    },
                     {
-                        "auth": []
-                    }
-                ]
-            }
-        },
-        "/api/customers/search/persons": {
-            "get": {
-                "tags": [
-                    "customers"
-                ],
-                "operationId": "App\\Http\\Controllers\\CustomersController::searchPersons",
-                "parameters": [
-                    {
-                        "name": "search",
+                        "name": "type",
                         "in": "query",
-                        "description": "name  of  customer persons",
+                        "description": "get by type [COMPANIES,PERSONS]",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -363,17 +335,17 @@
                 ]
             }
         },
-        "/api/customers/search/companies": {
+        "/api/customers/search": {
             "get": {
                 "tags": [
                     "customers"
                 ],
-                "operationId": "App\\Http\\Controllers\\CustomersController::searchCompanies",
+                "operationId": "App\\Http\\Controllers\\CustomersController::search",
                 "parameters": [
                     {
                         "name": "search",
                         "in": "query",
-                        "description": "name  of  customer companies",
+                        "description": "name  of  customer persons",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -439,17 +411,17 @@
                 ]
             }
         },
-        "/api/incomes/categories/get/{id}": {
+        "/api/incomes/categories/get": {
             "get": {
                 "tags": [
                     "incomes"
                 ],
                 "description": "get company by id",
-                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::getItem",
+                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::get",
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "description": "id of category",
                         "required": false,
                         "schema": {
@@ -540,6 +512,33 @@
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/incomes/invoices/index": {
+            "get": {
+                "tags": [
+                    "incomes"
+                ],
+                "description": "get index",
+                "operationId": "App\\Http\\Controllers\\InvoicesController::getNumber",
                 "responses": {
                     "200": {
                         "description": "successful operation",
@@ -716,13 +715,13 @@
                 ]
             }
         },
-        "/api/persons/get": {
+        "/api/persons/index": {
             "get": {
                 "tags": [
                     "persons"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\PersonsController::getPersons",
+                "operationId": "App\\Http\\Controllers\\PersonsController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -755,52 +754,13 @@
                 ]
             }
         },
-        "/api/persons/get/all": {
+        "/api/persons/get": {
             "get": {
                 "tags": [
                     "persons"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\PersonsController::getPersonsAll",
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "items": {}
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "auth": []
-                    }
-                ]
-            }
-        },
-        "/api/persons/get/{person}": {
-            "get": {
-                "tags": [
-                    "persons"
-                ],
-                "description": "get perosn by id",
-                "operationId": "App\\Http\\Controllers\\PersonsController::getPerson",
-                "parameters": [
-                    {
-                        "name": "person",
-                        "in": "path",
-                        "description": "ID of pet to fetch",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
+                "operationId": "App\\Http\\Controllers\\PersonsController::get",
                 "responses": {
                     "200": {
                         "description": "successful operation",

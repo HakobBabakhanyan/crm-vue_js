@@ -6,15 +6,6 @@ const store = new Vuex.Store({
     state: {
         jwt: localStorage.getItem('jwt'),
         user: null,
-        url: {
-            getCustomers: '/api/customers/get',
-            getCustomersCompanies: '/api/customers/get/companies',
-            getCustomersPersons: '/api/customers/get/persons', // TODO remove const created
-            getSelectsItems: '/api/customers/get/selects',
-            createCustomer: '/api/customers/create',
-            destroyCustomers: '/api/customers/destroy/',
-
-        }
     },
     getters: {
         getUser: async (state) => {

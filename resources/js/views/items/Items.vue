@@ -8,26 +8,23 @@
                             <i class="material-icons">assignment</i>
                         </div>
                         <div class="card-icon float-right ">
-                            <router-link :to="{name:'person-add'}">
+                            <router-link :to="{name:'item-create'}">
                                 <span class="text-white">Add</span>
                             </router-link>
                         </div>
-                        <h4 class="card-title">Persons</h4>
+                        <h4 class="card-title">Customers Company</h4>
 
                     </div>
                     <div class="card-body table-responsive">
                         <VTable @remove="remove"
-                                :edit_route="'person-edit'"
-                                :thead="{'id':{name:'ID'},
-                                'name':{name:'Name'},
-                                'created_at':{name:'Date'}}"
-                                :items="persons" />
+                                :edit_route="'item-edit'"
+                                :thead="{'id':{name:'ID'},'name':{name:'Name'},'created_at':{name:'Date'}}"
+                                :items="items" />
                         <paginate
                             :page-count="data.last_page?data.last_page:0"
-                            v-model="data.current_page"
                             :page-range="3"
                             :margin-pages="2"
-                            :click-handler="clickCallback"
+                            :click-handler="pagination"
                             :prev-text="'Prev'"
                             :next-text="'Next'"
                             :container-class="'pagination'"
@@ -46,56 +43,54 @@
     </div>
 </template>
 <script>
-
-    import Person from "../../http/api/Person";
+    import Items from "../../http/api/Items";
 
     export default {
-        name: "Persons",
+        name: "Items",
         data: () => ({
-            name: '',
-            password: '',
-            persons: [],
+            items: [],
             data: [],
 
         }),
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            Person.index().then((response) => {
-                self.data = response.persons;
-                self.persons = self.data.data;
+            Items.index().then((response) => {
+                self.data = response.items;
+                self.items = self.data.data;
             });
 
         },
         methods: {
-            remove($event,id) {
+            remove($event, id) {
                 let self = this;
                 self.$swal.fire({
-                    icon:'warning',
-                    title:'Delete this Person',
+                    icon: 'warning',
+                    title: 'Delete this Item !',
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        Person.delete({
-                            id:id,
-                            page:self.data.current_page
-                        }).then( (response)=>{
+                    preConfirm: (item) => {
+                        Items.delete({
+                            id:id
+                        }).then((response) => {
                             self.$toastr.s(response.message);
-                            self.data = response.persons;
-                            self.persons = self.data.data;
-                        } );
+                            self.data = response.items;
+                            self.items = self.data.data;
+                        })
                     },
-                });
+                })
+
             },
-            clickCallback(pageNum) {
-                let self= this;
-                Person.index({
+            pagination(pageNum) {
+                let self = this;
+                Items.index({
                     page:pageNum
                 }).then((response) => {
-                    self.data = response.persons;
-                    self.persons = self.data.data;
+                    self.data = response.items;
+                    self.items = self.data.data;
                 });
-            }
+
+            },
         }
     }
 </script>

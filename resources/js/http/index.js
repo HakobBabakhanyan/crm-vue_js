@@ -10,19 +10,19 @@ import axios from 'axios';
 // },function (error) {
 //     return Promise.reject(error);
 // });
-axios.interceptors.response.use(function (response) {
-    return response;
-}, function (error) {
-    if (error.response) {
-        if (error.response.status === 400) {
-            if (error.response.data.status === 'Authorization Token not found') {
-                localStorage.removeItem('jwt');
-                router.push({name: 'login'})
-            }
-        }
-    }
-    return Promise.reject(error);
-});
+// axios.interceptors.response.use(function (response) {
+//     return response;
+// }, function (error) {
+//     if (error.response) {
+//         if (error.response.status === 400) {
+//             if (error.response.data.status === 'Authorization Token not found') {
+//                 localStorage.removeItem('jwt');
+//                 router.push({name: 'login'})
+//             }
+//         }
+//     }
+//     return Promise.reject(error);
+// });
 
 export default axios;
 

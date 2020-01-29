@@ -10,5 +10,4 @@ Vue.prototype.$const = CONST;
 Vue.prototype.$helpers = helpers;
 Vue.prototype.$http = axios;
 
-
 const app = new Vue({router, store}).$mount('#app');

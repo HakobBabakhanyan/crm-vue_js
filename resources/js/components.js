@@ -21,10 +21,10 @@ Vue.component('VTextarea', require('./views/components/form/VTextarea').default)
 Vue.component('VCheckbox', require('./views/components/form/VCheckbox').default);
 Vue.component('VInput', require('./views/components/form/VInput').default);
 
-Vue.component('IncomesCategories', require('./views/Incomes/Categories/Categories').default);
-Vue.component('IncomesCategory', require('./views/Incomes/Categories/Category').default);
-Vue.component('IncomesInvoices', require('./views/Incomes/Invoices/Invoices').default);
-Vue.component('IncomesInvoice', require('./views/Incomes/Invoices/Invoice').default);
+Vue.component('IncomesCategories', require('./views/incomes/categories/Categories').default);
+Vue.component('IncomesCategory', require('./views/incomes/categories/Category').default);
+Vue.component('IncomesInvoices', require('./views/incomes/invoices/Invoices').default);
+Vue.component('IncomesInvoice', require('./views/incomes/invoices/Invoice').default);
 
 
 Vue.component('Dashboard', require('./views/Dashboard').default);
@@ -39,13 +39,13 @@ Vue.component('App', require('./views/App.vue').default);
 Vue.component('Persons', require('./views/persons/Persons').default);
 Vue.component('Person', require('./views/persons/Person').default);
 Vue.component('Multiselect', require('vue-multiselect').default);
-Vue.component('Customers', require('./views/Customers/Customers').default);
-Vue.component('Customer', require('./views/Customers/Customer').default);
+Vue.component('Customers', require('./views/customers/Customers').default);
+Vue.component('Customer', require('./views/customers/Customer').default);
 // item
-Vue.component('Items', require('./views/Items/Items').default);
-Vue.component('Item', require('./views/Items/Item').default);
-Vue.component('ItemCategories', require('./views/Items/Categories/ItemCategories').default);
-Vue.component('ItemCategory', require('./views/Items/Categories/ItemCategory').default);
+Vue.component('Items', require('./views/items/Items').default);
+Vue.component('Item', require('./views/items/Item').default);
+Vue.component('ItemCategories', require('./views/items/Categories/ItemCategories').default);
+Vue.component('ItemCategory', require('./views/items/Categories/ItemCategory').default);
 // settings
 Vue.component('Currencies', require('./views/Settings/Currencies/Currencies').default);
 Vue.component('Currency', require('./views/Settings/Currencies/Currency').default);

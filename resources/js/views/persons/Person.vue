@@ -60,7 +60,7 @@
 <script>
 
     import Companies from "../../http/api/Companies";
-    import Persons from "../../http/api/Persons";
+    import Person from "../../http/api/Person";
 
     export default {
         name: "Person",
@@ -84,7 +84,7 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
             if(this.edit){
-                Persons.get({
+                Person.get({
                     id:self.$route.params.id
                 }).then((response)=>{
                     self.person = response.persons.shift();
@@ -134,7 +134,7 @@
                 if(this.person.info.contacts){
                     fd.append('contacts', this.person.info.contacts??null);
                 }
-                Persons.sync(fd).
+                Person.sync(fd).
                 then((response) => {
                     console.log(response.data)
                     self.$router.push({name:'persons'});

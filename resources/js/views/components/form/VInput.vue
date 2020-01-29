@@ -23,6 +23,7 @@
             },
             label: {
                 type: String,
+                default:'input',
                 required: true
             },
             value: {

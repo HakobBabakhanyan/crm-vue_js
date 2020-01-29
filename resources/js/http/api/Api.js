@@ -29,6 +29,13 @@ class Api {
        });
     }
 
+    static search(query){
+       return request({
+          url:this.getUrl().SEARCH,
+          method:'get',
+          params:query
+       });
+    }
 
     static sync(query){
 

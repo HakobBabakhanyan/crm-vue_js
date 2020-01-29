@@ -72,7 +72,7 @@ class AdminController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Items()
+     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
