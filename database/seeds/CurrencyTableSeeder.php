@@ -18,5 +18,12 @@ class CurrencyTableSeeder extends Seeder
             'status' => 1,
             'default' => 1,
         ]);
+        DB::table('currencies')->insert([
+            'name' => 'Euro',
+            'code' => 'EUR',
+            'rate' => 0.8,
+            'status' => 1,
+            'default' => 0,
+        ]);
     }
 }

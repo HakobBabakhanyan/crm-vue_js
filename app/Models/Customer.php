@@ -12,12 +12,14 @@ class Customer extends Model
         'COMPANIES' => Company::class
     ];
 
+    protected $appends=['name'];
 
-    public function parentable(){
-        return $this->guessBelongsToRelation();
+
+    public function parent(){
+        return $this->morphTo();
     }
-    public static function _save($data){
 
+    public static function _save($data){
 
         if(isset(self::TYPE[$data['type']])){
             $item = self::where([['parent_id',$data['selected']],['parent_type', self::TYPE[$data['type']]]])->first();
@@ -28,9 +30,12 @@ class Customer extends Model
             $item->parent_type = self::TYPE[$data['type']];
 
             $item->save();
-
             return $item;
         }
 
+    }
+
+    public function getNameAttribute(){
+        return $this->parent->name ?? null;
     }
 }

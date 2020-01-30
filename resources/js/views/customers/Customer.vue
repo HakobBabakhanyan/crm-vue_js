@@ -12,15 +12,14 @@
                                 <div class="row">
                                     <div class="col-12 my-2">
                                         <label class="typo__label">Simple</label>
-                                        <Multiselect
+                                        <VueSelect
                                             v-model="person.customer"
                                             :options="options"
                                             @input="updateSelect"
-                                            track-by="id"
                                             label="name"
                                             placeholder="Select"
                                         >
-                                        </Multiselect>
+                                        </VueSelect>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary pull-right">
@@ -69,7 +68,6 @@
             update($event) {
                 $event.preventDefault();
                 let self = this;
-                console.log(self.type);
                 Customers.create({
                     'selected': self.selected,
                     'type': self.type,

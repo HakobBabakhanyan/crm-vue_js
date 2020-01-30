@@ -11,8 +11,8 @@ class Person extends Model
     ];
 
 
-    public function customers(){
-        return $this->morphMany(Customer::class, 'parent','parent_type');
+    public function customer(){
+        return $this->morphOne(Customer::class, 'parent');
     }
 
     protected $appends = ['type'];

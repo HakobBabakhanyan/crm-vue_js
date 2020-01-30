@@ -14,30 +14,32 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label class="typo__label">Customers</label>
-                                        <Multiselect
-                                            v-model="item.customers"
+                                        <VueSelect
                                             :options="customers"
-                                            :internal-search="false"
-                                            :loading="isLoading"
-                                            @search-change="asyncFind"
-                                            track-by="id"
+                                            @search="customerFind"
                                             label="name"
-                                            group-label="type"
-                                            group-values="items"
                                             placeholder="Select Customers"
                                         >
-                                        </Multiselect>
+                                            <template  v-slot:option="option">
+                                                <i class="fa"
+                                                   v-bind:class="{
+                                                    'fa-building':option.parent.type ==='App\\Models\\Company',
+                                                    'fa-user':option.parent.type ==='App\\Models\\Person',
+                                                   }"></i>
+                                                {{ option.parent.name }}
+                                            </template>
+                                        </VueSelect>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="typo__label">Currencies</label>
-                                        <Multiselect
+                                        <VueSelect
                                             v-model="item.currency"
                                             :options="currencies"
                                             track-by="id"
                                             label="name"
-                                            placeholder="Select Customers"
-                                        >
-                                        </Multiselect>
+                                            placeholder="Select Currencies"
+                                        />
+
                                     </div>
                                     <div class="col-md-6 my-2">
                                         <label class="typo__label">Invoice Date</label>
@@ -69,60 +71,95 @@
                                             <th>Actions</th>
                                             <th>Name</th>
                                             <th>Quantity</th>
-                                            <th>Price</th>
+                                            <th v-if="(item.currency && !item.currency.default)">Price</th>
+                                            <th>Price Default</th>
                                             <th>Tax</th>
-                                            <th>Total</th>
+                                            <th v-if="(item.currency && !item.currency.default)">Total</th>
+                                            <th>Total Default</th>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="(item,index) in item.items">
+                                                <tr v-for="(v,k) in item.items">
                                                 <td>
-                                                    <button type="button" v-on:click="removeList(index)">
-                                                        remove {{ item.items }}
+                                                    <button type="button" class="btn btn-link btn-danger"
+
+                                                            v-on:click="removeList(k)">
+                                                        <i class="fa fa-minus"> </i>
                                                     </button>
                                                 </td>
                                                 <td>
-                                                    <Multiselect
-                                                        v-model="item.item"
+                                                    <VueSelect
                                                         :options="items"
-                                                        :internal-search="false"
-                                                        :loading="isLoading"
-                                                        @search-change="itemsFind"
-                                                        track-by="id"
+                                                        :clearable="false"
+                                                        :filterable="false"
+                                                        @search="itemsFind"
+                                                        @input="i => setSelectedItems(k, i)"
                                                         label="name"
                                                         placeholder="Select Customers"
-                                                    >
-                                                    </Multiselect>
-                                                </td>
-                                                <td>
-                                                    <VInput
-                                                        :label="'Quantity'"
-                                                        v-model="item.quantity"
                                                     />
                                                 </td>
                                                 <td>
-                                                    {{ item.item?((item.quantity || 1) * item.item.sale_price):'' }}
+                                                    <div style="width: 100px">
+                                                        <VInput
+                                                            :label="'Quantity'"
+                                                            v-model="item.items[k].quantity"
+                                                        />
+                                                    </div>
                                                 </td>
+                                                <td v-if="(item.currency && !item.currency.default)">
+                                                    {{ $helpers.getSalePrice(item.items[k],item.currency) }}
+                                                </td>
+                                                    <td>
+                                                        {{ $helpers.getSalePrice(item.items[k],currencyDefault) }}
+                                                    </td>
                                                 <td>
-                                                    <Multiselect
-                                                        v-model="item.taxe"
+                                                    <VueSelect
+                                                        v-model="item.items[k].tax"
                                                         :options="taxes"
-                                                        track-by="id"
                                                         label="name"
-                                                        placeholder="Select tax"
-                                                    >
-                                                    </Multiselect>
+                                                        @input="RecurringSelect"
+                                                    />
+                                                </td>
+                                                <td v-if="(item.currency && !item.currency.default)">
+                                                    {{ $helpers.getSalePrice(item.items[k],item.currency,'quantity') }}
                                                 </td>
                                                 <td>
-                                                    {{ item.item?item.item.sale_price:'' }}
+                                                    {{ $helpers.getSalePrice(item.items[k],currencyDefault,'quantity','tax') }}
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="6">
-                                                    <button type="button" v-on:click="item.items.push({})">
-                                                        add
+                                                <td :colspan="(item.currency && !item.currency.default)?8:6">
+                                                    <button type="button" class="btn btn-link btn-success"
+                                                            v-on:click="item.items.push(Object)">
+                                                        <i class="fa fa-plus"></i>
                                                     </button>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td :colspan="(item.currency && !item.currency.default)?7:5">
+                                                    Subtotal
+                                                </td>
+                                                <td>
+                                                  {{ subTotal }}
+                                                </td>
+                                            </tr>
+                                                <tr>
+                                                    <td :colspan="(item.currency && !item.currency.default)?7:5">
+                                                        tax
+                                                    </td>
+                                                    <td>
+                                                        tax
+                                                        <!--                                                        {{ subTotal }}-->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td :colspan="(item.currency && !item.currency.default)?7:5">
+                                                        total
+                                                    </td>
+                                                    <td>
+                                                        total
+<!--                                                        {{ subTotal }}-->
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -134,10 +171,9 @@
                                         />
                                     </div>
                                     <div class="col-12 my-2">
-                                        <Multiselect
+                                        <VueSelect
                                             v-model="item.category"
                                             :options="categories"
-                                            track-by="id"
                                             label="name"
                                             placeholder="Category"
                                         />
@@ -145,11 +181,8 @@
                                     <div class="col-12 my-2">
                                         <div class="row">
                                             <div class="col">
-                                                <Multiselect
-                                                    v-model="item.recurring"
+                                                <VueSelect
                                                     :options="recurring.data"
-                                                    placeholder="Recurring"
-                                                    label="Recurring"
                                                     @input="RecurringSelect"
                                                 />
                                             </div>
@@ -198,7 +231,8 @@
         data: () => {
             return {
                 item: {
-                    items: [{}]
+                    items: [Object],
+                    currency:Object
                 },
                 items: [],
                 categories: [],
@@ -213,6 +247,7 @@
                 invoice: {},
                 customers: [],
                 currencies: [],
+                currencyDefault: {},
                 date: {
                     Invoice: "2020-01-24",
                     due: "2020-01-26",
@@ -225,8 +260,12 @@
             Invoices.getNumber().then((response) => {
                 self.invoice.invoice_number = response.number
             });
-            Currencies.get().then((response) => {
-                self.currencies = response.items;
+            Currencies.get().then((data) => {
+                self.currencies = data.items;
+                self.currencyDefault= self.currencies.find(function (item) {
+                        return item.default === 1
+                });
+                self.item.currency = self.currencyDefault;
             });
             IncomesCategories.get().then((response) => {
                 self.categories = response.items
@@ -260,34 +299,21 @@
                     }
                 });
             },
-            asyncFind(query) {
+            customerFind(query){
                 let self = this;
-                this.isLoading = true;
-
                 Customers.search({
                     search: query
-                }).then((request) => {
-                    self.customers = [
-                        {
-                            type: 'Persons',
-                            items: request.persons
-                        },
-                        {
-                            type: 'Companies',
-                            items: request.companies
-                        }
-                    ];
-                    self.isLoading = false
+                }).then((data) => {
+                    self.customers = data.customers;
                 });
             },
-            itemsFind(query) {
-                let self = this;
-                this.isLoading = true;
+            itemsFind(search,loading) {
+                loading(true);
                 Items.search({
-                    search: query
+                    search: search  ,
                 }).then((data) => {
-                    self.items = data.items;
-                    self.isLoading = false
+                    this.items = data.items;
+                    loading(false);
                 });
             },
             RecurringSelect(select) {
@@ -301,9 +327,31 @@
                 }
             },
             removeList(index){
-                this.item.items.splice(index,1)
+                if(index){
+                    this.item.items.splice(index,1)
+                }else {
+                    this.$toastr.w('last item')
+                }
+            },
+            setSelectedItems(k,value){
+                this.item.items[k] = value;
+                this.items = [...this.items];
             }
         },
+        watch:{
+            'item.items.item':{
+                handler(val){
+                    console.log(val)
+                },
+            }
+        },
+        computed:{
+            subTotal(){
+                return this.item.items.reduce((acc, data) => {
+                        return acc + this.$helpers.getSalePrice(data,null,'quantity','tax')
+                }, 0)
+            }
+        }
     }
 </script>
 

@@ -29,21 +29,19 @@ class Api {
        });
     }
 
-    static search(query){
+    static search(query,data){
        return request({
           url:this.getUrl().SEARCH,
           method:'get',
-          params:query
+          params:query,
        });
     }
 
     static sync(query){
-
         return request({
             url:this.getUrl().SYNC,
             method:'post',
             data:query,
-
         });
     }
 

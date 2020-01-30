@@ -52,6 +52,9 @@ service.interceptors.response.use(
         if(error.request.status === 404){
             router.push({name:'404'})
         }
+        if(error.request.status === 400){
+            console.log(error.request)
+        }
         if (error.request.status === 422) {
             Object.keys(error.response.data.errors).forEach(function (item) {
                 self.$toastr.e(error.response.data.errors[item])
