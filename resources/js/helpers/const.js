@@ -19,6 +19,10 @@ export default {
         INCOMES_CATEGORIES_SYNC:'/api/incomes/categories/sync',
         INCOMES_CATEGORIES_DESTROY:'/api/incomes/categories/destroy/',
 
+    },
+    TAX:{
+        NORMAL:'Normal',
+        INCLUSIVE:'Inclusive',
     }
 };
 

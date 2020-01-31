@@ -76,7 +76,7 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
         Route::group(['prefix' => 'taxes'], function () {
             $controller = 'TaxController';
             Route::get('index', $controller . '@index');
-            Route::get('get/{item}', $controller . '@getItem');
+            Route::get('get', $controller . '@get');
             Route::get('search', $controller . '@search');
             Route::post('sync', $controller . '@sync');
             Route::delete('destroy/{item}', $controller . '@destroy');

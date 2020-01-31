@@ -20,7 +20,7 @@ class Item extends Model
         $item->description = $data['description'];
         $item->sale_price = $data['sale_price'];
         $item->purchase_price = $data['purchase_price'];
-        $item->categories_id = $data['categories_id']??null;
+        $item->category_id = $data['category_id']??null;
 
         $item->save();
 

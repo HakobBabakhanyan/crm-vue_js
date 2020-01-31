@@ -38,7 +38,7 @@ Vue.component('Login', require('./views/auth/Login').default);
 Vue.component('App', require('./views/App.vue').default);
 Vue.component('Persons', require('./views/persons/Persons').default);
 Vue.component('Person', require('./views/persons/Person').default);
-Vue.component('Multiselect', require('vue-multiselect').default);
+// Vue.component('Multiselect', require('vue-multiselect').default);
 Vue.component('Customers', require('./views/customers/Customers').default);
 Vue.component('Customer', require('./views/customers/Customer').default);
 // item
@@ -47,10 +47,12 @@ Vue.component('Item', require('./views/items/Item').default);
 Vue.component('ItemCategories', require('./views/items/Categories/ItemCategories').default);
 Vue.component('ItemCategory', require('./views/items/Categories/ItemCategory').default);
 // settings
-Vue.component('Currencies', require('./views/Settings/Currencies/Currencies').default);
-Vue.component('Currency', require('./views/Settings/Currencies/Currency').default);
-Vue.component('Taxes', require('./views/Settings/Taxes/Taxes').default);
-Vue.component('Tax', require('./views/Settings/Taxes/Tax').default);
+Vue.component('Currencies', require('./views/settings/Currencies/Currencies').default);
+Vue.component('Currency', require('./views/settings/Currencies/Currency').default);
+Vue.component('Taxes', require('./views/settings/taxes/Taxes').default);
+Vue.component('Tax', require('./views/settings/taxes/Tax').default);
+
+Vue.component('VueSelect',require('vue-select').default);
 
 
 

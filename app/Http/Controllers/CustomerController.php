@@ -64,14 +64,14 @@ class CustomerController extends Controller
         if($request->has('type')){
             if(isset(self::TYPE[$request['type']])){
                 ${strtolower($request['type'])} = (self::TYPE[$request['type']])::query()
-                    ->whereHas('customers')
-                    ->with('customers')->paginate(self::PAGINATE);
+                    ->whereHas('customer')
+                    ->with('customer')->paginate(self::PAGINATE);
             }
         }else {
-            $companies = Company::query()->whereHas('customers')
-                ->with('customers')->paginate(self::PAGINATE);
-            $persons = Person::query()->whereHas('customers')
-                ->with('customers')->paginate(self::PAGINATE);
+            $companies = Company::query()->whereHas('customer')
+                ->with('customer')->paginate(self::PAGINATE);
+            $persons = Person::query()->whereHas('customer')
+                ->with('customer')->paginate(self::PAGINATE);
         };
 
 
@@ -109,22 +109,15 @@ class CustomerController extends Controller
      *
      * Returns list of persons
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
     public function search(Request $request){
-        $data = [
-            'persons' => Person::query()->whereHas('customers')
-                ->with('customers')
-                ->where('name','LIKE','%'.$request['search'].'%')
-                ->get(),
-            'companies' => Company::query()->whereHas('customers')
-                ->with('customers')
-                ->where('name','LIKE','%'.$request['search'].'%')
-                ->get(),
 
+            return [
+            'customers' => Customer::with(['parent'=>function($q) use ($request){
+                $q->where('name','LIKE','%'.$request['search'].'%');
+            }])->get()
         ];
-
-        return response()->json($data);
     }
 
 
@@ -147,10 +140,10 @@ class CustomerController extends Controller
         $customer->delete();
 
         $data = [
-            'companies' => Company::query()->whereHas('customers')
-                ->with('customers')->paginate(self::PAGINATE),
-            'persons' => Person::query()->whereHas('customers')
-                ->with('customers')->paginate(self::PAGINATE),
+            'companies' => Company::query()->whereHas('customer')
+                ->with('customer')->paginate(self::PAGINATE),
+            'persons' => Person::query()->whereHas('customer')
+                ->with('customer')->paginate(self::PAGINATE),
             'message' => 'deleted'
         ];
         return response()->json($data);
@@ -159,16 +152,12 @@ class CustomerController extends Controller
 
     public function getSelectsItems(Request $request)
     {
-
-
         if (isset($request['type'])) {
             $model = Customer::TYPE[$request['type']];
         } else $model = Company::class;
 
-        $data = [
-            'items' => $model::query()->doesntHave('customers')->get()
+        return [
+            'items' => $model::query()->doesntHave('customer')->get()
         ];
-
-        return response()->json($data);
     }
 }

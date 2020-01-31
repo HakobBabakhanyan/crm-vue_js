@@ -28,18 +28,18 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <Multiselect
+                                        <VueSelect
                                             v-model="item.category"
                                             :options="options"
                                             :internal-search="false"
                                             :loading="isLoading"
                                             @input="updateSelect"
-                                            @search-change="asyncFind"
+                                            @search="asyncFind"
                                             track-by="id"
                                             label="name"
                                             placeholder="Select"
                                         >
-                                        </Multiselect>
+                                        </VueSelect>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary pull-right">
@@ -120,7 +120,7 @@
                 })
             },
             updateSelect(item) {
-                this.item.categories_id = item.id;
+                this.item.category_id = item.id;
             },
         },
     }

@@ -25,7 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        Customer::query()->with('parentable')->get();
+        Customer::query()->with('parent')->get();
         return response(1);
         dd('INV-'.str_pad(Company::max('id')+1, 5, '0', STR_PAD_LEFT));
     }

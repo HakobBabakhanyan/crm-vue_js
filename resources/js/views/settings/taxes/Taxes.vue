@@ -40,6 +40,8 @@
     </div>
 </template>
 <script>
+    import Tax from "../../../http/api/Tax";
+
     export default {
         name: "Taxes",
         data: () => ({
@@ -50,12 +52,8 @@
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            self.$http.get(self.$const.URL.SETTINGS_TAXES_INDEX, {
-                params: {
-                    token: self.$store.state.jwt
-                }
-            }).then((response) => {
-                self.data = response.data.items;
+            Tax.index().then((data) => {
+                self.data = data.items;
                 self.items = self.data.data;
             });
 

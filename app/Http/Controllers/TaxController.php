@@ -47,13 +47,13 @@ class TaxController extends Controller
 
     /**
      * @Oa\Get(
-     *      path="/api/settings/taxes/get/{id}",
+     *      path="/api/settings/taxes/get",
      *      tags={"settings"},
      *      security={ {"auth": {} } },
      *      description="get companies",
      *      @OA\Parameter(
      *         name="id",
-     *         in="path",
+     *         in="query",
      *         description="id of category",
      *         required=false,
      *        @OA\Schema(
@@ -72,13 +72,19 @@ class TaxController extends Controller
      *     )
      *
      * Returns list of persons
-     * @param $item
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getItem($item){
+    public function get(Request $request){
+
+        $taxes = Tax::query();
+
+        if(isset($request['id'])){
+            $taxes->where('id',$request['id']);
+        }
 
         $data = [
-            'item'=>Tax::query()->findOrFail($item)
+            'taxes'=>$taxes->get()
         ];
 
         return response()->json($data);

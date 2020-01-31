@@ -16,7 +16,7 @@
 
                     </div>
                     <div class="card-body table-responsive">
-                        <VTable @remove="remove" :delete_item="'customers'"
+                        <VTable @remove="remove" :delete_item="'customer'"
                                 :thead="{'id':{name:'ID'},'name':{name:'Name'},'created_at':{name:'Date'}}" :items="companies" />
                         <paginate
                             :page-count="dataCompanies.last_page?dataCompanies.last_page:0"
@@ -52,7 +52,7 @@
 
                     </div>
                     <div class="card-body table-responsive">
-                        <VTable @remove="remove" :delete_item="'customers'"
+                        <VTable @remove="remove" :delete_item="'customer'"
                                 :thead="{'id':{name:'ID'},
                                 'name':{name:'Name'},'created_at':{name:'Date'}}" :items="persons" />
                         <paginate
@@ -103,9 +103,9 @@
 
         },
         methods: {
-            remove($event, customers) {
+            remove($event, customer) {
                 let self = this;
-                let id = customers.shift().id;
+                let id = customer.id;
                 self.$swal.fire({
                     icon: 'warning',
                     title: 'Delete this Person',

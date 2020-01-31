@@ -20,15 +20,14 @@
                                     </div>
                                      <div class="col-12 my-2">
                                             <label class="typo__label">Simple</label>
-                                            <Multiselect
+                                            <VueSelect
                                                 v-model="selected"
                                                 :options="options"
                                                 :allow-empty="false"
-                                                track-by="type"
                                                 label="name"
                                                 placeholder="Select Type"
                                             >
-                                            </Multiselect>
+                                            </VueSelect>
                                         </div>
                                     <div class="col-12 mt-2">
                                         <VCheckbox v-model="item.status" ref="rate" :label="'Status'"/>
@@ -48,6 +47,7 @@
     </div>
 </template>
 <script>
+    import Tax from '../../../http/api/Tax'
     export default {
         name: "Currency",
         props: {
@@ -77,12 +77,10 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
             if (self.edit) {
-                this.$http.get(this.$const.URL.SETTINGS_TAXES_GET + self.$route.params.id, {
-                    params: {
-                        token: self.$store.state.jwt,
-                    }
-                }).then((response) => {
-                    self.item = response.data.item;
+                Tax.get({
+                    id:self.$route.params.id
+                }).then((data) => {
+                    self.item = data.taxes.shift();
                     self.options.map(function (item) {
                         if(item.name === self.item.type){
                             self.selected = item;
@@ -97,12 +95,11 @@
                 $event.preventDefault();
                 let self = this;
                 self.item.type = self.selected.type;
-                this.$http.post(this.$const.URL.SETTINGS_TAXES_SYNC, {
-                    token: localStorage.getItem('jwt'),
-                    'item': self.item,
-                }).then((response) => {
+                Tax.sync({
+                    item:self.item
+                }).then((data) => {
                     self.$router.push({name: 'settings-taxes'});
-                    self.$toastr.s(response.data.message);
+                    self.$toastr.s(data.message);
                 }).catch((error) => {
                     if (error.response) {
                         if (error.response.status === 422) {
