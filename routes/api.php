@@ -57,10 +57,10 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
         Route::group(['prefix' => 'categories'], function () {
             $controller = 'ItemCategoryController';
             Route::get('index', $controller . '@index');
-            Route::get('get/{category}', $controller . '@getCategory');
+            Route::get('get', $controller . '@get');
             Route::get('search', $controller . '@search');
             Route::post('sync', $controller . '@sync');
-            Route::delete('destroy/{category}', $controller . '@destroy');
+            Route::delete('destroy', $controller . '@destroy');
         });
     });
 
@@ -69,9 +69,9 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
             $controller = 'CurrencyController';
             Route::get('index', $controller . '@index');
             Route::get('get', $controller . '@get');
-            Route::get('get/{item}', $controller . '@getItem');
+            Route::get('get', $controller . '@get');
             Route::post('sync', $controller . '@sync');
-            Route::delete('destroy/{item}', $controller . '@destroy');
+            Route::delete('destroy', $controller . '@destroy');
         });
         Route::group(['prefix' => 'taxes'], function () {
             $controller = 'TaxController';

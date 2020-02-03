@@ -39,11 +39,10 @@ class ItemCategoryController extends Controller
 
 
     public function index(){
-        $data = [
+
+        return [
             'categories'=>ItemCategory::query()->paginate()
         ];
-
-        return response()->json($data);
     }
 
     /**
@@ -73,23 +72,21 @@ class ItemCategoryController extends Controller
      *     )
      *
      * Returns list of persons
-     * @param ItemCategory $category
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return array
      */
-    public function getCategory(ItemCategory $category){
+    public function get(Request $request){
 
-        $data = [
-            'category'=>$category
+        return  [
+            'category'=>ItemCategory::query()->findOrFail($request->get('id'))
         ];
-
-        return response()->json($data);
     }
 
     public function sync(Request $request){
 
         $data = $request->all();
         $validator = Validator::make($data['category'],[
-            'name' => 'required',
+            'name' => 'required|string|unique:item_categories,name,'.((isset($data['category']['id']))?$data['category']['id']:null),
         ]);
         $validator->validate();
 
@@ -100,7 +97,7 @@ class ItemCategoryController extends Controller
         }
         ItemCategory::_save($data['category'],$category);
 
-        return response()->json(['message'=>'Created']);
+        return ['message'=>'Created'];
     }
 
 
@@ -112,12 +109,13 @@ class ItemCategoryController extends Controller
         return response()->json($data);
     }
 
-    public function destroy(ItemCategory $category){
+    public function destroy(Request $request){
+        $category = ItemCategory::query()->findOrFail($request->get('id'));
         $category->delete();
-        $data = [
+
+        return [
             'categories'=>ItemCategory::query()->paginate(),
             'message'=>'deleted'
         ];
-        return response()->json($data);
     }
 }

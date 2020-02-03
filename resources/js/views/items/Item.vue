@@ -59,6 +59,7 @@
 <script>
 
     import Items from "../../http/api/Items";
+    import ItemCategory from "../../http/api/ItemCategory";
 
     export default {
         name: "ItemCategory",
@@ -109,13 +110,10 @@
             asyncFind (query) {
                 let self = this;
                 this.isLoading = true;
-                this.$http.get(self.$const.URL.ITEM_CATEGORIES_SEARCH, {
-                    params: {
-                        token: self.$store.state.jwt,
-                        name: query,
-                    }
-                }).then(response => {
-                    self.options = response.data.categories;
+                ItemCategory.search({
+                    name: query,
+                }).then(data => {
+                    self.options = data.categories;
                     self.isLoading = false
                 })
             },

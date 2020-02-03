@@ -13,7 +13,6 @@
                             </router-link>
                         </div>
                         <h4 class="card-title">Customers Company</h4>
-
                     </div>
                     <div class="card-body table-responsive">
                         <VTable @remove="remove"
@@ -44,7 +43,6 @@
 </template>
 <script>
     import Items from "../../http/api/Items";
-
     export default {
         name: "Items",
         data: () => ({

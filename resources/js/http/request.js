@@ -1,6 +1,6 @@
 import axios from 'axios';
 import router from "../routes/web";
-
+import VueToastr from "vue-toastr";
 
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -53,7 +53,10 @@ service.interceptors.response.use(
             router.push({name:'404'})
         }
         if(error.request.status === 400){
-            console.log(error.request)
+            if(error.response.data.status === 'Authorization Token not found'){
+                localStorage.removeItem('jwt');
+                router.push({name:'login'})
+            }
         }
         if (error.request.status === 422) {
             Object.keys(error.response.data.errors).forEach(function (item) {

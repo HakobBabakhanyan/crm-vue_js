@@ -22,7 +22,7 @@
                                     </div>
                                     <div class="col-12">
                                         <label class="typo__label">Simple Companies</label>
-                                        <Multiselect
+                                        <VueSelect
                                             v-model="person.companies"
                                             :options="options"
                                             :multiple="true"
@@ -31,7 +31,7 @@
                                             label="name"
                                             placeholder="Select Companies"
                                         >
-                                        </Multiselect>
+                                        </VueSelect>
                                     </div>
                                     <div class="col-12">
                                         <div class="row">

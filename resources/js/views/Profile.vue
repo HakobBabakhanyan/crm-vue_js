@@ -79,6 +79,7 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
             this.$store.getters.getUser.then((request) => {
+                console.log(request)
                 self.user = request;
                 self.name = self.user.name;
             });
@@ -87,7 +88,7 @@
             update($event) {
                 $event.preventDefault();
                 if (!this.validate()) return false;
-                self = this;
+                let self = this;
                 const fd = new FormData();
                 if(this.files){
                     fd.append('image', this.files[0]);

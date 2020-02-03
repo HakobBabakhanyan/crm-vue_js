@@ -55,7 +55,7 @@ class CurrencyController extends Controller
      *      description="get companies",
      *      @OA\Parameter(
      *         name="id",
-     *         in="path",
+     *         in="query",
      *         description="id of category",
      *         required=false,
      *        @OA\Schema(
@@ -74,56 +74,16 @@ class CurrencyController extends Controller
      *     )
      *
      * Returns list of persons
-     * @param $item
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return array
      */
-    public function get(){
-        $data = [
-            'items'=>Currency::query()->get()
-        ];
+    public function get(Request $request){
 
-        return response()->json($data);
+        return [
+            'item'=>Currency::query()->findOrFail($request->get('id'))
+        ];
     }
 
-
-    /**
-     * @Oa\Get(
-     *      path="/api/settings/currencies/get/{id}",
-     *      tags={"settings"},
-     *      security={ {"auth": {} } },
-     *      description="get companies",
-     *      @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="id of category",
-     *         required=false,
-     *        @OA\Schema(
-     *             type="integer",
-     *             format="int64",
-     *         )
-     *     ),
-     *      @OA\Response(
-     *          response=200,
-     *          @OA\JsonContent(
-     *             type="object",
-     *             @OA\Item()
-     *         ),
-     *          description="successful operation"
-     *       ),
-     *     )
-     *
-     * Returns list of persons
-     * @param $item
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getItem($item){
-
-        $data = [
-            'item'=>Currency::query()->findOrFail($item)
-        ];
-
-        return response()->json($data);
-    }
 
 
     public function sync(Request $request){
@@ -149,12 +109,12 @@ class CurrencyController extends Controller
     }
 
 
-    public function destroy(Currency $item){
-        $item->delete();
-        $data = [
+    public function destroy(Request $request){
+        $currency=Currency::query()->findOrFail($request->input('id'));
+        $currency->delete();
+        return [
             'items'=>Currency::query()->paginate(),
             'message'=>'deleted'
         ];
-        return response()->json($data);
     }
 }

@@ -19,6 +19,7 @@
                         <VTable @remove="remove" :edit_route="'item-categories-edit'"
                                 :thead="{'id':{name:'ID'},'name':{name:'Name'},'created_at':{name:'Date'}}" :items="items" />
                         <paginate
+                            v-model="data.current_page"
                             :page-count="data.last_page?data.last_page:0"
                             :page-range="3"
                             :margin-pages="2"
@@ -41,6 +42,8 @@
     </div>
 </template>
 <script>
+    import ItemCategory from "../../../http/api/ItemCategory";
+
     export default {
         name: "ItemCategories",
         data: () => ({
@@ -51,12 +54,9 @@
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            self.$http.get(self.$const.URL.ITEM_CATEGORIES_INDEX, {
-                params: {
-                    token: self.$store.state.jwt
-                }
-            }).then((response) => {
-                self.data = response.data.categories;
+            ItemCategory.index().then((data) => {
+                console.log(data)
+                self.data = data.categories;
                 self.items = self.data.data;
             });
 
@@ -70,11 +70,12 @@
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (item) => {
-                        return self.$http.delete(self.$const.URL.ITEM_CATEGORIES_DESTROY + id, {
-                            data: {token: self.$store.state.jwt}
-                        }).then((response) => {
-                            self.$toastr.s(response.data.message);
-                            self.data = response.data.categories;
+                        return  ItemCategory.delete({
+                            id:id,
+                            page:self.data.current_page
+                        }).then((data) => {
+                            self.$toastr.s(data.message);
+                            self.data = data.categories;
                             self.items = self.data.data;
                         })
                     },
@@ -83,12 +84,10 @@
             },
             pagination(pageNum) {
                 let self = this;
-                self.$http.get(self.$const.URL.ITEM_CATEGORIES_INDEX + '?page=' + pageNum, {
-                    params: {
-                        token: self.$store.state.jwt
-                    }
-                }).then((response) => {
-                    self.data = response.data.categories;
+                ItemCategory.index({
+                    page:pageNum
+                }).then((data) => {
+                    self.data = data.categories;
                     self.items = self.data.data;
                 });
             },

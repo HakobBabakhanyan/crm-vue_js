@@ -44,6 +44,8 @@
 
 <script>
 
+    import Currencies from "../../../http/api/Currencies";
+
     export default {
         name: "Currency",
         props: {
@@ -58,12 +60,10 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
             if (self.edit) {
-                this.$http.get(this.$const.URL.SETTINGS_CURRENCIES_GET + self.$route.params.id, {
-                    params: {
-                        token: self.$store.state.jwt,
-                    }
-                }).then((response) => {
-                    self.item = response.data.item;
+                Currencies.get({
+                    id:self.$route.params.id
+                }).then((data) => {
+                    self.item = data.item;
                 });
             }
 
@@ -72,12 +72,11 @@
             update($event) {
                 $event.preventDefault();
                 let self = this;
-                this.$http.post(this.$const.URL.SETTINGS_CURRENCIES_SYNC, {
-                    token: localStorage.getItem('jwt'),
-                    'item': self.item,
-                }).then((response) => {
+                Currencies.sync({
+                    item:self.item
+                }).then((data) => {
                     self.$router.push({name: 'settings-currencies'});
-                    self.$toastr.s(response.data.message);
+                    self.$toastr.s(data.message);
                 }).catch((error) => {
                     if (error.response) {
                         if (error.response.status === 422) {

@@ -283,21 +283,7 @@
                 $event.preventDefault();
                 let self = this;
                 console.log(self.type);
-                this.$http.post(this.$const.URL.INCOMES_CATEGORIES_SYNC, {
-                    token: localStorage.getItem('jwt'),
-                    'item': self.item,
-                }).then((response) => {
-                    self.$router.push({name: 'incomes-categories-index'});
-                    self.$toastr.s(response.data.message);
-                }).catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            Object.keys(error.response.data.errors).forEach(function (item) {
-                                self.$toastr.e(error.response.data.errors[item])
-                            });
-                        }
-                    }
-                });
+
             },
             customerFind(query){
                 let self = this;

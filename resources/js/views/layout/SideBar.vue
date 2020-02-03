@@ -17,7 +17,7 @@
                         <p>{{ data.name }}</p>
                     </a>
                 </router-link>
-                <SideBarCollapse v-else  :data="data"/>
+                <SideBarCollapse v-else :data="data"/>
             </ul>
         </div>
     </div>
@@ -25,58 +25,59 @@
 <script>
     export default {
         name: "side-bar",
-        data:() => ({
-            side_bar:{
-                'dashboard':{
-                    'icon':'fa fa-tachometer',
-                     'name':'Dashboard'
-                },'profile':{
-                    'icon':'fa fa-user',
-                     'name':'Profile'
-                },'companies':{
-                    'icon':'fa fa-building',
-                     'name':'Companies'
-                },'persons':{
-                    'icon':'fa fa-user',
-                     'name':'Persons'
-                },'customers':{
-                    'icon':'fa fa-users',
-                     'name':'Customers'
-                },'items':{
-                    'name':'Items',
-                    'icon':'fa fa-cubes',
-                    'children':{
-                        'item-index':{
-                            'icon':'fa fa-angle-double-right',
-                            'name':'Items'
+        data: () => ({
+            side_bar: {
+                'dashboard': {
+                    'icon': 'fa fa-tachometer',
+                    'name': 'Dashboard'
+                }, 'companies': {
+                    'icon': 'fa fa-building',
+                    'name': 'Companies'
+                }, 'persons': {
+                    'icon': 'fa fa-user',
+                    'name': 'Persons'
+                }, 'items': {
+                    'name': 'Items',
+                    'icon': 'fa fa-cubes',
+                    'children': {
+                        'item-index': {
+                            'icon': 'fa fa-angle-double-right',
+                            'name': 'Items'
                         },
-                        'item-categories-index':{
-                            'icon':'fa fa-angle-double-right',
-                            'name':'Categories'
+                        'item-categories-index': {
+                            'icon': 'fa fa-angle-double-right',
+                            'name': 'categories'
                         }
                     }
-                },'incomes':{
-                    'name':'Incomes',
-                    'icon':'fa fa-dollar',
-                    'children':{
-                        'incomes-invoices-index':{
-                            'icon':'fa fa-angle-double-right',
-                            'name':'Invoices'
-                        },'incomes-categories-index':{
-                            'icon':'fa fa-angle-double-right',
-                            'name':'Categories'
+                }, 'incomes': {
+                    'name': 'Incomes',
+                    'icon': 'fa fa-dollar',
+                    'children': {
+                        'incomes-invoices-index': {
+                            'icon': 'fa fa-angle-double-right',
+                            'name': 'Invoices'
+                        }, 'incomes-categories-index': {
+                            'icon': 'fa fa-angle-double-right',
+                            'name': 'categories'
+                        }, 'customers': {
+                            'icon': 'fa fa-users',
+                            'name': 'Customers'
                         }
                     }
-                },'settings':{
-                    'name':'Settings',
-                    'icon':'fa fa-cogs',
-                    'children':{
-                        'settings-currencies':{
-                            'icon':'fa fa-angle-double-right',
-                            'name':'Currencies'
-                        },'settings-taxes':{
-                            'icon':'fa fa-angle-double-right',
-                            'name':'Taxes'
+                }, 'settings': {
+                    'name': 'Settings',
+                    'icon': 'fa fa-cogs',
+                    'children': {
+                        'profile': {
+                            'icon': 'fa fa-user',
+                            'name': 'Profile'
+                        },
+                        'settings-currencies': {
+                            'icon': 'fa fa-angle-double-right',
+                            'name': 'Currencies'
+                        }, 'settings-taxes': {
+                            'icon': 'fa fa-angle-double-right',
+                            'name': 'Taxes'
                         },
                     },
 
@@ -85,8 +86,8 @@
         }),
         mounted() {
         },
-        methods:{
-             collapse(index) {
+        methods: {
+            collapse(index) {
                 this.collapse_data.index = !this.collapse_data.index;
                 return this.collapse_data.index
             }

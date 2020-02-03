@@ -9,7 +9,9 @@ class IncomesCategories extends Api {
 
    static getUrl(){
         const  URL = {
-            GET:'/api/incomes/categories/get'
+            INDEX: '/api/incomes/categories/index',
+            SYNC: '/api/incomes/categories/sync',
+            GET:'/api/incomes/categories/get',
         };
         return URL;
     }

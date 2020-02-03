@@ -60,12 +60,11 @@
                 $event.preventDefault();
                 let self = this;
                 console.log(self.type);
-                this.$http.post(this.$const.URL.INCOMES_CATEGORIES_SYNC, {
-                    token: localStorage.getItem('jwt'),
-                    'item': self.item,
-                }).then((response) => {
+                IncomesCategories.sync({
+                    item:self.item
+                }).then((data) => {
                     self.$router.push({name: 'incomes-categories-index'});
-                    self.$toastr.s(response.data.message);
+                    self.$toastr.s(data.message);
                 }).catch((error) => {
                     if (error.response) {
                         if (error.response.status === 422) {

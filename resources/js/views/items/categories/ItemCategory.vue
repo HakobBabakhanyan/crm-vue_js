@@ -29,6 +29,8 @@
 
 <script>
 
+    import ItemCategory from "../../../http/api/ItemCategory";
+
     export default {
         name: "ItemCategory",
         props:{
@@ -45,12 +47,10 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
             if(self.edit){
-                this.$http.get(this.$const.URL.ITEM_CATEGORIES_GET + self.$route.params.id, {
-                    params: {
-                        token: self.$store.state.jwt,
-                    }
-                }).then((response) => {
-                    self.category = response.data.category;
+                ItemCategory.get({
+                    id:self.$route.params.id
+                }).then((data) => {
+                    self.category = data.category;
                 });
             }
 
@@ -60,12 +60,11 @@
                 $event.preventDefault();
                 let self = this;
                 console.log(self.type);
-                this.$http.post(this.$const.URL.ITEM_CATEGORIES_SYNC, {
-                    token: localStorage.getItem('jwt'),
-                    'category': self.category,
-                }).then((response) => {
+                ItemCategory.sync({
+                    category: self.category
+                }).then((data) => {
                     self.$router.push({name: 'item-categories-index'});
-                    self.$toastr.s(response.data.message);
+                    self.$toastr.s(data.message);
                 }).catch((error) => {
                     if (error.response) {
                         if (error.response.status === 422) {

@@ -40,6 +40,8 @@
     </div>
 </template>
 <script>
+    import IncomesCategories from "../../../http/api/IncomesCategories";
+
     export default {
         name: "IncomesInvoices",
         data: () => ({
@@ -82,14 +84,7 @@
             },
             pagination(pageNum) {
                 let self = this;
-                self.$http.get(self.$const.URL.INCOMES_CATEGORIES_INDEX + '?page=' + pageNum, {
-                    params: {
-                        token: self.$store.state.jwt
-                    }
-                }).then((response) => {
-                    self.data = response.data.items;
-                    self.items = self.data.data;
-                });
+               console.log(pageNumzz)
             },
         }
     }

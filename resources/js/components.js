@@ -44,8 +44,8 @@ Vue.component('Customer', require('./views/customers/Customer').default);
 // item
 Vue.component('Items', require('./views/items/Items').default);
 Vue.component('Item', require('./views/items/Item').default);
-Vue.component('ItemCategories', require('./views/items/Categories/ItemCategories').default);
-Vue.component('ItemCategory', require('./views/items/Categories/ItemCategory').default);
+Vue.component('ItemCategories', require('./views/items/categories/ItemCategories').default);
+Vue.component('ItemCategory', require('./views/items/categories/ItemCategory').default);
 // settings
 Vue.component('Currencies', require('./views/settings/Currencies/Currencies').default);
 Vue.component('Currency', require('./views/settings/Currencies/Currency').default);

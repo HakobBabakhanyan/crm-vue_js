@@ -40,6 +40,8 @@
     </div>
 </template>
 <script>
+    import IncomesCategories from "../../../http/api/IncomesCategories";
+
     export default {
         name: "IncomesCategories",
         data: () => ({
@@ -50,12 +52,8 @@
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            self.$http.get(self.$const.URL.INCOMES_CATEGORIES_INDEX, {
-                params: {
-                    token: self.$store.state.jwt
-                }
-            }).then((response) => {
-                self.data = response.data.items;
+            IncomesCategories.index().then((data) => {
+                self.data = data.items;
                 self.items = self.data.data;
             });
 
@@ -82,10 +80,8 @@
             },
             pagination(pageNum) {
                 let self = this;
-                self.$http.get(self.$const.URL.INCOMES_CATEGORIES_INDEX + '?page=' + pageNum, {
-                    params: {
-                        token: self.$store.state.jwt
-                    }
+                IncomesCategories.index({
+                    page:pageNum
                 }).then((response) => {
                     self.data = response.data.items;
                     self.items = self.data.data;
