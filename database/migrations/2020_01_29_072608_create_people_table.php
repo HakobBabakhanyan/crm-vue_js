@@ -15,10 +15,12 @@ class CreatePeopleTable extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('person_id')->unsigned()->nullable();
             $table->string('name');
             $table->string('image')->nullable();
             $table->text('info')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

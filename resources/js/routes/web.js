@@ -1,9 +1,16 @@
-import VueRouter from "vue-router";
 import Vue from "vue";
+import VueRouter from "vue-router";
+Vue.use(VueRouter);
+import VueProgressBar from 'vue-progressbar'
+Vue.use(VueProgressBar, {
+    color: '#9c27b0',
+    failedColor: 'red',
+    height: '3px'
+});
 import auth from "./middleware/auth";
 import guest from "./middleware/guest";
-Vue.use(VueRouter);
 import "../components";
+
 
 
  const router  = new VueRouter({
@@ -45,6 +52,14 @@ import "../components";
         {
             path: '/companies',
             name: 'companies',
+            component: Vue.component('Companies'),
+            meta: {
+                middleware: auth,
+            },
+        },
+        {
+            path: '/companies/history',
+            name: 'companies-history',
             component: Vue.component('Companies'),
             meta: {
                 middleware: auth,
@@ -264,16 +279,27 @@ import "../components";
                 middleware: auth,
             },
         },
+        {
+            path: '*',
+            name: '404',
+            props:{edit:true},
+            component: Vue.component('error_404'),
+            meta: {
+                middleware: auth,
+            },
+        },
 
 
     ],
 });
 
 
+let vue = new Vue();
 // Creates a `nextMiddleware()` function which not only
 // runs the default `next()` callback but also triggers
 // the subsequent Middleware function.
 router.beforeEach((to, from, next) => {
+    vue.$Progress.start();
     if (to.meta.middleware) {
         const middleware = Array.isArray(to.meta.middleware)
             ? to.meta.middleware
@@ -291,6 +317,9 @@ router.beforeEach((to, from, next) => {
     }
 
     return next();
+});
+router.afterEach(() => {
+    vue.$Progress.finish()
 });
 
 function  nextFactory(context, middleware, index) {

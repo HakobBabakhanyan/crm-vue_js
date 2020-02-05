@@ -58,7 +58,7 @@
                             <router-link class="dropdown-item" active-class="false"  :to="{name:'profile'}">
                                 Profile
                             </router-link>
-                            <a class="dropdown-item" href="#">Settings</a>
+                            <a class="dropdown-item" v-on:click="$helpers.test()" href="javascript:void(0)">Settings</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" v-on:click="logout()"  href="javascript:void(0)">Log out</a>
                         </div>
@@ -69,6 +69,7 @@
     </nav>
 </template>
 <script>
+    import Auth from '../../http/api/Auth'
     export default {
         name: "nav-bar",
         data: () => ({
@@ -86,15 +87,10 @@
         methods: {
             logout() {
                 let self = this;
-                    this.$http.post('/api/logout', {
-                        token: self.$store.state.jwt
-                    }).then(function (response) {
-                        localStorage.removeItem('jwt');
-                        self.$store.state.jwt = false ;
+                Auth.logout().then(function (data) {
+                        self.$helpers.log_out();
                         return self.$router.push({ name: 'login' });
-                    }).catch(function (error) {
-                        console.log(error);
-                    });
+                    })
             }
 
         }

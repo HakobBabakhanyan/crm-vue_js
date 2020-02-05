@@ -15,6 +15,7 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('item_id')->unsigned()->nullable();
             $table->bigInteger('category_id')->unsigned()->nullable();
             $table->string('name');
             $table->text('description')->nullable();
@@ -23,6 +24,7 @@ class CreateItemsTable extends Migration
             $table->integer('purchase_price');
             $table->boolean('status')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

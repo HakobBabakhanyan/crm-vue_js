@@ -58,8 +58,8 @@
 
 <script>
 
-    import Items from "../../http/api/Items";
-    import ItemCategory from "../../http/api/ItemCategory";
+    import ItemRequest from "../../http/api/ItemRequest";
+    import ItemCategoryRequest from "../../http/api/ItemCategoryRequest";
 
     export default {
         name: "ItemCategory",
@@ -77,10 +77,9 @@
             }
         },
         mounted() {
-            this.$parent.auth = this.$store.state.jwt;
             let self = this;
             if(self.edit){
-                Items.get({
+                ItemRequest.get({
                     id:self.$route.params.id
                 }).then((response) => {
                     self.item = response.item;
@@ -92,25 +91,17 @@
             update($event) {
                 $event.preventDefault();
                 let self = this;
-                Items.sync({
+                ItemRequest.sync({
                     'item': self.item
                 }).then((response) => {
                     self.$router.push({name: 'item-index'});
                     self.$toastr.s(response.data.message);
-                }).catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            Object.keys(error.response.data.errors).forEach(function (item) {
-                                self.$toastr.e(error.response.data.errors[item])
-                            });
-                        }
-                    }
                 });
             },
             asyncFind (query) {
                 let self = this;
                 this.isLoading = true;
-                ItemCategory.search({
+                ItemCategoryRequest.search({
                     name: query,
                 }).then(data => {
                     self.options = data.categories;

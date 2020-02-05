@@ -76,13 +76,17 @@
             }
         },
         mounted() {
-            this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            this.$store.getters.getUser.then((request) => {
-                console.log(request)
-                self.user = request;
-                self.name = self.user.name;
-            });
+            if(!self.$store.state.user){
+                self.$helpers.getUser().then((data) => {
+                    self.$store.state.user = data.user;
+                    self.user = self.$store.state.user;
+                    self.name = self.user.name
+                });
+            } else {
+                self.user = self.$store.state.user;
+                self.name = self.user.name
+            }
         },
         methods: {
             update($event) {

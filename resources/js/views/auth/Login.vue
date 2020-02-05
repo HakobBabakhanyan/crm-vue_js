@@ -50,6 +50,7 @@
 </template>
 
 <script>
+    import Auth from '../../http/api/Auth';
 
     export default {
         name: "Login",
@@ -65,18 +66,13 @@
                 event.preventDefault();
                 let self = this;
                 if (this.name !== "" && this.password !== "") {
-                    this.$http.post('/api/login', {
+                    Auth.login({
                         name: this.name,
                         password: this.password
-                    }).then(function (response) {
-                        localStorage.setItem('jwt', response.data.token);
-                        self.$store.state.jwt = response.data.token;
+                    }).then(function (data) {
+                        localStorage.setItem('jwt', data.token);
+                        self.$store.state.jwt = data.token;
                         return self.$router.push({name: 'dashboard'});
-                    }).catch(function (error) {
-                        if (error.response.status === 401) {
-                            self.$toastr.e(error.response.data.error);
-                        }
-                        ;
                     });
 
                 } else {

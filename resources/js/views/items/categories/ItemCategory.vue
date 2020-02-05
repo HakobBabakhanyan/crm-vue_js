@@ -29,7 +29,7 @@
 
 <script>
 
-    import ItemCategory from "../../../http/api/ItemCategory";
+    import ItemCategoryRequest from "../../../http/api/ItemCategoryRequest";
 
     export default {
         name: "ItemCategory",
@@ -47,9 +47,7 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
             if(self.edit){
-                ItemCategory.get({
-                    id:self.$route.params.id
-                }).then((data) => {
+                    ItemCategoryRequest.show(self.$route.params.id).then((data) => {
                     self.category = data.category;
                 });
             }
@@ -59,20 +57,17 @@
             update($event) {
                 $event.preventDefault();
                 let self = this;
-                console.log(self.type);
-                ItemCategory.sync({
+                if(self.edit) ItemCategoryRequest.update(self.category.id,{
+                        category: self.category
+                    }).then((data) => {
+                        self.$router.push({name: 'item-categories-index'});
+                        self.$toastr.s(data.message);
+                    });
+                else ItemCategoryRequest.create({
                     category: self.category
                 }).then((data) => {
                     self.$router.push({name: 'item-categories-index'});
                     self.$toastr.s(data.message);
-                }).catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            Object.keys(error.response.data.errors).forEach(function (item) {
-                                self.$toastr.e(error.response.data.errors[item])
-                            });
-                        }
-                    }
                 });
             },
         },

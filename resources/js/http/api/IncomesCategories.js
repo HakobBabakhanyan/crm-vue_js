@@ -1,5 +1,4 @@
 import Api from './Api';
-import request from "../request";
 
 class IncomesCategories extends Api {
 
@@ -8,12 +7,11 @@ class IncomesCategories extends Api {
     }
 
    static getUrl(){
-        const  URL = {
+       return {
             INDEX: '/api/incomes/categories/index',
             SYNC: '/api/incomes/categories/sync',
-            GET:'/api/incomes/categories/get',
+            GET: '/api/incomes/categories/get',
         };
-        return URL;
     }
 
 

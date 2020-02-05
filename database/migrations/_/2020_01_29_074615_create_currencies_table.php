@@ -15,7 +15,12 @@ class CreateCurrenciesTable extends Migration
     {
         Schema::create('currencies', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('param_id');
+
+
+
             $table->string('name')->unique();
+            $table->bigInteger('parent_id');
             $table->string('code')->unique();
             $table->float('rate');
             $table->boolean('status')->default(0);

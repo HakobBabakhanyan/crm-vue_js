@@ -1,5 +1,4 @@
 import Api from './Api';
-import request from "../request";
 
 class Currencies extends Api {
 
@@ -8,13 +7,13 @@ class Currencies extends Api {
     }
 
    static getUrl(){
-        const  URL = {
-            INDEX:'/api/settings/currencies/index',
-            GET:'/api/settings/currencies/get',
-            SYNC:'/api/settings/currencies/sync',
-            DELETE:'/api/settings/currencies/destroy',
+       return {
+            INDEX: '/api/settings/currencies/index',
+            GET: '/api/settings/currencies/get',
+            SEARCH: '/api/settings/currencies/search',
+            SYNC: '/api/settings/currencies/sync',
+            DELETE: '/api/settings/currencies/destroy',
         };
-        return URL;
     }
 
 

@@ -8,10 +8,9 @@ class Invoices extends Api {
     }
 
    static getUrl(){
-        const  URL = {
-            NUMBER:'/api/incomes/invoices/number'
+       return {
+            NUMBER: '/api/incomes/invoices/number'
         };
-        return URL;
     }
 
     static getNumber(query){

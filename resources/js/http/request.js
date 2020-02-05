@@ -1,6 +1,9 @@
 import axios from 'axios';
 import router from "../routes/web";
+import helpers from "../helpers/helpers";
 import VueToastr from "vue-toastr";
+import Vue from 'vue'
+Vue.use(VueToastr);
 
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -41,29 +44,40 @@ service.interceptors.response.use(
     response => {
         const res = response.data;
 
-            if(res.code){
-                console.log('test ' + res.code)
-            };
-
-            return res
+        if (res.code) {
+            console.log('test ' + res.code)
+        }
+        return res
 
     },
     error => {
-        if(error.request.status === 404){
-            router.push({name:'404'})
+        let vue = new Vue();
+        switch (error.request.status) {
+            case 400:
+                if (error.response.data.status === 'Authorization Token not found') {
+                    vue.$toastr.e('Authorization Token not found');
+                    helpers.log_out();
+                    router.push({name: 'login'})
+                }
+                break;
+            case 401:
+                vue = new Vue();
+                vue.$toastr.e(error.response.data.error);
+                break;
+            case 404:
+                console.log(404);
+                // router.push({name: '404'});
+                break;
+            case 422:
+                vue = new Vue();
+                Object.keys(error.response.data.errors).forEach(function (item) {
+                    vue.$toaster.e(error.response.data.errors[item]);
+                });
+                break;
+            default:
+                vue.$toastr.e('undefined error');
+                console.log('err - ' + error);
         }
-        if(error.request.status === 400){
-            if(error.response.data.status === 'Authorization Token not found'){
-                localStorage.removeItem('jwt');
-                router.push({name:'login'})
-            }
-        }
-        if (error.request.status === 422) {
-            Object.keys(error.response.data.errors).forEach(function (item) {
-                self.$toastr.e(error.response.data.errors[item])
-            });
-        }
-        console.log('err - ' + error);
         return Promise.reject(error)
     }
 );

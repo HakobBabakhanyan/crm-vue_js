@@ -52,7 +52,7 @@
 
 <script>
 
-    import Companies from "../../http/api/Companies";
+    import CompanyRequest from "../../http/api/CompanyRequest";
 
     export default {
         name: "CompanyAdd",
@@ -75,10 +75,8 @@
 
             if(this.edit){
                 let self = this;
-                Companies.get({
-                    id:self.$route.params.id
-                }).then( (response) => {
-                    self.company = response.companies.shift();
+                CompanyRequest.show(self.$route.params.id).then( (data) => {
+                    self.company = data.company;
                     if(!self.company.info){
                         self.company.info = {}
                     }
@@ -113,8 +111,13 @@
                 if(this.company.info.contacts){
                     fd.append('contacts', this.company.info.contacts??null);
                 }
-                Companies.sync(fd).then((response) => {
-                    self.$router.push({name:'companies'});
+                if(this.edit){
+                    CompanyRequest.update(this.company.id,fd).then((response) => {
+                        // self.$router.push({name:'companies'});
+                        self.$toastr.s(response.message);
+                    });
+                }else CompanyRequest.create(fd).then((response) => {
+                    // self.$router.push({name:'companies'});
                     self.$toastr.s(response.message);
                 });
             },

@@ -28,7 +28,6 @@ class CurrencyController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
@@ -36,8 +35,6 @@ class CurrencyController extends Controller
      *
      * Returns list of persons
      */
-
-
     public function index(){
         $data = [
             'items'=>Currency::query()->paginate()
@@ -46,7 +43,11 @@ class CurrencyController extends Controller
         return response()->json($data);
     }
 
-
+    public function search(){
+        return [
+         'currencies'=>Currency::query()->get()
+        ];
+    }
     /**
      * @Oa\Get(
      *      path="/api/settings/currencies/get",
@@ -67,7 +68,6 @@ class CurrencyController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
@@ -83,8 +83,6 @@ class CurrencyController extends Controller
             'item'=>Currency::query()->findOrFail($request->get('id'))
         ];
     }
-
-
 
     public function sync(Request $request){
 
@@ -107,7 +105,6 @@ class CurrencyController extends Controller
 
         return response()->json(['message'=>'Created']);
     }
-
 
     public function destroy(Request $request){
         $currency=Currency::query()->findOrFail($request->input('id'));

@@ -78,7 +78,7 @@
     </div>
 </template>
 <script>
-    import Customers from "../../http/api/Customers";
+    import CustomerRequest from "../../http/api/CustomerRequest";
 
     export default {
         name: "Customers",
@@ -94,7 +94,7 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
 
-            Customers.index().then((response) => {
+            CustomerRequest.index().then((response) => {
                 self.dataCompanies = response.companies;
                 self.companies = self.dataCompanies.data;
                 self.dataPersons = response.persons;
@@ -112,9 +112,7 @@
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: () => {
-                        return  Customers.delete({
-                            id:id
-                        }).then((response) => {
+                        return  CustomerRequest.delete(id).then((response) => {
                             self.$toastr.s(response.message);
                             self.dataCompanies = response.companies;
                             self.companies = self.dataCompanies.data;
@@ -127,7 +125,7 @@
             },
             paginationCompanies(pageNum) {
                 let self = this;
-                Customers.index({
+                CustomerRequest.index({
                     page:pageNum,
                     'type':'COMPANIES'
                 }).then((response) => {
@@ -137,7 +135,7 @@
             },
             paginationPersons(pageNum) {
                 let self = this;
-                Customers.index({
+                CustomerRequest.index({
                     page:pageNum,
                     'type':'PERSONS'
                 }).then((response) => {

@@ -7,8 +7,8 @@
             "email": "info@digex"
         },
         "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            "name": "crm",
+            "url": "http://crm.loc/"
         },
         "version": "1.0.0"
     },
@@ -16,10 +16,6 @@
         {
             "url": "",
             "description": "crm  host server"
-        },
-        {
-            "url": "https://crm.loc/api/v1",
-            "description": "L5 Swagger OpenApi Server"
         }
     ],
     "paths": {
@@ -37,8 +33,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -83,8 +78,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "json",
-                                    "items": {}
+                                    "type": "json"
                                 }
                             }
                         }
@@ -98,7 +92,7 @@
                     "companies"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\CompaniesController::index",
+                "operationId": "App\\Http\\Controllers\\CompanyController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -117,8 +111,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -137,7 +130,7 @@
                     "companies"
                 ],
                 "description": "get company id",
-                "operationId": "App\\Http\\Controllers\\CompaniesController::get",
+                "operationId": "App\\Http\\Controllers\\CompanyController::get",
                 "parameters": [
                     {
                         "name": "company",
@@ -156,8 +149,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -176,7 +168,7 @@
                     "settings"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\CurrenciesController::index",
+                "operationId": "App\\Http\\Controllers\\CurrencyController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -195,8 +187,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -215,11 +206,11 @@
                     "settings"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\CurrenciesController::get",
+                "operationId": "App\\Http\\Controllers\\CurrencyController::get",
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "description": "id of category",
                         "required": false,
                         "schema": {
@@ -234,47 +225,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "auth": []
-                    }
-                ]
-            }
-        },
-        "/api/settings/currencies/get/{id}": {
-            "get": {
-                "tags": [
-                    "settings"
-                ],
-                "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\CurrenciesController::getItem",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of category",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -293,7 +244,7 @@
                     "customers"
                 ],
                 "description": "get custumers",
-                "operationId": "App\\Http\\Controllers\\CustomersController::index",
+                "operationId": "App\\Http\\Controllers\\CustomerController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -321,8 +272,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -340,7 +290,7 @@
                 "tags": [
                     "customers"
                 ],
-                "operationId": "App\\Http\\Controllers\\CustomersController::search",
+                "operationId": "App\\Http\\Controllers\\CustomerController::search",
                 "parameters": [
                     {
                         "name": "search",
@@ -358,8 +308,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -378,7 +327,7 @@
                     "incomes"
                 ],
                 "description": "get index",
-                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::index",
+                "operationId": "App\\Http\\Controllers\\InvoiceCategoryController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -397,8 +346,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -417,7 +365,7 @@
                     "incomes"
                 ],
                 "description": "get company by id",
-                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::get",
+                "operationId": "App\\Http\\Controllers\\InvoiceCategoryController::get",
                 "parameters": [
                     {
                         "name": "id",
@@ -436,8 +384,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -456,7 +403,7 @@
                     "incomes"
                 ],
                 "description": "get company by id",
-                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::sync",
+                "operationId": "App\\Http\\Controllers\\InvoiceCategoryController::sync",
                 "parameters": [
                     {
                         "name": "item",
@@ -479,8 +426,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -499,7 +445,7 @@
                     "incomes"
                 ],
                 "description": "get company by id",
-                "operationId": "App\\Http\\Controllers\\IncomeCategoriesController::destroy",
+                "operationId": "App\\Http\\Controllers\\InvoiceCategoryController::destroy",
                 "parameters": [
                     {
                         "name": "item",
@@ -518,8 +464,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -538,15 +483,14 @@
                     "incomes"
                 ],
                 "description": "get index",
-                "operationId": "App\\Http\\Controllers\\InvoicesController::getNumber",
+                "operationId": "App\\Http\\Controllers\\InvoiceController::getNumber",
                 "responses": {
                     "200": {
                         "description": "successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -565,7 +509,7 @@
                     "items"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\ItemCategoriesController::index",
+                "operationId": "App\\Http\\Controllers\\ItemCategoryController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -584,8 +528,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -604,7 +547,7 @@
                     "items"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\ItemCategoriesController::getCategory",
+                "operationId": "App\\Http\\Controllers\\ItemCategoryController::get",
                 "parameters": [
                     {
                         "name": "id",
@@ -623,8 +566,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -643,7 +585,7 @@
                     "items"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\ItemsController::index",
+                "operationId": "App\\Http\\Controllers\\ItemController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -662,8 +604,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -676,17 +617,17 @@
                 ]
             }
         },
-        "/api/items/get/{id}": {
+        "/api/items/get": {
             "get": {
                 "tags": [
                     "items"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\ItemsController::getItem",
+                "operationId": "App\\Http\\Controllers\\ItemController::get",
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "description": "id of category",
                         "required": false,
                         "schema": {
@@ -701,8 +642,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -721,7 +661,7 @@
                     "persons"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\PersonsController::index",
+                "operationId": "App\\Http\\Controllers\\PersonController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -740,8 +680,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -760,15 +699,14 @@
                     "persons"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\PersonsController::get",
+                "operationId": "App\\Http\\Controllers\\PersonController::get",
                 "responses": {
                     "200": {
                         "description": "successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -787,7 +725,7 @@
                     "settings"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\TaxesController::index",
+                "operationId": "App\\Http\\Controllers\\TaxController::index",
                 "parameters": [
                     {
                         "name": "page",
@@ -806,8 +744,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -820,17 +757,17 @@
                 ]
             }
         },
-        "/api/settings/taxes/get/{id}": {
+        "/api/settings/taxes/get": {
             "get": {
                 "tags": [
                     "settings"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\TaxesController::getItem",
+                "operationId": "App\\Http\\Controllers\\TaxController::get",
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "description": "id of category",
                         "required": false,
                         "schema": {
@@ -845,8 +782,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "items": {}
+                                    "type": "object"
                                 }
                             }
                         }

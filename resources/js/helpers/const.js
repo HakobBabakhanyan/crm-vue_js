@@ -7,6 +7,7 @@ export default {
     TAX:{
         NORMAL:'Normal',
         INCLUSIVE:'Inclusive',
+        COMPOUND:'Compound',
     }
 };
 

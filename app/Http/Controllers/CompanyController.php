@@ -30,7 +30,6 @@ class CompanyController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
@@ -39,95 +38,122 @@ class CompanyController extends Controller
      * Returns list of companies
      */
     public function index(){
-        $data=[
-            'companies'=>Company::paginate()
-        ];
 
-        return response()->json($data);
+        return [
+            'companies'=>Company::query()->paginate()
+        ];
     }
+
+    public function history(){
+        return [
+          'companies'=>Company::query()->withoutGlobalScope('real')->whereNotNull('company_id')->paginate()
+        ];
+    }
+
 
     /**
      * @Oa\Get(
      *      path="/api/companies/get",
      *      tags={"companies"},
+     *      description="companies  list all"
      *      security={ {"auth": {} } },
-     *      description="get company id",
+     *      @OA\Response(
+     *          response=200,
+     *          @OA\JsonContent(
+     *             type="object",
+     *         ),
+     *          description="successful operation"
+     *       ),
+     *     )
+     *
+     * @return array
+     */
+    public function get(){
+        return [
+            'companies'=>Company::query()->get()
+        ];
+    }
+
+    /**
+     * @Oa\Get(
+     *      path="/api/companies/show/{id}",
+     *      tags={"companies"},
      *      @OA\Parameter(
-     *         name="company",
+     *         name="id",
      *         in="path",
-     *         description="ID of pet to fetch",
+     *         description="pages id if null return list",
      *         required=true,
      *        @OA\Schema(
      *             type="integer",
      *             format="int64",
      *         )
      *     ),
+     *      security={ {"auth": {} } },
      *      @OA\Response(
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
      *     )
      *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Company $company
+     * @return array
      */
-    public function get(Request $request){
-
-        $companies = Company::query();
-
-        if(isset($request['id'])){
-            $companies->where('id',$request['id']);
-        }
-
-        $data=[
-            'companies'=>$companies->get()
+    public function show(Company $company){
+        return [
+            'company'=>$company
         ];
-
-        return response()->json($data);
     }
 
-    public function sync(Request $request){
+    public function create(Request $request){
 
         $request->validate([
-            'name'=>'required|unique:companies,name,'.(isset($request['id'])?$request['id']:null),
-            'type'=>'required'
+            'name'=>'required|string',
+            'type'=>'required|string'
         ]);
 
-        if(isset($request['id'])){
-            $company = Company::find($request['id']);
-        }else {
-            $company = null;
-        }
+        $company = Company::_save($request->all());
+
+        return [
+            'message'=>'success',
+            'company'=>$company
+        ];
+
+    }
+
+    public function update(Company $company,Request $request){
+        $request->validate([
+            'name'=>'required|string',
+            'type'=>'required|string'
+        ]);
         if(isset($request['image'])){
             $request['img'] = $this->imageUpload($request['image'],[300,300]);
             if($company){
                 $this->imageDelete($company->logo);
             }
         }
-
         $company = Company::_save($request->all(),$company);
 
-        $data=[
+        return [
             'message'=>'success',
             'company'=>$company
         ];
 
-        return response()->json($data);
-
     }
 
-    public function destroy(Request $request){
+    public function destroy(Company $company){
 
-        $company = Company::query()->findOrFail($request['id']);
         $company->delete();
+
         $data=[
             'message'=>'Company delete',
             'companies'=>Company::paginate()
         ];
         return response()->json($data);
     }
+
+
+
 }

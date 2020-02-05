@@ -215,10 +215,10 @@
 <script>
 
     import Currencies from "../../../http/api/Currencies";
-    import Customers from "../../../http/api/Customers";
+    import CustomerRequest from "../../../http/api/CustomerRequest";
     import Invoices from "../../../http/api/Invoices";
     import IncomesCategories from "../../../http/api/IncomesCategories";
-    import Items from "../../../http/api/Items";
+    import ItemRequest from "../../../http/api/ItemRequest";
     import Tax from "../../../http/api/Tax";
 
     export default {
@@ -247,7 +247,7 @@
                 invoice: {},
                 customers: [],
                 currencies: [],
-                currencyDefault: {},
+                currencyDefault: null,
                 date: {
                     Invoice: "2020-01-24",
                     due: "2020-01-26",
@@ -260,12 +260,13 @@
             Invoices.getNumber().then((response) => {
                 self.invoice.invoice_number = response.number
             });
-            Currencies.get().then((data) => {
-                self.currencies = data.items;
-                self.currencyDefault= self.currencies.find(function (item) {
+            Currencies.search().then((data) => {
+                self.currencies = data.currencies;
+                let currencyDefault = self.currencies.find(function (item) {
                         return item.default === 1
                 });
-                self.item.currency = self.currencyDefault;
+                self.currencyDefault = currencyDefault;
+                self.item.currency = currencyDefault;
             });
             IncomesCategories.get().then((response) => {
                 self.categories = response.items
@@ -283,11 +284,10 @@
                 $event.preventDefault();
                 let self = this;
                 console.log(self.type);
-
             },
             customerFind(query){
                 let self = this;
-                Customers.search({
+                CustomerRequest.search({
                     search: query
                 }).then((data) => {
                     self.customers = data.customers;
@@ -295,7 +295,7 @@
             },
             itemsFind(search,loading) {
                 loading(true);
-                Items.search({
+                ItemRequest.search({
                     search: search  ,
                 }).then((data) => {
                     this.items = data.items;
@@ -325,34 +325,26 @@
                 // v.item = { ...value };
             }
         },
-        watch:{
-            'item.items.item':{
-                handler(val){
-                    console.log(val)
-                },
-            }
-        },
         computed:{
             subTotal(){
                 let acc =  this.item.data.reduce((acc, data) => {
                         return acc + this.$helpers.getSalePrice(data,null,'subtotal')
                 }, 0);
 
-                return `${(acc * this.item.currency.rate)} ${this.item.currency.code}`
+                return `${(acc * this.item.currency.rate).toFixed(2)} ${this.item.currency.code}`
             },
             tax(){
                 let acc = this.item.data.reduce((acc, data) => {
                     return acc + this.$helpers.getSalePrice(data,null,'tax')
                 }, 0);
-                return `${(acc * this.item.currency.rate)} ${this.item.currency.code}`
+                return `${(acc * this.item.currency.rate).toFixed(2)} ${this.item.currency.code}`
             },
             total(){
                 let acc = this.item.data.reduce((acc, data) => {
-                    return acc + this.$helpers.getSalePrice(data,null,'tax_total')
+                    return acc + this.$helpers.getSalePrice(data,null,'total_tax')
                 }, 0);
 
-                return `${(acc * this.item.currency.rate)} ${this.item.currency.code}`
-
+                return `${(acc * this.item.currency.rate).toFixed(2)} ${this.item.currency.code}`
             }
         }
     }

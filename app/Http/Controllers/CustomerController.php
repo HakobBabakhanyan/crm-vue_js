@@ -46,7 +46,6 @@ class CustomerController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
@@ -101,7 +100,6 @@ class CustomerController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
@@ -124,18 +122,15 @@ class CustomerController extends Controller
     public function create(Request $request)
     {
 
-        $customer = Customer::_save($request->all());
+         Customer::_save($request->all());
 
-        $data = [
+        return [
             'message' => 'Created'
         ];
-        return response()->json($data);
     }
 
-    public function destroy(Request $request)
+    public function destroy(Customer $customer)
     {
-
-        $customer = Customer::query()->findOrFail($request['id']);
 
         $customer->delete();
 

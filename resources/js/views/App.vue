@@ -1,5 +1,6 @@
 <template>
     <div class="wrapper" v-bind:class="{'nav-open':nav_open}">
+        <vue-progress-bar></vue-progress-bar>
         <side-bar v-if="auth"/>
         <div v-bind:class="{'main-panel':auth}">
             <nav-bar v-if="auth"/>
@@ -18,6 +19,9 @@
                 auth: false,
                 nav_open:false
             }),
+        mounted() {
+                this.auth = this.$store.state.jwt
+        }
     }
 </script>
 

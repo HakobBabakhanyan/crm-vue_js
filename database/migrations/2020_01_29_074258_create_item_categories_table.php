@@ -15,8 +15,10 @@ class CreateItemCategoriesTable extends Migration
     {
         Schema::create('item_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->unique();
+            $table->bigInteger('item_category_id')->unsigned()->nullable();
+            $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

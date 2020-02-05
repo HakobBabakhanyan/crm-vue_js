@@ -47,7 +47,7 @@
 </template>
 <script>
 
-    import Person from "../../http/api/Person";
+    import PersonRequest from "../../http/api/PersonRequest";
 
     export default {
         name: "Persons",
@@ -61,7 +61,7 @@
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            Person.index().then((response) => {
+            PersonRequest.index().then((response) => {
                 self.data = response.persons;
                 self.persons = self.data.data;
             });
@@ -76,8 +76,7 @@
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (login) => {
-                        Person.delete({
-                            id:id,
+                        PersonRequest.delete(id,{
                             page:self.data.current_page
                         }).then( (response)=>{
                             self.$toastr.s(response.message);
@@ -89,7 +88,7 @@
             },
             clickCallback(pageNum) {
                 let self= this;
-                Person.index({
+                PersonRequest.index({
                     page:pageNum
                 }).then((response) => {
                     self.data = response.persons;

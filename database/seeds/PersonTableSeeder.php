@@ -13,7 +13,7 @@ class PersonTableSeeder extends Seeder
     {
         factory(\App\Models\Person::class, 50)->create()
             ->each(function ($person) {
-                $person->customers()->save(factory(App\Models\Customer::class)->make());
+//                $person->customers()->save(factory(App\Models\Customer::class)->make());
             });;
     }
 }

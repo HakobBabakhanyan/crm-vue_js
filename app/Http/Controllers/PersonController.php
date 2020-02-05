@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Person;
 use App\Traits\Uploads;
 use Illuminate\Http\Request;
@@ -29,7 +30,6 @@ class PersonController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
@@ -46,51 +46,71 @@ class PersonController extends Controller
 
     /**
      * @Oa\Get(
-     *      path="/api/persons/get",
+     *      path="/api/persons/show/{id}",
      *      tags={"persons"},
      *      security={ {"auth": {} } },
      *      description="get companies",
+     *      @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="number of page",
+     *         required=true,
+     *        @OA\Schema(
+     *             type="integer",
+     *             format="int64",
+     *         )
+     *     ),
      *      @OA\Response(
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
      *     )
      *
      * Returns list of persons
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param $person
+     * @return array
      */
-    public function get(Request $request){
-        $persons = Person::query();
+    public function show($person){
 
-        if(isset($request['id'])){
-            $persons->where('id',$request['id']);
-        }
-        $data=[
-            'persons'=>$persons->with('companies')->get()
+        return [
+            'person'=>Person::query()->with('companies')->find($person)
         ];
-        return response()->json($data);
     }
 
 
-    public function sync(Request $request){
+    public function create(Request $request){
 
-        if(isset($request['id'])){
-            $company = Person::find($request['id']);
-        }else {
-            $company = null;
-        }
+        $request->validate([
+            'name'=>'required|string',
+        ]);
+
         if(isset($request['image'])){
             $request['img'] = $this->imageUpload($request['image'],[300,300]);
-            if($company){
-                $this->imageDelete($company->logo);
-            }
         }
-        $company = Person::_save($request->all(),$company);
+        $company = Person::_save($request->all());
+
+        return [
+            'message'=>'success',
+            'person'=>$company
+        ];
+
+    }
+    public function update(Request $request,Person $person){
+
+
+        $request->validate([
+            'name'=>'required|string',
+        ]);
+
+        if(isset($request['image'])){
+            $request['img'] = $this->imageUpload($request['image'],[300,300]);
+
+                $this->imageDelete($person->logo);
+        }
+        $company = Person::_save($request->all(),$person);
 
         $data=[
             'message'=>'success',
@@ -100,9 +120,8 @@ class PersonController extends Controller
         return response()->json($data);
 
     }
-    public function destroy(Request $request){
+    public function destroy(Person $person){
 
-        $person = Person::query()->findOrFail($request['id']);
         $person->delete();
         $data=[
             'message'=>'Person delete',

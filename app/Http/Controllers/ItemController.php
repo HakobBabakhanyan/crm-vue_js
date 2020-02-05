@@ -28,7 +28,6 @@ class ItemController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
@@ -68,7 +67,6 @@ class ItemController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),

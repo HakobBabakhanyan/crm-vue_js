@@ -15,8 +15,8 @@ use Illuminate\Routing\Controller as BaseController;
  *          email="info@digex"
  *      ),
  *     @OA\License(
- *         name="Apache 2.0",
- *         url="http://www.apache.org/licenses/LICENSE-2.0.html"
+ *         name="crm",
+ *         url="http://crm.loc/"
  *     )
  * )
  */
@@ -25,11 +25,6 @@ use Illuminate\Routing\Controller as BaseController;
  *      url=L5_SWAGGER_CONST_HOST,
  *      description="crm  host server"
  *  )
- *
- * @OA\Server(
- *      url="https://crm.loc/api/v1",
- *      description="L5 Swagger OpenApi Server"
- * )
  */
 /**
  * @OA\Tag(

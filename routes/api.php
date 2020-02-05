@@ -19,48 +19,41 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::post('login', 'Auth\AuthController@login');
+function resources($controller,$item = 'item'){
+    Route::get('index', $controller.'@index');
+    Route::get('history', $controller.'@history');
+    Route::get("show/{{$item}}", $controller.'@show');
+    Route::get('get', $controller.'@get');
+    Route::post('create', $controller.'@create');
+    Route::put("update/{{$item}}", $controller.'@update');
+    Route::delete("destroy/{{$item}}", $controller.'@destroy');
+}
+
 
 Route::group(['middleware' => ['jwt.verify:admin']], function () {
     Route::post('user', 'AdminController@getAuthenticatedUser');
     Route::post('user/update', 'AdminController@update');
 
     Route::group(['prefix' => 'companies'], function () {
-        Route::get('index', 'CompanyController@index');
-        Route::get('get', 'CompanyController@get');
-        Route::post('sync', 'CompanyController@sync');
-        Route::delete('destroy', 'CompanyController@destroy');
+        resources('CompanyController','company');
     });
+
     Route::group(['prefix' => 'persons'], function () {
-        Route::get('index', 'PersonController@index');
-        Route::get('get', 'PersonController@get');
-        Route::post('sync', 'PersonController@sync');
-        Route::delete('destroy', 'PersonController@destroy');
+        resources('PersonController','person');
     });
 
     Route::group(['prefix' => 'customers'], function () {
         $controller = 'CustomerController';
-        Route::get('index', $controller . '@index');
+        resources($controller,'customer');
         Route::get('get/selects', $controller . '@getSelectsItems');
-        Route::get('search', $controller . '@search');
-        Route::post('create', $controller . '@create');
-        Route::delete('destroy', $controller . '@destroy');
     });
 
     Route::group(['prefix' => 'items'], function () {
         $controller = 'ItemController';
-        Route::get('index', $controller . '@index');
-        Route::post('sync', $controller . '@sync');
-        Route::get('get', $controller . '@get');
-        Route::get('search', $controller . '@search');
-        Route::delete('destroy', $controller . '@destroy');
-
+        resources('ItemController','item');
         Route::group(['prefix' => 'categories'], function () {
-            $controller = 'ItemCategoryController';
-            Route::get('index', $controller . '@index');
-            Route::get('get', $controller . '@get');
-            Route::get('search', $controller . '@search');
-            Route::post('sync', $controller . '@sync');
-            Route::delete('destroy', $controller . '@destroy');
+            Route::get('search',"ItemCategoryController@search");
+            resources('ItemCategoryController','category');
         });
     });
 
@@ -69,7 +62,7 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
             $controller = 'CurrencyController';
             Route::get('index', $controller . '@index');
             Route::get('get', $controller . '@get');
-            Route::get('get', $controller . '@get');
+            Route::get('search', $controller . '@search');
             Route::post('sync', $controller . '@sync');
             Route::delete('destroy', $controller . '@destroy');
         });

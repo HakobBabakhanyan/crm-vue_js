@@ -8,6 +8,11 @@
                             <i class="material-icons">assignment</i>
                         </div>
                         <div class="card-icon float-right ">
+                            <router-link :to="{name:'companies-history'}">
+                                <span class="text-white">History</span>
+                            </router-link>
+                        </div>
+                        <div class="card-icon float-right ">
                             <router-link :to="{name:'company-add'}">
                                 <span class="text-white">Add</span>
                             </router-link>
@@ -42,7 +47,7 @@
 </template>
 <script>
 
-    import Companies from '../../http/api/Companies'
+    import CompanyRequest from '../../http/api/CompanyRequest'
 
     export default {
         name: "Companies",
@@ -57,11 +62,32 @@
             this.$parent.auth = this.$store.state.jwt;
 
             let self = this;
-            Companies.index().then((response) => {
+            if(this.$route.name === 'companies-history'){
+                CompanyRequest.history().then( (data) => {
+                    self.data = data.companies;
+                    self.companies = self.data.data;
+                } )
+            }else {
+                CompanyRequest.index().then((response) => {
                 self.data = response.companies;
                 self.companies = self.data.data;
-            });
+            });}
 
+        },
+        watch:{
+            '$route.name': function () {
+                let self = this;
+                if(this.$route.name === 'companies-history'){
+                    CompanyRequest.history().then( (data) => {
+                        self.data = data.companies;
+                        self.companies = self.data.data;
+                    } )
+                }else {
+                    CompanyRequest.index().then((response) => {
+                        self.data = response.companies;
+                        self.companies = self.data.data;
+                    });}
+            }
         },
         methods: {
             remove($event,id) {
@@ -72,8 +98,7 @@
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: () => {
-                        Companies.delete({
-                            id:id,
+                        CompanyRequest.delete(id,{
                             page:self.data.current_page
                         }).then( (response) => {
                             self.$toastr.s(response.message);
@@ -86,7 +111,7 @@
             },
             clickCallback(pageNum) {
                 let self= this;
-                Companies.index({
+                CompanyRequest.index({
                     page: pageNum
                 }).then((response) => {
                     console.log(response)

@@ -18,6 +18,7 @@ class CreateCustomersTable extends Migration
             $table->bigInteger('parent_id')->unsigned();
             $table->string('parent_type');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

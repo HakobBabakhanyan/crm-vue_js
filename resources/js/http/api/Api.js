@@ -9,9 +9,19 @@ class Api {
        console.log('API')
    }
 
-   static getUrl(){
-       return {};
-   }
+   static prefix() { return 'api'};
+
+    static getUrl(){
+        return {
+            INDEX: this.prefix() + '/index',
+            HISTORY: this.prefix() + '/history',
+            SHOW: this.prefix() + '/show/:id',
+            GET: this.prefix() + '/get',
+            CREATE: this.prefix() + '/create',
+            UPDATE: this.prefix() + '/update/:id',
+            DELETE: this.prefix() + '/destroy/:id',
+        };
+    }
 
    static index(query) {
         return request({
@@ -21,6 +31,44 @@ class Api {
         })
     }
 
+   static show(id,query){
+       return request({
+           url:this.getUrl().SHOW.replace(':id', id),
+           method:'get',
+           params:query
+       });
+   }
+
+    static create(query){
+        return request({
+            url:this.getUrl().CREATE,
+            method:'post',
+            data:query,
+        });
+    }
+
+    static update(id,query){
+       if(query instanceof FormData)
+       query.append('_method','put');
+       else Object.assign( query,{'_method':'put'});
+
+       return request({
+           url:this.getUrl().UPDATE.replace(':id', id),
+           method:'post',
+           data:query,
+       });
+    }
+
+
+    static delete(id,query){
+        return request({
+            url: this.getUrl().DELETE.replace(':id', id),
+            method: 'delete',
+            params: query
+        })
+    }
+
+
     static get(query){
        return request({
           url:this.getUrl().GET,
@@ -29,7 +77,7 @@ class Api {
        });
     }
 
-    static search(query,data){
+   static search(query,data){
        return request({
           url:this.getUrl().SEARCH,
           method:'get',
@@ -37,7 +85,7 @@ class Api {
        });
     }
 
-    static sync(query){
+   static sync(query){
         return request({
             url:this.getUrl().SYNC,
             method:'post',
@@ -45,15 +93,15 @@ class Api {
         });
     }
 
-    static delete(query){
+
+
+    static history(query) {
         return request({
-            url: this.getUrl().DELETE,
-            method: 'delete',
+            url: this.getUrl().HISTORY,
+            method: 'get',
             params: query
         })
     }
-
-
 }
 
 export default Api;

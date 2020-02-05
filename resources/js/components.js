@@ -51,6 +51,9 @@ Vue.component('Currencies', require('./views/settings/Currencies/Currencies').de
 Vue.component('Currency', require('./views/settings/Currencies/Currency').default);
 Vue.component('Taxes', require('./views/settings/taxes/Taxes').default);
 Vue.component('Tax', require('./views/settings/taxes/Tax').default);
+// error
+Vue.component('error_404', require('./views/error/404').default);
+
 
 Vue.component('VueSelect',require('vue-select').default);
 

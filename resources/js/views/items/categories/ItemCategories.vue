@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-    import ItemCategory from "../../../http/api/ItemCategory";
+    import ItemCategoryRequest from "../../../http/api/ItemCategoryRequest";
 
     export default {
         name: "ItemCategories",
@@ -54,7 +54,7 @@
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            ItemCategory.index().then((data) => {
+            ItemCategoryRequest.index().then((data) => {
                 console.log(data)
                 self.data = data.categories;
                 self.items = self.data.data;
@@ -70,8 +70,7 @@
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (item) => {
-                        return  ItemCategory.delete({
-                            id:id,
+                        return  ItemCategoryRequest.delete(id,{
                             page:self.data.current_page
                         }).then((data) => {
                             self.$toastr.s(data.message);
@@ -84,7 +83,7 @@
             },
             pagination(pageNum) {
                 let self = this;
-                ItemCategory.index({
+                ItemCategoryRequest.index({
                     page:pageNum
                 }).then((data) => {
                     self.data = data.categories;

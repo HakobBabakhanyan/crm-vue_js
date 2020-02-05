@@ -26,8 +26,6 @@
                                             v-model="person.companies"
                                             :options="options"
                                             :multiple="true"
-                                            @input="updateSelect"
-                                            track-by="id"
                                             label="name"
                                             placeholder="Select Companies"
                                         >
@@ -59,8 +57,8 @@
 
 <script>
 
-    import Companies from "../../http/api/Companies";
-    import Person from "../../http/api/Person";
+    import CompanyRequest from "../../http/api/CompanyRequest";
+    import PersonRequest from "../../http/api/PersonRequest";
 
     export default {
         name: "Person",
@@ -84,23 +82,26 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
             if(this.edit){
-                Person.get({
-                    id:self.$route.params.id
-                }).then((response)=>{
-                    self.person = response.persons.shift();
+                PersonRequest.show(self.$route.params.id).then((data)=>{
+                    self.person = data.person;
                     if(!self.person.info){
                         self.person.info = {}
                     }
                     this.selected = self.person.companies;
                 } );
             }
-            Companies.get().then((response)=>{
+            CompanyRequest.get().then((response)=>{
                 self.options = response.companies;
             } )
         },
         methods: {
             update($event) {
                 $event.preventDefault();
+                let selected = [];
+                this.person.companies.map(function (item) {
+                    selected.push(item.id)
+                });
+                this.selected = selected;
                 if (!this.validate()) return false;
                 self = this;
                 const fd = new FormData();
@@ -134,30 +135,19 @@
                 if(this.person.info.contacts){
                     fd.append('contacts', this.person.info.contacts??null);
                 }
-                Person.sync(fd).
-                then((response) => {
-                    console.log(response.data)
+                if(this.edit)
+                    PersonRequest.update(this.$route.params.id,fd).then((data) => {
+                        self.$router.push({name:'persons'});
+                        self.$toastr.s(data.message);
+                    });
+                else
+                PersonRequest.create(fd).then((data) => {
                     self.$router.push({name:'persons'});
-                    self.$toastr.s(response.data.message);
-                }).catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            Object.keys(error.response.data.errors).forEach(function (item) {
-                                self.$toastr.e(error.response.data.errors[item])
-                            });
-                        }
-                    }
+                    self.$toastr.s(data.message);
                 });
             },
             uploadFile($event) {
                 this.files = $event
-            },
-            updateSelect(items) {
-                let selected = [];
-                items.map(function (item) {
-                    selected.push(item.id)
-                });
-                this.selected = selected;
             },
             validate() {
                 let error = false;

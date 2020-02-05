@@ -28,7 +28,6 @@ class ItemCategoryController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
@@ -47,7 +46,7 @@ class ItemCategoryController extends Controller
 
     /**
      * @Oa\Get(
-     *      path="/api/items/categories/get/{id}",
+     *      path="/api/items/categories/show/{id}",
      *      tags={"items"},
      *      security={ {"auth": {} } },
      *      description="get companies",
@@ -65,36 +64,46 @@ class ItemCategoryController extends Controller
      *          response=200,
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Item()
      *         ),
      *          description="successful operation"
      *       ),
      *     )
      *
      * Returns list of persons
-     * @param Request $request
+     * @param ItemCategory $category
      * @return array
      */
-    public function get(Request $request){
+    public function show(ItemCategory $category){
 
         return  [
-            'category'=>ItemCategory::query()->findOrFail($request->get('id'))
+            'category'=>$category
         ];
     }
 
-    public function sync(Request $request){
+    public function create(Request $request){
 
         $data = $request->all();
         $validator = Validator::make($data['category'],[
-            'name' => 'required|string|unique:item_categories,name,'.((isset($data['category']['id']))?$data['category']['id']:null),
+            'name' => 'required|string|',
         ]);
+
         $validator->validate();
 
-        if(isset($data['category']['id'])){
-            $category = ItemCategory::findOrFail($data['category']['id']);
-        }else {
-            $category = null;
-        }
+        ItemCategory::_save($data['category']);
+
+        return ['message'=>'Created'];
+    }
+
+    public function update(Request $request, ItemCategory $category){
+
+        $data = $request->all();
+
+        $validator = Validator::make($data['category'],[
+            'name' => 'required|string'
+        ]);
+
+        $validator->validate();
+
         ItemCategory::_save($data['category'],$category);
 
         return ['message'=>'Created'];
@@ -109,8 +118,7 @@ class ItemCategoryController extends Controller
         return response()->json($data);
     }
 
-    public function destroy(Request $request){
-        $category = ItemCategory::query()->findOrFail($request->get('id'));
+    public function destroy(ItemCategory $category){
         $category->delete();
 
         return [

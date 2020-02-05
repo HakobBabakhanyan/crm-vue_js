@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-    import Items from "../../http/api/Items";
+    import ItemRequest from "../../http/api/ItemRequest";
     export default {
         name: "Items",
         data: () => ({
@@ -53,7 +53,7 @@
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            Items.index().then((response) => {
+            ItemRequest.index().then((response) => {
                 self.data = response.items;
                 self.items = self.data.data;
             });
@@ -68,7 +68,7 @@
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (item) => {
-                        Items.delete({
+                        ItemRequest.delete({
                             id:id
                         }).then((response) => {
                             self.$toastr.s(response.message);
@@ -81,7 +81,7 @@
             },
             pagination(pageNum) {
                 let self = this;
-                Items.index({
+                ItemRequest.index({
                     page:pageNum
                 }).then((response) => {
                     self.data = response.items;

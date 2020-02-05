@@ -37,7 +37,7 @@
 
 <script>
 
-    import Customers from "../../http/api/Customers";
+    import CustomerRequest from "../../http/api/CustomerRequest";
 
     export default {
         name: "Customer",
@@ -56,9 +56,8 @@
             }
         },
         mounted() {
-            this.$parent.auth = this.$store.state.jwt;
             let self = this;
-                Customers.selects( {
+                CustomerRequest.selects( {
                         type: self.type
                 }).then((response) => {
                     self.options = response.items;
@@ -68,7 +67,7 @@
             update($event) {
                 $event.preventDefault();
                 let self = this;
-                Customers.create({
+                CustomerRequest.create({
                     'selected': self.selected,
                     'type': self.type,
                 }).then((response) => {
