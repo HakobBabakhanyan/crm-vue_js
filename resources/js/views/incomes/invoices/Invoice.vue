@@ -15,6 +15,7 @@
                                     <div class="col-md-6">
                                         <label class="typo__label">Customers</label>
                                         <VueSelect
+                                            v-model="invoice.customer"
                                             :options="customers"
                                             @search="customerFind"
                                             label="name"
@@ -23,8 +24,8 @@
                                             <template  v-slot:option="option">
                                                 <i class="fa"
                                                    v-bind:class="{
-                                                    'fa-building':option.parent.type ==='App\\Models\\Company',
-                                                    'fa-user':option.parent.type ==='App\\Models\\Person',
+                                                    'fa-building':option.parent_type ==='App\\Models\\Company',
+                                                    'fa-user':option.parent_type ==='App\\Models\\Person',
                                                    }"></i>
                                                 {{ option.parent.name }}
                                             </template>
@@ -33,7 +34,7 @@
                                     <div class="col-md-6">
                                         <label class="typo__label">Currencies</label>
                                         <VueSelect
-                                            v-model="item.currency"
+                                            v-model="invoice.currency"
                                             :options="currencies"
                                             track-by="id"
                                             label="name"
@@ -44,13 +45,14 @@
                                     <div class="col-md-6 my-2">
                                         <label class="typo__label">Invoice Date</label>
                                         <Datepicker
-                                            v-model="date.Invoice"
+                                            v-model="form.invoice_date"
                                             :lang="'en'"
                                         />
                                     </div>
                                     <div class="col-md-6 my-2">
                                         <label class="typo__label">Due Date</label>
-                                        <Datepicker v-model="date.due"
+                                        <Datepicker v-model="form.due_date"
+                                                    :lang="'en'"
                                         />
                                     </div>
                                     <div class="col-md-6">
@@ -71,14 +73,14 @@
                                             <th>Actions</th>
                                             <th>Name</th>
                                             <th>Quantity</th>
-                                            <th v-if="(item.currency && !item.currency.default)">Price</th>
+                                            <th v-if="(invoice.currency && !invoice.currency.default)">Price</th>
                                             <th>Price Default</th>
                                             <th>Tax</th>
-                                            <th v-if="(item.currency && !item.currency.default)">Total</th>
+                                            <th v-if="(invoice.currency && !invoice.currency.default)">Total</th>
                                             <th>Total Default</th>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="(v,k) in item.data">
+                                                <tr v-if="invoice.items.lengthphp" v-for="(v,k) in invoice.items">
                                                 <td >
                                                     <button  type="button" class="btn btn-link btn-danger p-1"
                                                             v-on:click="removeList(k)">
@@ -106,8 +108,8 @@
                                                         />
                                                     </div>
                                                 </td>
-                                                <td v-if="(item.currency && !item.currency.default)">
-                                                    {{ $helpers.getSalePrice(v,item.currency) }}
+                                                <td v-if="(invoice.currency && !invoice.currency.default)">
+                                                    {{ $helpers.getSalePrice(v,invoice.currency) }}
                                                 </td>
                                                     <td>
                                                         {{ $helpers.getSalePrice(v,currencyDefault) }}
@@ -121,23 +123,23 @@
                                                         @input="RecurringSelect"
                                                     />
                                                 </td>
-                                                <td v-if="(item.currency && !item.currency.default)">
-                                                    {{ $helpers.getSalePrice(v,item.currency,true) }}
+                                                <td v-if="(invoice.currency && !invoice.currency.default)">
+                                                    {{ $helpers.getSalePrice(v,invoice.currency,true) }}
                                                 </td>
                                                 <td>
                                                     {{ $helpers.getSalePrice(v,currencyDefault,'total') }}
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td :colspan="(item.currency && !item.currency.default)?8:6">
+                                                <td :colspan="(invoice.currency && !invoice.currency.default)?8:6">
                                                     <button type="button" class="btn btn-link btn-success"
-                                                            v-on:click="item.data.push(new Object)">
+                                                            v-on:click="invoice.items.push(new Object)">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td :colspan="(item.currency && !item.currency.default)?7:5">
+                                                <td :colspan="(invoice.currency && !invoice.currency.default)?7:5">
                                                     Subtotal
                                                 </td>
                                                 <td>
@@ -145,7 +147,7 @@
                                                 </td>
                                             </tr>
                                                 <tr>
-                                                    <td :colspan="(item.currency && !item.currency.default)?7:5">
+                                                    <td :colspan="(invoice.currency && !invoice.currency.default)?7:5">
                                                         tax
                                                     </td>
                                                     <td>
@@ -153,7 +155,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td :colspan="(item.currency && !item.currency.default)?7:5">
+                                                    <td :colspan="(invoice.currency && !invoice.currency.default)?7:5">
                                                         total
                                                     </td>
                                                     <td>
@@ -172,7 +174,7 @@
                                     </div>
                                     <div class="col-12 my-2">
                                         <VueSelect
-                                            v-model="item.category"
+                                            v-model="invoice.category"
                                             :options="categories"
                                             label="name"
                                             placeholder="Category"
@@ -214,12 +216,12 @@
 
 <script>
 
-    import Currencies from "../../../http/api/Currencies";
+    import CurrencyRequest from "../../../http/api/CurrencyRequest";
     import CustomerRequest from "../../../http/api/CustomerRequest";
-    import Invoices from "../../../http/api/Invoices";
-    import IncomesCategories from "../../../http/api/IncomesCategories";
+    import InvoiceRequest from "../../../http/api/InvoiceRequest";
+    import InvoiceCategoryRequest from "../../../http/api/InvoiceCategoryRequest";
     import ItemRequest from "../../../http/api/ItemRequest";
-    import Tax from "../../../http/api/Tax";
+    import TaxRequest from "../../../http/api/TaxRequest";
 
     export default {
         name: "IncomesInvoice",
@@ -230,9 +232,13 @@
         },
         data: () => {
             return {
-                item: {
-                    data: [new Object],
-                    currency:Object
+                invoice: {
+                    items: [new Object],
+                    currency:{},
+                },
+                form:{
+                    invoice_date: new Date(),
+                    due_date: new Date(),
                 },
                 items: [],
                 categories: [],
@@ -244,38 +250,37 @@
                     times: false
                 },
                 isLoading: false,
-                invoice: {},
                 customers: [],
                 currencies: [],
                 currencyDefault: null,
-                date: {
-                    Invoice: "2020-01-24",
-                    due: "2020-01-26",
-                }
             }
         },
         mounted() {
-            this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            Invoices.getNumber().then((response) => {
+            InvoiceRequest.getNumber().then((response) => {
                 self.invoice.invoice_number = response.number
             });
-            Currencies.search().then((data) => {
+            CurrencyRequest.get().then((data) => {
                 self.currencies = data.currencies;
                 let currencyDefault = self.currencies.find(function (item) {
                         return item.default === 1
                 });
                 self.currencyDefault = currencyDefault;
-                self.item.currency = currencyDefault;
+                self.invoice.currency = currencyDefault;
             });
-            IncomesCategories.get().then((response) => {
-                self.categories = response.items
+            InvoiceCategoryRequest.get().then((response) => {
+                self.categories = response.categories
             });
-            Tax.search().then((data) => {
+            TaxRequest.get().then((data) => {
                 self.taxes = data.taxes
             });
             if (self.edit) {
-
+                InvoiceRequest.show(self.$route.params.id).then( data =>{
+                    self.invoice = data.invoice;
+                    data.invoice.items = data.invoice.invoice_items.map(function ($item) {
+                        return {item:$item.item,quantity: $item.quantity,taxes:$item.taxes}
+                    })
+                } )
             }
 
         },
@@ -283,14 +288,36 @@
             update($event) {
                 $event.preventDefault();
                 let self = this;
-                console.log(self.type);
+                self.form.currency_id = self.invoice.currency.id;
+                self.form.customer_id = self.invoice.customer.id;
+                self.form.invoice_number = self.invoice.invoice_number;
+                self.form.order_number = self.invoice.order_number;
+                self.form.data = self.invoice.items.map(function (item) {
+                     return  {
+                         item_id:item.item.id,
+                         quantity:(item.quantity || 1),
+                         tax:Array.isArray(item.taxes)?(item.taxes.map(function (item) {
+                                return item.id
+                         })):null
+                     }
+                });
+                self.form.description = self.invoice.description;
+                self.form.category_id = self.invoice.category.id;
+                InvoiceRequest.create({
+                    invoice:self.form
+                }).then( data => {
+                    self.$router.push({name: 'item-index'});
+                    self.$toastr.s(data.message);
+                });
             },
-            customerFind(query){
+            customerFind(query,loading){
                 let self = this;
+                loading(true);
                 CustomerRequest.search({
                     search: query
                 }).then((data) => {
                     self.customers = data.customers;
+                    loading(false);
                 });
             },
             itemsFind(search,loading) {
@@ -314,37 +341,37 @@
             },
             removeList(index){
                 if(index){
-                    this.item.items.splice(index,1)
+                    this.invoice.items.splice(index,1)
                 }else {
                     this.$toastr.w('last item')
                 }
             },
             setSelectedItems(k,value){
                 this.items = [ ...this.items];
-                this.item.data[k] = { ...value };
+                this.invoice.items[k] = { ...value };
                 // v.item = { ...value };
             }
         },
         computed:{
             subTotal(){
-                let acc =  this.item.data.reduce((acc, data) => {
+                let acc =  this.invoice.items.reduce((acc, data) => {
                         return acc + this.$helpers.getSalePrice(data,null,'subtotal')
                 }, 0);
 
-                return `${(acc * this.item.currency.rate).toFixed(2)} ${this.item.currency.code}`
+                return `${(acc * this.invoice.currency.rate).toFixed(2)} ${this.invoice.currency.code}`
             },
             tax(){
-                let acc = this.item.data.reduce((acc, data) => {
+                let acc = this.invoice.items.reduce((acc, data) => {
                     return acc + this.$helpers.getSalePrice(data,null,'tax')
                 }, 0);
-                return `${(acc * this.item.currency.rate).toFixed(2)} ${this.item.currency.code}`
+                return `${(acc * this.invoice.currency.rate).toFixed(2)} ${this.invoice.currency.code}`
             },
             total(){
-                let acc = this.item.data.reduce((acc, data) => {
+                let acc = this.invoice.items.reduce((acc, data) => {
                     return acc + this.$helpers.getSalePrice(data,null,'total_tax')
                 }, 0);
 
-                return `${(acc * this.item.currency.rate).toFixed(2)} ${this.item.currency.code}`
+                return `${(acc * this.invoice.currency.rate).toFixed(2)} ${this.invoice.currency.code}`
             }
         }
     }

@@ -46,10 +46,11 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
         $controller = 'CustomerController';
         resources($controller,'customer');
         Route::get('get/selects', $controller . '@getSelectsItems');
+        Route::get('search', $controller . '@search');
     });
 
     Route::group(['prefix' => 'items'], function () {
-        $controller = 'ItemController';
+        Route::get('search',"ItemController@search");
         resources('ItemController','item');
         Route::group(['prefix' => 'categories'], function () {
             Route::get('search',"ItemCategoryController@search");
@@ -59,37 +60,22 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
 
     Route::group(['prefix' => 'settings'], function () {
         Route::group(['prefix' => 'currencies'], function () {
-            $controller = 'CurrencyController';
-            Route::get('index', $controller . '@index');
-            Route::get('get', $controller . '@get');
-            Route::get('search', $controller . '@search');
-            Route::post('sync', $controller . '@sync');
-            Route::delete('destroy', $controller . '@destroy');
+            resources('CurrencyController','currency');
         });
         Route::group(['prefix' => 'taxes'], function () {
-            $controller = 'TaxController';
-            Route::get('index', $controller . '@index');
-            Route::get('get', $controller . '@get');
-            Route::get('search', $controller . '@search');
-            Route::post('sync', $controller . '@sync');
-            Route::delete('destroy/{item}', $controller . '@destroy');
+            resources('TaxController','tax');
         });
     });
-    Route::group(['prefix' => 'incomes'], function () {
+    Route::group(['prefix' => 'invoices'], function () {
+        $controller = 'InvoiceController';
+        resources('InvoiceController','invoice');
+        Route::get('number',  $controller.'@getNumber');
+
         Route::group(['prefix' => 'categories'], function () {
-            $controller = 'InvoiceCategoryController';
-            Route::get('index', $controller . '@index');
-            Route::get('get', $controller . '@get');
-            Route::post('sync', $controller . '@sync');
-            Route::delete('destroy/{item}', $controller . '@destroy');
+            resources('InvoiceCategoryController','category');
         });
 
-        Route::group(['prefix' => 'invoices'], function () {
-            $controller = 'InvoiceController';
-            Route::get('number', $controller . '@getNumber');
-        });
     });
-
 
     Route::post('logout', 'Auth\AuthController@logout');
 });

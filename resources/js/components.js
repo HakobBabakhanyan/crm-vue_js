@@ -47,8 +47,8 @@ Vue.component('Item', require('./views/items/Item').default);
 Vue.component('ItemCategories', require('./views/items/categories/ItemCategories').default);
 Vue.component('ItemCategory', require('./views/items/categories/ItemCategory').default);
 // settings
-Vue.component('Currencies', require('./views/settings/Currencies/Currencies').default);
-Vue.component('Currency', require('./views/settings/Currencies/Currency').default);
+Vue.component('Currencies', require('./views/settings/currencies/Currencies').default);
+Vue.component('Currency', require('./views/settings/currencies/Currency').default);
 Vue.component('Taxes', require('./views/settings/taxes/Taxes').default);
 Vue.component('Tax', require('./views/settings/taxes/Tax').default);
 // error

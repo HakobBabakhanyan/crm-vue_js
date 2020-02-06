@@ -31,4 +31,26 @@ class InvoiceController extends Controller
                 'number'=>'INV-'.str_pad((Invoice::query()->max('id')+1), 5, '0', STR_PAD_LEFT)
             ]);
     }
+
+
+    public function index(){
+        return [
+         'invoices'=> Invoice::query()->paginate()
+        ];
+    }
+
+    public function show(Invoice $invoice){
+        return [
+          'invoice'=>$invoice->load(['invoiceItems'=>function($q){
+              $q->with(['taxes','item']);
+          },'currency','customer'])
+        ];
+    }
+
+    public function create(Request $request){
+        Invoice::_save($request['invoice']);
+        return [
+            'message'=>'crated'
+        ];
+    }
 }

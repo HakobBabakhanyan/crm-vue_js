@@ -41,7 +41,7 @@
     </div>
 </template>
 <script>
-    import Currencies from "../../../http/api/Currencies";
+    import CurrencyRequest from "../../../http/api/CurrencyRequest";
 
     export default {
         name: "Currencies",
@@ -51,9 +51,8 @@
 
         }),
         mounted() {
-            this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            Currencies.index().then((data) => {
+            CurrencyRequest.index().then((data) => {
                 self.data = data.items;
                 self.items = self.data.data;
             });
@@ -68,8 +67,7 @@
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (item) => {
-                        return Currencies.delete({
-                            id:id,
+                        return CurrencyRequest.delete(id,{
                             page:self.data.current_page
                         }).then((data) => {
                             self.$toastr.s(data.message);
@@ -81,7 +79,7 @@
             },
             pagination(pageNum) {
                 let self = this;
-                Currencies.index({
+                CurrencyRequest.index({
                     page:pageNum
                 }).then((data) => {
                     self.data = data.items;

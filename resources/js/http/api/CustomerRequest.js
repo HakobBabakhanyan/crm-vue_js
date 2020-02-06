@@ -17,6 +17,14 @@ class CustomerRequest extends Api {
         })
     }
 
+    static search(query) {
+        return request({
+            url: '/api/customers/search',
+            method: 'get',
+            params: query
+        })
+    }
+
 
 
 

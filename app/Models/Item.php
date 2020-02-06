@@ -3,12 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
 
+    use SoftDeletes;
+
+    public function taxes(){
+        return $this->belongsToMany(Tax::class,'invoice_item_taxes');
+    }
+
     public function category(){
-        return $this->hasOne(ItemCategory::class,'id','categories_id');
+        return $this->hasOne(ItemCategory::class,'id','category_id');
     }
 
     public static function _save($data,$item=null){

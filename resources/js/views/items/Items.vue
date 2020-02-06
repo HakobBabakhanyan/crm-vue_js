@@ -20,6 +20,7 @@
                                 :thead="{'id':{name:'ID'},'name':{name:'Name'},'created_at':{name:'Date'}}"
                                 :items="items" />
                         <paginate
+                            v-model="data.current_page"
                             :page-count="data.last_page?data.last_page:0"
                             :page-range="3"
                             :margin-pages="2"
@@ -68,8 +69,8 @@
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (item) => {
-                        ItemRequest.delete({
-                            id:id
+                        ItemRequest.delete(id,{
+                            page:self.data.current_page
                         }).then((response) => {
                             self.$toastr.s(response.message);
                             self.data = response.items;

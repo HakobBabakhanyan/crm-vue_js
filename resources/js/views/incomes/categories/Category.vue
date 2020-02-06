@@ -29,7 +29,7 @@
 
 <script>
 
-    import IncomesCategories from "../../../http/api/IncomesCategories";
+    import InvoiceCategoryRequest from "../../../http/api/InvoiceCategoryRequest";
 
     export default {
         name: "IncomesCategory",
@@ -47,10 +47,8 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
             if(self.edit){
-                IncomesCategories.get({
-                    id:self.$route.params.id
-                }).then((response) => {
-                    self.item = response.items.shift();
+                InvoiceCategoryRequest.show(self.$route.params.id).then((data) => {
+                    self.item = data.category;
                 });
             }
 
@@ -59,20 +57,19 @@
             update($event) {
                 $event.preventDefault();
                 let self = this;
-                console.log(self.type);
-                IncomesCategories.sync({
+                if(self.edit)
+                    InvoiceCategoryRequest.update(self.item.id,{
+                        item:self.item
+                    }).then((data) => {
+                        self.$router.push({name: 'incomes-categories-index'});
+                        self.$toastr.s(data.message);
+                    });
+                    else
+                InvoiceCategoryRequest.create({
                     item:self.item
                 }).then((data) => {
                     self.$router.push({name: 'incomes-categories-index'});
                     self.$toastr.s(data.message);
-                }).catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            Object.keys(error.response.data.errors).forEach(function (item) {
-                                self.$toastr.e(error.response.data.errors[item])
-                            });
-                        }
-                    }
                 });
             },
         },

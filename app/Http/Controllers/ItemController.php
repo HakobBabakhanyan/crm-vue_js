@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ItemController extends Controller
 {
+
     /**
      * @Oa\Get(
      *      path="/api/items/index",
@@ -35,8 +36,6 @@ class ItemController extends Controller
      *
      * Returns list of persons
      */
-
-
     public function index(){
 
         $data = [
@@ -45,7 +44,6 @@ class ItemController extends Controller
 
         return response()->json($data);
     }
-
 
     /**
      * @Oa\Get(
@@ -74,55 +72,81 @@ class ItemController extends Controller
      *
      * Returns list of persons
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
     public function get(Request $request){
 
-        $data = [
+        return  [
             'item'=>Item::query()->with('category')->findOrFail($request['id'])
         ];
 
-        return response()->json($data);
+
+    }
+
+    public function show($item){
+
+        return [
+          'item'=>Item::query()->with('category')->findOrFail($item)
+        ];
     }
 
 
 
     public function search(Request $request){
         $items = Item::query();
-
-
+        $items->where('name','LIKE','%'.$request['search'].'%');
         return [
           'items' =>$items->get()
         ];
     }
-
-
-    public function sync(Request $request){
+    public function create(Request $request){
 
         $data = $request->all();
         $validator = Validator::make($data['item'],[
-            'name' => 'required',
+            'name' => 'string|required',
+            'description' => 'string|nullable',
+            'sale_price' => 'string|required|numeric',
+            'purchase_price' => 'string|required|numeric',
+            'category_id' => 'numeric|exists:item_categories,id',
         ]);
         $validator->validate();
 
-        if(isset($data['item']['id'])){
-            $item = Item::findOrFail($data['item']['id']);
-        }else {
-            $item = null;
-        }
-        Item::_save($data['item'],$item);
+        Item::_save($data['item']);
 
         return response()->json(['message'=>'Created']);
     }
 
 
-    public function destroy(Request $request){
-        $item = Item::query()->find($request['id']);
+    /***
+     * @param Request $request
+     * @param Item $item
+     * @return array
+     */
+    public function update(Request $request,Item $item){
+
+        $data = $request->all();
+
+        $validator = Validator::make($data['item'],[
+            'name' => 'string|required',
+            'description' => 'string|nullable',
+            'sale_price' => 'string|required|numeric',
+            'purchase_price' => 'string|required|numeric',
+            'category_id' => 'numeric|exists:item_categories,id',
+        ]);
+
+        $validator->validate();
+
+        Item::_save($data['item'],$item);
+
+        return ['message'=>'Created'];
+    }
+
+
+    public function destroy(Item $item){
         $item->delete();
-        $data = [
+        return [
             'items'=>Item::query()->paginate(),
             'message'=>'deleted'
         ];
-        return response()->json($data);
     }
 }

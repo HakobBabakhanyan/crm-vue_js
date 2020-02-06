@@ -71,11 +71,11 @@ service.interceptors.response.use(
             case 422:
                 vue = new Vue();
                 Object.keys(error.response.data.errors).forEach(function (item) {
-                    vue.$toaster.e(error.response.data.errors[item]);
+                    vue.$toastr.e(error.response.data.errors[item]);
                 });
                 break;
             default:
-                vue.$toastr.e('undefined error');
+                vue.$toastr.e(error.response.data.message);
                 console.log('err - ' + error);
         }
         return Promise.reject(error)

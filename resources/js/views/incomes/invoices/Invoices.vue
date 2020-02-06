@@ -15,7 +15,7 @@
                         <h4 class="card-title">Invoices</h4>
                     </div>
                     <div class="card-body table-responsive">
-                        <VTable @remove="remove" :edit_route="'incomes-categories-edit'"
+                        <VTable @remove="remove" :edit_route="'incomes-invoices-edit'"
                                 :thead="{'id':{name:'ID'},'name':{name:'Name'},'created_at':{name:'Date'}}" :items="items" />
                         <paginate
                             :page-count="data.last_page?data.last_page:0"
@@ -40,7 +40,8 @@
     </div>
 </template>
 <script>
-    import IncomesCategories from "../../../http/api/IncomesCategories";
+    import InvoiceCategoryRequest from "../../../http/api/InvoiceCategoryRequest";
+    import InvoiceRequest from "../../../http/api/InvoiceRequest";
 
     export default {
         name: "IncomesInvoices",
@@ -52,14 +53,10 @@
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            // self.$http.get(self.$const.URL.INCOMES_CATEGORIES_INDEX, {
-            //     params: {
-            //         token: self.$store.state.jwt
-            //     }
-            // }).then((response) => {
-            //     self.data = response.data.items;
-            //     self.items = self.data.data;
-            // });
+            InvoiceRequest.index().then((data) => {
+                self.data = data.invoices;
+                self.items = self.data.data;
+            });
 
         },
         methods: {

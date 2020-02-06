@@ -255,6 +255,15 @@ import "../components";
             },
         },
         {
+            path: '/incomes/invoices/update/:id',
+            name: 'incomes-invoices-edit',
+            props: {edit: true},
+            component: Vue.component('IncomesInvoice'),
+            meta: {
+                middleware: auth,
+            },
+        },
+        {
             path: '/incomes/categories',
             name: 'incomes-categories-index',
             component: Vue.component('IncomesCategories'),

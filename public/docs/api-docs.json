@@ -129,13 +129,38 @@
                 "tags": [
                     "companies"
                 ],
-                "description": "get company id",
+                "description": "get companies",
                 "operationId": "App\\Http\\Controllers\\CompanyController::get",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/companies/show/{id}": {
+            "get": {
+                "tags": [
+                    "companies"
+                ],
+                "operationId": "App\\Http\\Controllers\\CompanyController::show",
                 "parameters": [
                     {
-                        "name": "company",
+                        "name": "id",
                         "in": "path",
-                        "description": "ID of pet to fetch",
+                        "description": "pages id if null return list",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -200,19 +225,19 @@
                 ]
             }
         },
-        "/api/settings/currencies/get": {
+        "/api/settings/currencies/show/{id}": {
             "get": {
                 "tags": [
                     "settings"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\CurrencyController::get",
+                "operationId": "App\\Http\\Controllers\\CurrencyController::show",
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "id of category",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "integer",
                             "format": "int64"
@@ -365,7 +390,7 @@
                     "incomes"
                 ],
                 "description": "get company by id",
-                "operationId": "App\\Http\\Controllers\\InvoiceCategoryController::get",
+                "operationId": "App\\Http\\Controllers\\InvoiceCategoryController::show",
                 "parameters": [
                     {
                         "name": "id",
@@ -397,14 +422,66 @@
                 ]
             }
         },
-        "/api/incomes/categories/sync": {
+        "/api/incomes/categories/create": {
             "post": {
                 "tags": [
                     "incomes"
                 ],
                 "description": "get company by id",
-                "operationId": "App\\Http\\Controllers\\InvoiceCategoryController::sync",
+                "operationId": "App\\Http\\Controllers\\InvoiceCategoryController::create",
                 "parameters": [
+                    {
+                        "name": "item",
+                        "in": "query",
+                        "description": "item",
+                        "required": false,
+                        "schema": {
+                            "properties": {
+                                "item[name]": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "auth": []
+                    }
+                ]
+            }
+        },
+        "/api/incomes/categories/update/{id}": {
+            "put": {
+                "tags": [
+                    "incomes"
+                ],
+                "description": "get company by id",
+                "operationId": "App\\Http\\Controllers\\InvoiceCategoryController::update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "item",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
                     {
                         "name": "item",
                         "in": "query",
@@ -541,13 +618,13 @@
                 ]
             }
         },
-        "/api/items/categories/get/{id}": {
+        "/api/items/categories/show/{id}": {
             "get": {
                 "tags": [
                     "items"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\ItemCategoryController::get",
+                "operationId": "App\\Http\\Controllers\\ItemCategoryController::show",
                 "parameters": [
                     {
                         "name": "id",
@@ -693,13 +770,25 @@
                 ]
             }
         },
-        "/api/persons/get": {
+        "/api/persons/show/{id}": {
             "get": {
                 "tags": [
                     "persons"
                 ],
                 "description": "get companies",
-                "operationId": "App\\Http\\Controllers\\PersonController::get",
+                "operationId": "App\\Http\\Controllers\\PersonController::show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "number of page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "successful operation",

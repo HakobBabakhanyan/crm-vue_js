@@ -43,22 +43,23 @@ class CurrencyController extends Controller
         return response()->json($data);
     }
 
-    public function search(){
+    public function get(){
         return [
          'currencies'=>Currency::query()->get()
         ];
     }
+
     /**
      * @Oa\Get(
-     *      path="/api/settings/currencies/get",
+     *      path="/api/settings/currencies/show/{id}",
      *      tags={"settings"},
      *      security={ {"auth": {} } },
      *      description="get companies",
      *      @OA\Parameter(
      *         name="id",
-     *         in="query",
+     *         in="path",
      *         description="id of category",
-     *         required=false,
+     *         required=true,
      *        @OA\Schema(
      *             type="integer",
      *             format="int64",
@@ -74,40 +75,52 @@ class CurrencyController extends Controller
      *     )
      *
      * Returns list of persons
-     * @param Request $request
+     * @param Currency $currency
      * @return array
      */
-    public function get(Request $request){
+    public function show(Currency $currency){
 
         return [
-            'item'=>Currency::query()->findOrFail($request->get('id'))
+            'currency'=>$currency
         ];
     }
 
-    public function sync(Request $request){
+    public function create(Request $request){
 
         $data = $request->all();
         $validator = Validator::make($data['item'],[
-            'name' => 'required|string|unique:currencies,name,'.(isset($data['item']['id'])?$data['item']['id']:null),
-            'code'=>'required|string|unique:currencies,code,'.(isset($data['item']['id'])?$data['item']['id']:null),
+            'name' => 'required|string',
+            'code'=>'required|string',
             'rate'=>'required|numeric',
             'status'=>'boolean',
             'default'=>'boolean',
         ]);
         $validator->validate();
 
-        if(isset($data['item']['id'])){
-            $item = Currency::query()->findOrFail($data['item']['id']);
-        }else {
-            $item = null;
-        }
-        Currency::_save($data['item'],$item);
+        Currency::_save($data['item']);
 
-        return response()->json(['message'=>'Created']);
+        return ['message'=>'Created'];
     }
 
-    public function destroy(Request $request){
-        $currency=Currency::query()->findOrFail($request->input('id'));
+    public function update(Request $request,Currency $currency){
+
+        $data = $request->all();
+        $validator = Validator::make($data['item'],[
+            'name' => 'required|string',
+            'code'=>'required|string',
+            'rate'=>'required|numeric',
+            'status'=>'boolean',
+            'default'=>'boolean',
+        ]);
+        $validator->validate();
+
+        Currency::_save($data['item'],$currency);
+
+        return ['message'=>'updated'];
+    }
+
+    public function destroy(Currency $currency){
+
         $currency->delete();
         return [
             'items'=>Currency::query()->paginate(),

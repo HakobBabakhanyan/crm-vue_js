@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInvoiceCategoriesTable extends Migration
+class CreateTaxesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,15 @@ class CreateInvoiceCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoice_categories', function (Blueprint $table) {
+        Schema::create('taxes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->unique();
+            $table->bigInteger('tax_id')->unsigned()->nullable();
+            $table->string('name');
+            $table->float('rate');
+            $table->integer('type');
+            $table->boolean('status')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +32,6 @@ class CreateInvoiceCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoice_categories');
+        Schema::dropIfExists('taxes');
     }
 }

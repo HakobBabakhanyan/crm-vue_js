@@ -79,10 +79,8 @@
         mounted() {
             let self = this;
             if(self.edit){
-                ItemRequest.get({
-                    id:self.$route.params.id
-                }).then((response) => {
-                    self.item = response.item;
+                ItemRequest.show(self.$route.params.id).then((data) => {
+                    self.item = data.item;
                 });
             }
 
@@ -91,11 +89,18 @@
             update($event) {
                 $event.preventDefault();
                 let self = this;
-                ItemRequest.sync({
+                if(self.edit)
+                ItemRequest.update(self.item.id,{
                     'item': self.item
-                }).then((response) => {
+                }).then((data) => {
                     self.$router.push({name: 'item-index'});
-                    self.$toastr.s(response.data.message);
+                    self.$toastr.s(data.message);
+                });
+                else ItemRequest.create({
+                    'item': self.item
+                }).then((data) => {
+                    self.$router.push({name: 'item-index'});
+                    self.$toastr.s(data.message);
                 });
             },
             asyncFind (query) {

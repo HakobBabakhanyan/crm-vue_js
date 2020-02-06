@@ -40,7 +40,7 @@
     </div>
 </template>
 <script>
-    import Tax from "../../../http/api/Tax";
+    import TaxRequest from "../../../http/api/TaxRequest";
 
     export default {
         name: "Taxes",
@@ -52,7 +52,7 @@
         mounted() {
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
-            Tax.index().then((data) => {
+            TaxRequest.index().then((data) => {
                 self.data = data.items;
                 self.items = self.data.data;
             });
@@ -67,11 +67,11 @@
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (item) => {
-                        return self.$http.delete(self.$const.URL.SETTINGS_TAXES_DESTROY + id, {
-                            data: {token: self.$store.state.jwt}
-                        }).then((response) => {
-                            self.$toastr.s(response.data.message);
-                            self.data = response.data.items;
+                        return  TaxRequest.delete(id,{
+                            page:self.data.current_page
+                        }).then((data) => {
+                            self.$toastr.s(data.message);
+                            self.data = data.items;
                             self.items = self.data.data;
                         })
                     },

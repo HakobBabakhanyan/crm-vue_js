@@ -29,16 +29,9 @@ class Company extends Model
         'info' => 'collection'
     ];
 
-
-//    protected $appends = ['type'];
-
     public function customer(){
         return $this->morphOne(Customer::class, 'parent');
     }
-
-//    public function getTypeAttribute(){
-//        return self::class;
-//    }
 
     public static function _save($data, $item=null){
         if(!$item){

@@ -55,8 +55,8 @@ class CompanyController extends Controller
      * @Oa\Get(
      *      path="/api/companies/get",
      *      tags={"companies"},
-     *      description="companies  list all"
      *      security={ {"auth": {} } },
+     *   description="get companies",
      *      @OA\Response(
      *          response=200,
      *          @OA\JsonContent(

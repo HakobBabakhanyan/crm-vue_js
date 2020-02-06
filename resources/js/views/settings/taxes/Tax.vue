@@ -47,7 +47,7 @@
     </div>
 </template>
 <script>
-    import Tax from '../../../http/api/Tax'
+    import Tax from '../../../http/api/TaxRequest'
     export default {
         name: "Currency",
         props: {
@@ -95,19 +95,18 @@
                 $event.preventDefault();
                 let self = this;
                 self.item.type = self.selected.type;
-                Tax.sync({
+                if(self.edit)
+                Tax.update(self.item.id,{
                     item:self.item
                 }).then((data) => {
                     self.$router.push({name: 'settings-taxes'});
                     self.$toastr.s(data.message);
-                }).catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            Object.keys(error.response.data.errors).forEach(function (item) {
-                                self.$toastr.e(error.response.data.errors[item])
-                            });
-                        }
-                    }
+                });
+                else Tax.create({
+                    item:self.item
+                }).then((data) => {
+                    self.$router.push({name: 'settings-taxes'});
+                    self.$toastr.s(data.message);
                 });
             },
         },

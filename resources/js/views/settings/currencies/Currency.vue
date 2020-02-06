@@ -44,7 +44,7 @@
 
 <script>
 
-    import Currencies from "../../../http/api/Currencies";
+    import CurrencyRequest from "../../../http/api/CurrencyRequest";
 
     export default {
         name: "Currency",
@@ -60,10 +60,8 @@
             this.$parent.auth = this.$store.state.jwt;
             let self = this;
             if (self.edit) {
-                Currencies.get({
-                    id:self.$route.params.id
-                }).then((data) => {
-                    self.item = data.item;
+                CurrencyRequest.show(self.$route.params.id).then((data) => {
+                    self.item = data.currency;
                 });
             }
 
@@ -72,19 +70,17 @@
             update($event) {
                 $event.preventDefault();
                 let self = this;
-                Currencies.sync({
+                if (self.edit)  CurrencyRequest.update(self.item.id,{
                     item:self.item
                 }).then((data) => {
                     self.$router.push({name: 'settings-currencies'});
                     self.$toastr.s(data.message);
-                }).catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            Object.keys(error.response.data.errors).forEach(function (item) {
-                                self.$toastr.e(error.response.data.errors[item])
-                            });
-                        }
-                    }
+                }); else
+                CurrencyRequest.create({
+                    item:self.item
+                }).then((data) => {
+                    self.$router.push({name: 'settings-currencies'});
+                    self.$toastr.s(data.message);
                 });
             },
         },

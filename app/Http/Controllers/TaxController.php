@@ -50,16 +50,6 @@ class TaxController extends Controller
      *      tags={"settings"},
      *      security={ {"auth": {} } },
      *      description="get companies",
-     *      @OA\Parameter(
-     *         name="id",
-     *         in="query",
-     *         description="id of category",
-     *         required=false,
-     *        @OA\Schema(
-     *             type="integer",
-     *             format="int64",
-     *         )
-     *     ),
      *      @OA\Response(
      *          response=200,
      *          @OA\JsonContent(
@@ -70,26 +60,17 @@ class TaxController extends Controller
      *     )
      *
      * Returns list of persons
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
-    public function get(Request $request){
+    public function get(){
 
-        $taxes = Tax::query();
-
-        if(isset($request['id'])){
-            $taxes->where('id',$request['id']);
-        }
-
-        $data = [
-            'taxes'=>$taxes->get()
+        return [
+            'taxes'=>Tax::query()->get()
         ];
-
-        return response()->json($data);
     }
 
 
-    public function sync(Request $request){
+    public function create(Request $request){
 
         $data = $request->all();
         $types = Tax::TYPE;
@@ -105,15 +86,32 @@ class TaxController extends Controller
         ]);
         $validator->validate();
 
-        if(isset($data['item']['id'])){
-            $item = Tax::query()->findOrFail($data['item']['id']);
-        }else {
-            $item = null;
-        }
 
-        Tax::_save($data['item'],$item);
+        Tax::_save($data['item']);
 
-        return response()->json(['message'=>'Created']);
+        return ['message'=>'Created'];
+    }
+
+    public function update(Request $request,Tax $tax){
+
+        $data = $request->all();
+        $types = Tax::TYPE;
+        $validator = Validator::make($data['item'],[
+            'name' => 'required|string',
+            'type'=>['required','numeric',function($attribute, $value, $fail) use ($types){
+                if (!isset($types[$value])) {
+                    $fail($attribute.' is invalid.');
+                }
+            }],
+            'rate'=>'required|numeric',
+            'status'=>'boolean',
+        ]);
+        $validator->validate();
+
+
+        Tax::_save($data['item'],$tax);
+
+        return ['message'=>'Created'];
     }
 
 
@@ -126,9 +124,9 @@ class TaxController extends Controller
         ];
     }
 
-    public function destroy(Tax $item){
+    public function destroy(Tax $tax){
 
-        $item->delete();
+        $tax->delete();
         $data = [
             'items'=>Tax::query()->paginate(),
             'message'=>'deleted'
