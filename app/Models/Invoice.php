@@ -65,15 +65,16 @@ class Invoice extends Model
 
         foreach ($invoiceItem as $item){
             if($taxes[$item->item_id])
-           foreach ($taxes[$item->item_id] as $tax){
-               InvoiceItemTax::query()
-                   ->updateOrInsert(
-                       ['invoice_item_id'=>$item->id],
-                       ['invoice_item_id'=>$item->id,
-                        'tax_id'=>$tax
-                       ]);
-           }
-            else InvoiceItemTax::query()->where('invoice_item_id',$item->id)->delete();
+                foreach ($taxes[$item->item_id] as $tax){
+                     InvoiceItemTax::query()
+                        ->updateOrInsert(
+                            ['invoice_item_id'=>$item->id],
+                            ['invoice_item_id'=>$item->id,
+                           'tax_id'=>$tax
+                         ]);
+                }
+            else
+                InvoiceItemTax::query()->where('invoice_item_id',$item->id)->delete();
 
        }
         return true;
