@@ -19,6 +19,7 @@ class CreateInvoicesTable extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('currency_id')->unsigned();
             $table->bigInteger('customer_id')->unsigned();
+            $table->integer('discount')->default(0);
             $table->date('invoice_date');
             $table->date('due_date');
             $table->string('invoice_number');

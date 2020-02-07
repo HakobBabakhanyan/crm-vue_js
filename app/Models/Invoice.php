@@ -8,26 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
 
-//    public function items(){
-//        return $this->belongsToMany(Item::class,'invoice_items')
-//            ->withTimestamps()
-//            ->withPivot('quantity');
-//    }
+    protected  $casts=[
+        'invoice_date'=>'date',
+        'due_date'=>'date'
+    ];
+    public function items(){
+        return $this->belongsToMany(Item::class,'invoice_items')
+            ->withTimestamps()
+            ->withPivot('quantity');
+    }
 
     public function invoiceItems(){
         return $this->hasMany(InvoiceItem::class);
     }
 
-    public function item_tax(){
-
-        $this->loadMissing('items');
-        dd();
-        InvoiceItemTax::query()
-            ->whereIn('invoice_item_id',$this->items->pluck('id'))
-            ->get();
-        dd();
-        return ;
+    public function category(){
+        return $this->belongsTo(InvoiceCategory::class);
     }
+
 
     public function currency(){
         return $this->belongsTo(Currency::class);
@@ -37,9 +35,9 @@ class Invoice extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public static function _save($data){
+    public static function _save($data,$item = null){
 
-        $item = self::query()->first();
+        if(!$item) $item = new self();
 
         $item->invoice_date = Carbon::make($data['invoice_date']);
         $item->due_date = Carbon::make($data['due_date']);
@@ -49,9 +47,10 @@ class Invoice extends Model
         $item->invoice_number = $data['invoice_number'];
         $item->order_number = $data['order_number'];
         $item->description = $data['description'];
+        $item->discount = $data['discount'];
         $item->save();
-        $item->items()->sync(self::getSyncArray($data['data']));
-        $item->taxSync($data['data']);
+        $item->items()->sync(self::getSyncArray($data['items']));
+        $item->taxSync($data['items']);
 
         return $item;
 
@@ -60,22 +59,25 @@ class Invoice extends Model
     protected  function taxSync($data){
 
        $invoiceItem = InvoiceItem::query()->where('invoice_id',$this->id)
-            ->whereIn('item_id',array_map(function ($a){
-                return $a['item_id'];
-            },$data))->get();
+           ->get();
 
        $taxes = array_column($data,'tax','item_id');
 
         foreach ($invoiceItem as $item){
-           foreach ($taxes[$item->item_id]??[] as $tax){
+            if($taxes[$item->item_id])
+           foreach ($taxes[$item->item_id] as $tax){
                InvoiceItemTax::query()
-                   ->updateOrCreate(['invoice_item'=>$item->id],['tax_id'=>$tax]);
+                   ->updateOrInsert(
+                       ['invoice_item_id'=>$item->id],
+                       ['invoice_item_id'=>$item->id,
+                        'tax_id'=>$tax
+                       ]);
            }
+            else InvoiceItemTax::query()->where('invoice_item_id',$item->id)->delete();
+
        }
         return true;
     }
-
-
 
     protected static function getSyncArray($items){
         $sync = array();

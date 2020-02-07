@@ -94,10 +94,11 @@
                 if (!this.validate()) return false;
                 let self = this;
                 const fd = new FormData();
+                fd.append('token', localStorage.getItem('jwt'));
+
                 if(this.files){
                     fd.append('image', this.files[0]);
                 }
-                fd.append('token', localStorage.getItem('jwt'));
                 if(this.user.name){
                     fd.append('name', this.user.name??null);
                 }

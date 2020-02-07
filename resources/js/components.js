@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueToastr from "vue-toastr";
 import VueSweetalert2 from 'vue-sweetalert2';
-
+Vue.use(require('vue-moment'));
 
 Vue.use(VueToastr, {
     defaultTimeout: 1500,
@@ -15,7 +15,8 @@ Vue.component('NavBar', require('./views/layout/NavBar').default);
 Vue.component('SideBar', require('./views/layout/SideBar').default);
 Vue.component('VFooter', require('./views/layout/Footer').default);
 
-Vue.component('Datepicker',require('vue-datepicker-ui').default);
+
+Vue.component('DatePicker', require('v-calendar/lib/components/date-picker.umd'));
 Vue.component('VTable', require('./views/components/table/VTable').default);
 Vue.component('VTextarea', require('./views/components/form/VTextarea').default);
 Vue.component('VCheckbox', require('./views/components/form/VCheckbox').default);

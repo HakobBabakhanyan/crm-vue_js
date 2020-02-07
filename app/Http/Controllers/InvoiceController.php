@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
@@ -43,14 +44,57 @@ class InvoiceController extends Controller
         return [
           'invoice'=>$invoice->load(['invoiceItems'=>function($q){
               $q->with(['taxes','item']);
-          },'currency','customer'])
+          },'currency','customer','category'])
         ];
     }
 
     public function create(Request $request){
+        $data = $request->all();
+        $validator = Validator::make($data['invoice'],[
+            'currency_id'=>'integer|exists:currencies,id',
+            'customer_id'=>'integer|exists:customers,id',
+            'category_id'=>'integer|exists:invoice_categories,id',
+            'items.*.item_id'=>'required|integer|exists:items,id',
+            'items.*.tax.*'=>'exists:taxes,id',
+            'invoice_number'=>'string|required',
+            'order_number'=>'integer|required',
+            'items.*'=>'required',
+            'items.*.quantity'=>'required|integer',
+            'items.*.tax'=>'array|nullable',
+            'description'=>'required|string',
+            'invoice_date'=>'required|date|before_or_equal:due_date',
+            'due_date'=>'required|date|after_or_equal:invoice_date',
+        ]);
+        $validator->validate();
+
         Invoice::_save($request['invoice']);
         return [
             'message'=>'crated'
+        ];
+    }
+
+    public function update(Request $request, Invoice $invoice){
+        $data = $request->all();
+        $validator = Validator::make($data['invoice'],[
+            'currency_id'=>'integer|exists:currencies,id',
+            'customer_id'=>'integer|exists:customers,id',
+            'category_id'=>'integer|exists:invoice_categories,id',
+            'invoice_number'=>'string|required',
+            'order_number'=>'integer|required',
+            'items.*'=>'required',
+            'items.*.item_id'=>'required|integer|exists:items,id',
+            'items.*.quantity'=>'required|integer',
+            'items.*.tax'=>'array|nullable',
+            'items.*.tax.*'=>'exists:taxes,id',
+            'description'=>'required|string',
+            'invoice_date'=>'required|date|before_or_equal:due_date',
+            'due_date'=>'required|date|after_or_equal:invoice_date',
+        ]);
+        $validator->validate();
+
+        Invoice::_save($request['invoice'],$invoice);
+        return [
+            'message'=>'update'
         ];
     }
 }
