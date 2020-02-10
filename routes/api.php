@@ -33,22 +33,18 @@ function resources($controller,$item = 'item'){
 Route::group(['middleware' => ['jwt.verify:admin']], function () {
     Route::post('user', 'AdminController@getAuthenticatedUser');
     Route::post('user/update', 'AdminController@update');
-
     Route::group(['prefix' => 'companies'], function () {
         resources('CompanyController','company');
     });
-
     Route::group(['prefix' => 'persons'], function () {
         resources('PersonController','person');
     });
-
     Route::group(['prefix' => 'customers'], function () {
         $controller = 'CustomerController';
         resources($controller,'customer');
         Route::get('get/selects', $controller . '@getSelectsItems');
         Route::get('search', $controller . '@search');
     });
-
     Route::group(['prefix' => 'items'], function () {
         Route::get('search',"ItemController@search");
         resources('ItemController','item');
@@ -57,7 +53,6 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
             resources('ItemCategoryController','category');
         });
     });
-
     Route::group(['prefix' => 'settings'], function () {
         Route::group(['prefix' => 'currencies'], function () {
             resources('CurrencyController','currency');
@@ -75,6 +70,11 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
             resources('InvoiceCategoryController','category');
         });
 
+    });
+    Route::group(['prefix'=>'banking'],function (){
+        Route::group(['prefix'=>'accounts'],function (){
+            resources('BankingAccountController','account');
+        });
     });
 
     Route::post('logout', 'Auth\AuthController@logout');

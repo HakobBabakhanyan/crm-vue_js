@@ -36,7 +36,7 @@ class InvoiceController extends Controller
 
     public function index(){
         return [
-         'invoices'=> Invoice::query()->paginate()
+         'invoices'=> Invoice::query()->with('customer')->paginate()
         ];
     }
 
@@ -87,8 +87,8 @@ class InvoiceController extends Controller
             'items.*.tax'=>'array|nullable',
             'items.*.tax.*'=>'exists:taxes,id',
             'description'=>'required|string',
-            'invoice_date'=>'required|date|before_or_equal:due_date',
-            'due_date'=>'required|date|after_or_equal:invoice_date',
+            'invoice_date'=>'required|date_format:d-m-Y|before_or_equal:due_date',
+            'due_date'=>'required|date_format:d-m-Y|after_or_equal:invoice_date',
         ]);
         $validator->validate();
 

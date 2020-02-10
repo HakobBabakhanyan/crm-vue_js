@@ -53,7 +53,7 @@
         mounted() {
             let self = this;
             CurrencyRequest.index().then((data) => {
-                self.data = data.items;
+                self.data = data;
                 self.items = self.data.data;
             });
 
@@ -71,7 +71,7 @@
                             page:self.data.current_page
                         }).then((data) => {
                             self.$toastr.s(data.message);
-                            self.data = data.items;
+                            self.data = data;
                             self.items = self.data.data;
                         })
                     },
@@ -82,7 +82,7 @@
                 CurrencyRequest.index({
                     page:pageNum
                 }).then((data) => {
-                    self.data = data.items;
+                    self.data = data;
                     self.items = self.data.data;
                 });
             },

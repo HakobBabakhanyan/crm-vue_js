@@ -17,6 +17,8 @@
                 </span>
             </td>
             <td class="td-actions text-right">
+                <slot  v-bind:item="item"  name="action">
+                </slot>
                 <router-link v-if="edit_route" class="btn btn-success btn-link"
                              :to="{name:edit_route,params:{id:item.id} }">
                     <i class="material-icons">edit</i>
@@ -25,6 +27,7 @@
                         type="button" class="btn btn-danger btn-link">
                     <i class="material-icons">delete</i>
                 </button>
+
             </td>
         </tr>
         </tbody>

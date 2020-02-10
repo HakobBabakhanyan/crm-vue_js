@@ -11,6 +11,10 @@ import auth from "./middleware/auth";
 import guest from "./middleware/guest";
 import "../components";
 
+import Banking from './route/Banking'
+import Incomes from "./route/Incomes";
+import Settings from "./route/Settings";
+import Items from "./route/Items";
 
 
  const router  = new VueRouter({
@@ -133,161 +137,10 @@ import "../components";
                 middleware: auth,
             },
         },
-        // Route for items
-        {
-            path: '/items/index',
-            name: 'item-index',
-            component: Vue.component('Items'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/items/create',
-            name: 'item-create',
-            component: Vue.component('Item'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/items/edit/:id',
-            name: 'item-edit',
-            props: {edit: true},
-            component: Vue.component('Item'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/items/categories/index',
-            name: 'item-categories-index',
-            component: Vue.component('ItemCategories'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/items/categories/create',
-            name: 'item-categories-create',
-            component: Vue.component('ItemCategory'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/items/categories/edit/:id',
-            name: 'item-categories-edit',
-            props: {edit: true},
-            component: Vue.component('ItemCategory'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/settings/currencies',
-            name: 'settings-currencies',
-            component: Vue.component('Currencies'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/settings/currencies/create',
-            name: 'settings-currencies-create',
-            component: Vue.component('Currency'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/settings/currencies/edit/:id',
-            name: 'settings-currencies-edit',
-            props: {edit: true},
-            component: Vue.component('Currency'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/settings/taxes',
-            name: 'settings-taxes',
-            props: {edit: true},
-            component: Vue.component('Taxes'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/settings/taxes/create',
-            name: 'settings-taxes-create',
-            component: Vue.component('Tax'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/settings/taxes/edit/:id',
-            name: 'settings-taxes-edit',
-            props: {edit: true},
-            component: Vue.component('Tax'),
-            meta: {
-                middleware: auth,
-            },
-        },
-
-        //  ROUTE INCOMES  //
-
-        {
-            path: '/incomes/invoices',
-            name: 'incomes-invoices-index',
-            component: Vue.component('IncomesInvoices'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/incomes/invoices/create',
-            name: 'incomes-invoices-create',
-            component: Vue.component('IncomesInvoice'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/incomes/invoices/update/:id',
-            name: 'incomes-invoices-edit',
-            props: {edit: true},
-            component: Vue.component('IncomesInvoice'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/incomes/categories',
-            name: 'incomes-categories-index',
-            component: Vue.component('IncomesCategories'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/incomes/categories/create',
-            name: 'incomes-categories-create',
-            component: Vue.component('IncomesCategory'),
-            meta: {
-                middleware: auth,
-            },
-        },
-        {
-            path: '/incomes/categories/edit/:id',
-            name: 'incomes-categories-edit',
-            props:{edit:true},
-            component: Vue.component('IncomesCategory'),
-            meta: {
-                middleware: auth,
-            },
-        },
+        ...Items,
+        ...Settings,
+        ...Incomes,
+        ...Banking,
         {
             path: '*',
             name: '404',
@@ -297,8 +150,6 @@ import "../components";
                 middleware: auth,
             },
         },
-
-
     ],
 });
 

@@ -1,12 +1,11 @@
 <template>
-    <li  class="nav-item" v-bind:class="{'active':collapse }">
+    <li  class="nav-item" v-bind:class="{'active bg-light':collapse }">
         <a class="nav-link collapsed"
            data-toggle="collapse"
            v-on:click="collapse = !collapse" href="javascript:void(0)"
            :aria-expanded="collapse">
-
-            <i :class="data.icon"></i>
             <p>
+                <FontAwesomeIcon :icon="data.icon" />
                 {{ data.name }}
                 <b class="caret"></b>
             </p>
@@ -19,8 +18,9 @@
                              v-bind:key="index"
                              class="nav-item">
                     <a class="nav-link" href="javascript:void(0)">
-                        <i :class="item.icon"></i>
-                        <p>{{ item.name }}</p>
+                        <p>
+                            <FontAwesomeIcon :icon="item.icon" />
+                            {{ item.name }}</p>
                     </a>
                 </router-link>
                 <SideBarCollapse v-else  :data="item"/>

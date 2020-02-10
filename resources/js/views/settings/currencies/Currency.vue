@@ -61,7 +61,7 @@
             let self = this;
             if (self.edit) {
                 CurrencyRequest.show(self.$route.params.id).then((data) => {
-                    self.item = data.currency;
+                    self.item = data.data;
                 });
             }
 

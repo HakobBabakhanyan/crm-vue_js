@@ -36,16 +36,13 @@ class CurrencyController extends Controller
      * Returns list of persons
      */
     public function index(){
-        $data = [
-            'items'=>Currency::query()->paginate()
-        ];
 
-        return response()->json($data);
+        return Currency::query()->paginate();
     }
 
     public function get(){
         return [
-         'currencies'=>Currency::query()->get()
+         'data'=>Currency::query()->get()
         ];
     }
 
@@ -81,7 +78,7 @@ class CurrencyController extends Controller
     public function show(Currency $currency){
 
         return [
-            'currency'=>$currency
+            'data'=>$currency
         ];
     }
 
@@ -122,9 +119,8 @@ class CurrencyController extends Controller
     public function destroy(Currency $currency){
 
         $currency->delete();
-        return [
-            'items'=>Currency::query()->paginate(),
-            'message'=>'deleted'
-        ];
+
+        return  array_merge([ 'message'=>'deleted'],
+            Currency::query()->paginate()->toArray());
     }
 }

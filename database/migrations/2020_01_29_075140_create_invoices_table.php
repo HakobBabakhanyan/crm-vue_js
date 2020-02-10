@@ -25,6 +25,7 @@ class CreateInvoicesTable extends Migration
             $table->string('invoice_number');
             $table->string('order_number');
             $table->string('description');
+            $table->integer('status')->default(0);
 
             $table->timestamps();
             $table->softDeletes();

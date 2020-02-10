@@ -13,8 +13,9 @@
                              v-if="!data.children"
                              class="nav-item">
                     <a class="nav-link" href="javascript:void(0)">
-                        <i :class="data.icon"></i>
-                        <p>{{ data.name }}</p>
+                        <p>
+                            <FontAwesomeIcon :icon="data.icon" />
+                            {{ data.name }}</p>
                     </a>
                 </router-link>
                 <SideBarCollapse v-else :data="data"/>
@@ -28,55 +29,66 @@
         data: () => ({
             side_bar: {
                 'dashboard': {
-                    'icon': 'fa fa-tachometer',
+                    'icon': 'tachometer-alt',
                     'name': 'Dashboard'
                 }, 'companies': {
-                    'icon': 'fa fa-building',
+                    'icon': 'building',
                     'name': 'Companies'
                 }, 'persons': {
-                    'icon': 'fa fa-user',
+                    'icon': 'user',
                     'name': 'Persons'
                 }, 'items': {
                     'name': 'Items',
-                    'icon': 'fa fa-cubes',
+                    'icon': 'cubes',
                     'children': {
                         'item-index': {
-                            'icon': 'fa fa-angle-double-right',
+                            'icon': 'angle-double-right',
                             'name': 'Items'
                         },
                         'item-categories-index': {
-                            'icon': 'fa fa-angle-double-right',
+                            'icon': 'angle-double-right',
                             'name': 'categories'
                         }
                     }
                 }, 'incomes': {
                     'name': 'Incomes',
-                    'icon': 'fa fa-dollar',
+                    'icon': 'dollar-sign',
                     'children': {
                         'incomes-invoices-index': {
-                            'icon': 'fa fa-angle-double-right',
+                            'icon': 'angle-double-right',
                             'name': 'Invoices'
                         }, 'incomes-categories-index': {
-                            'icon': 'fa fa-angle-double-right',
+                            'icon': 'angle-double-right',
                             'name': 'categories'
                         }, 'customers': {
-                            'icon': 'fa fa-users',
+                            'icon': 'users',
                             'name': 'Customers'
                         }
                     }
-                }, 'settings': {
+                },
+                'banking': {
+                    'name': 'Banking',
+                    'icon': 'piggy-bank',
+                    'children': {
+                        'banking-accounts': {
+                            'icon': 'angle-double-right',
+                            'name': 'Accounts'
+                        },
+                    },
+                },
+                'settings': {
                     'name': 'Settings',
-                    'icon': 'fa fa-cogs',
+                    'icon': 'cogs',
                     'children': {
                         'profile': {
-                            'icon': 'fa fa-user',
+                            'icon': 'user',
                             'name': 'Profile'
                         },
                         'settings-currencies': {
-                            'icon': 'fa fa-angle-double-right',
+                            'icon': 'angle-double-right',
                             'name': 'Currencies'
                         }, 'settings-taxes': {
-                            'icon': 'fa fa-angle-double-right',
+                            'icon': 'angle-double-right',
                             'name': 'Taxes'
                         },
                     },

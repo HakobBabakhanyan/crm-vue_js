@@ -9,8 +9,8 @@ class Invoice extends Model
 {
 
     protected  $casts=[
-        'invoice_date'=>'date',
-        'due_date'=>'date'
+        'invoice_date'=>'date:d-m-Y',
+        'due_date'=>'date:d-m-Y'
     ];
     public function items(){
         return $this->belongsToMany(Item::class,'invoice_items')
@@ -87,4 +87,7 @@ class Invoice extends Model
         }
         return $sync;
     }
+
+
+
 }

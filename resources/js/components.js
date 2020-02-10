@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueToastr from "vue-toastr";
 import VueSweetalert2 from 'vue-sweetalert2';
+import './icons';
 Vue.use(require('vue-moment'));
 
 Vue.use(VueToastr, {
@@ -26,6 +27,7 @@ Vue.component('IncomesCategories', require('./views/incomes/categories/Categorie
 Vue.component('IncomesCategory', require('./views/incomes/categories/Category').default);
 Vue.component('IncomesInvoices', require('./views/incomes/invoices/Invoices').default);
 Vue.component('IncomesInvoice', require('./views/incomes/invoices/Invoice').default);
+Vue.component('IncomesInvoiceShow', require('./views/incomes/invoices/InvoiceShow').default);
 
 
 Vue.component('Dashboard', require('./views/Dashboard').default);
@@ -57,6 +59,13 @@ Vue.component('error_404', require('./views/error/404').default);
 
 
 Vue.component('VueSelect',require('vue-select').default);
+Vue.component('Stepper',require('./views/components/Stepper').default);
+
+
+///
+Vue.component('BankingAccounts',require('./views/banking/accounts/Accounts').default);
+Vue.component('BankingAccount',require('./views/banking/accounts/Account').default);
+
 
 
 

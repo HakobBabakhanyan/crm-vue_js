@@ -259,8 +259,8 @@
                 invoice: {
                     items: [new Object],
                     currency:{},
-                    invoice_date:'2018-06-01',
-                    due_date: '2018-06-01',
+                    invoice_date:new Date(),
+                    due_date: new Date(),
                 },
                 form:{
 
@@ -286,7 +286,7 @@
                 self.invoice.invoice_number = response.number
             });
             CurrencyRequest.get().then((data) => {
-                self.currencies = data.currencies;
+                self.currencies = data.data;
                 let currencyDefault = self.currencies.find(function (item) {
                         return item.default === 1
                 });
@@ -308,8 +308,8 @@
                             quantity: $item.quantity,
                             taxes:$item.taxes}
                     });
-                    invoice.due_date = new Date(invoice.due_date);
-                    invoice.invoice_date = new Date(invoice.invoice_date);
+                    invoice.due_date = new Date(this.$moment(invoice.due_date,'D/MM/YYYY'));
+                    invoice.invoice_date = new Date(this.$moment(invoice.invoice_date,'D/MM/YYYY'));
                     self.$set(self,'invoice',invoice)
                 } )
             }
@@ -337,8 +337,8 @@
                     self.form.description = self.invoice.description;
                     self.form.category_id = self.invoice.category.id;
                     self.form.discount = self.invoice.discount;
-                    self.form.invoice_date = this.$moment(self.invoice.invoice_date).format('MM/D/YYYY');
-                    self.form.due_date =  this.$moment(self.invoice.due_date).format('MM/D/YYYY');
+                    self.form.invoice_date = this.$moment(self.invoice.invoice_date).format('D-MM-YYYY');
+                    self.form.due_date =  this.$moment(self.invoice.due_date).format('D-MM-YYYY');
                     if(self.edit)
                         InvoiceRequest.update(self.invoice.id,{
                             invoice:self.form

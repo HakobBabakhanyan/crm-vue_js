@@ -16,7 +16,20 @@
                     </div>
                     <div class="card-body table-responsive">
                         <VTable @remove="remove" :edit_route="'incomes-invoices-edit'"
-                                :thead="{'id':{name:'ID'},'name':{name:'Name'},'created_at':{name:'Date'}}" :items="items" />
+                                :thead="{'id':{name:'ID'},
+                                'invoice_number':{name:'Number'},
+                                'invoice_date':{name:'Invoice Date'},
+                                'due_date':{name:'Due Date '}}"
+                                :items="items" >
+                            <template   v-slot:action="{item}" >
+                                <router-link class="btn btn-success btn-link"
+                                             :to="{name:'incomes-invoices-show',
+                                             params:{id:item.id} }">
+                                    <i class="fa fa-eye"></i>
+                                </router-link>
+                            </template>
+
+                        </VTable>
                         <paginate
                             :page-count="data.last_page?data.last_page:0"
                             :page-range="3"
